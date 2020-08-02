@@ -9,6 +9,8 @@ gem 'coffee-rails', '~> 4.2'
 gem 'jquery-rails'
 gem 'turbolinks',   '~> 5'
 gem 'jbuilder',     '~> 2.5'
+gem 'pry-rails'
+gem 'bcrypt'
 
 group :development, :test do
   gem 'sqlite3'
