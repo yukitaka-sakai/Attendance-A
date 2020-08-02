@@ -1,0 +1,80 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+/* universal */
+/* 対象htmlのbody部分を画面上から80px下げる */ 
+body {
+  padding-top: 80px;
+}
+
+/* 要素が多い場合に必要に応じてスクロールバー表示 */ 
+section {
+  overflow: auto;
+}
+
+/* 要素はユーザーが寸法を変更できる仕組みを、垂直方向について表示 */ 
+textarea {
+  resize: vertical;
+}
+
+/* 中央寄せ */
+.center {
+  text-align: center;
+}
+
+/* 下の余白 */
+.center h1 {
+  margin-bottom: 10px;
+}
+
+/* 文字体裁*/ 
+/* 行の高さ*/ 
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1;
+}
+
+
+h1 {
+  font-size: 3em;
+  /* 水平方向の文字間隔を操作*/ 
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+
+h2 {
+  font-size: 1.2em;
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+  text-align: center;
+  /* フォントの太さ*/ 
+  font-weight: normal;
+  color: #777;
+}
+
+p {
+  font-size: 1.1em;
+  line-height:1.7em;
+}
+
+/* ヘッダー*/ 
+
+#logo {
+  float: left;
+  margin-right: 10px;
+  font-size: 1.7em;
+  color: #fff;
+  /* 大文字に変換*/ 
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  padding-top: 9px;
+  font-weight: bold;
+}
+
+/* カーソルホバー時の動き */ 
+#logo:hover {
+  color: #fff;
+  /* 下線なし*/ 
+  text-decoration: none;
+}
