@@ -9,18 +9,20 @@ class UsersController < ApplicationController
   end
   
   def create
-    @user = User.new(user_params)
-    if @user.save
-      redirect_to @user
-      flash[:success] = '新規作成に成功しました。'
+    @user = User.new(user_params) #userモデルの新しいパラメーターを＠userに代入
+    if @user.save #  @userの登録に成功したら
+      log_in @user #保存成功後、ログインする
+      flash[:success] = '新規作成に成功しました。' # 成功メッセージを出す
+      redirect_to @user # redirect_to user_url(@user)をシンプルに記述　＞showへ遷移
     else
-      render :new
+      render :new # 失敗したらnewに戻る
     end
   end
   
   private
   
-    def user_params
+    def user_params # ストロングパラメーター　ユーザーのパラメーターは
+    　# requireメソッドでオブジェクト名を定める。permitでキーを指定する。
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
 end
