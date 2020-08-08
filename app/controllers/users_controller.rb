@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   
   def show # 送られてきたパラメータ（id）と同じidを持つレコードをuserモデルから探し@userに代入
-    @user =User.find(params[:id])
+    @user = User.find(params[:id])
   end
   
   def new
@@ -23,10 +23,19 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
   
+  def update
+    @user = User.find(params[:id])
+    if @user.update_attributes(user_params)
+      # 更新に成功した場合の処理を記述する。
+    else
+      render :edit
+    end
+  end
+  
   private
   
     def user_params # ストロングパラメーター　ユーザーのパラメーターは
-    　# requireメソッドでオブジェクト名を定める。permitでキーを指定する。
+      # requireメソッドでオブジェクト名を定める。permitでキーを指定する。
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
 end
