@@ -1,10 +1,14 @@
 class UsersController < ApplicationController
   before_action :set_user,       only: [:show, :edit, :update]
-  before_action :logged_in_user, only: [:show, :edit, :update]
+  before_action :logged_in_user, only: [:logged_in_user, :show, :edit, :update]
   before_action :correct_user,   only: [:edit, :update]
   
   def show # 送られてきたパラメータ（id）と同じidを持つレコードをuserモデルから探し@userに代入
     @user = User.find(params[:id])
+  end
+  
+  def index
+    @user = User.all
   end
   
   def new
