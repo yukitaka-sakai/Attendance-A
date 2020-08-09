@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+  before_action :set_user,       only: [:show, :edit, :update]
+  before_action :logged_in_user, only: [:show, :edit, :update]
+  before_action :correct_user,   only: [:edit, :update]
   
   def show # 送られてきたパラメータ（id）と同じidを持つレコードをuserモデルから探し@userに代入
     @user = User.find(params[:id])
@@ -38,5 +41,22 @@ class UsersController < ApplicationController
     def user_params # ストロングパラメーター　ユーザーのパラメーターは
       # requireメソッドでオブジェクト名を定める。permitでキーを指定する。
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    end
+    
+    def set_user
+      @user = User.find(params[:id])
+    end
+    
+    def logged_in_user
+      unless logged_in? # loginしていなかったら
+        store_location # アクセスしようとしたURLを記憶する
+        flash[:danger] = "ログインしてください"
+        redirect_to login_url
+      end
+    end
+    
+    def correct_user
+      @user = User.find(params[:id])
+      redirect_to root_url unless current_user?(@user) #current_userがuserと違うならトップページに戻る
     end
 end
