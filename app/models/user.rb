@@ -10,8 +10,9 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum: 100 },
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: true    
+  validates :department, length: { in: 2..30 }, allow_blank: true #ブランクをスルー
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true # nilをスルー
 
 
   # 渡された文字列のハッシュ値を返す

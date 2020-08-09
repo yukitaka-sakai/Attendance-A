@@ -50,7 +50,7 @@ class UsersController < ApplicationController
   
     def user_params # ストロングパラメーター　ユーザーのパラメーターは
       # requireメソッドでオブジェクト名を定める。permitでキーを指定する。
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :department, :password, :password_confirmation)
     end
     
     def set_user
