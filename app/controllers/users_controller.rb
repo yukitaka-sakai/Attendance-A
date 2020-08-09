@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user,       only: [:show, :edit, :update, :destroy]
   before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy]
   before_action :correct_user,   only: [:edit, :update]
+  before_action :admin_user,     only:  :destroy
   
   def show # 送られてきたパラメータ（id）と同じidを持つレコードをuserモデルから探し@userに代入
     # @user = User.find(params[:id])
@@ -67,6 +68,10 @@ class UsersController < ApplicationController
     
     def correct_user
       @user = User.find(params[:id])
-      redirect_to root_url unless current_user?(@user) #current_userがuserと違うならトップページに戻る
+      redirect_to root_url unless current_user?(@user) || current_user.admin?#current_userがuserと違うならトップページに戻る
+    end
+    
+    def admin_user
+      redirect_to root_url unless current_user.admin?
     end
 end
