@@ -1,10 +1,10 @@
 class UsersController < ApplicationController
-  before_action :set_user,       only: [:show, :edit, :update]
-  before_action :logged_in_user, only: [:logged_in_user, :show, :edit, :update]
+  before_action :set_user,       only: [:show, :edit, :update, :destroy]
+  before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy]
   before_action :correct_user,   only: [:edit, :update]
   
   def show # 送られてきたパラメータ（id）と同じidを持つレコードをuserモデルから探し@userに代入
-    @user = User.find(params[:id])
+    # @user = User.find(params[:id])
   end
   
   def index
@@ -27,17 +27,23 @@ class UsersController < ApplicationController
   end
   
   def edit
-    @user = User.find(params[:id])
+    # @user = User.find(params[:id])
   end
   
   def update
-    @user = User.find(params[:id])
+    # @user = User.find(params[:id])
     if @user.update_attributes(user_params)
       flash[:success] = "更新成功"
       redirect_to @user
     else
       render :edit
     end
+  end
+  
+  def destroy
+    @user.destroy
+    flash[:success] = "#{@user.name}のデータを削除しました。"
+    redirect_to users_url
   end
   
   private
