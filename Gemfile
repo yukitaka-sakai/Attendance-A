@@ -11,6 +11,8 @@ gem 'turbolinks',   '~> 5'
 gem 'jbuilder',     '~> 2.5'
 gem 'pry-rails'
 gem 'bcrypt'
+gem 'faker'
+
 
 group :development, :test do
   gem 'sqlite3'
