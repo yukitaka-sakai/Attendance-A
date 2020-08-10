@@ -21,7 +21,7 @@
 </div>
   
 <div>
-  <table class="table table-bordered table-condensed" id="attendance-table" >
+  <table class="table table-bordered table-condensed" id="table-attendances" >
     <thead>
       <tr>
         <td rowspan="3">残業申請</td>
@@ -57,7 +57,7 @@
         <tr>
           <td></td>
           <td><%= l(day, format: :short) %></td>
-          <td></td>
+          <td><%= $day_of_the_week[day.wday] %></td>
           <td></td>
           <td></td>
           <td></td>
