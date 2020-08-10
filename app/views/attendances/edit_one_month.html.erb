@@ -1,0 +1,43 @@
+<% provide(:title, @user.name) %>
+
+<div>
+  <h1>勤怠編集</h1>
+    <table class="table table-bordered table-condensed" id="table-attendances" >
+      <thead>
+        <tr>
+          <td>日付</td>
+          <td>曜日</td>
+          <td>出社</td>
+          <td>退社</td>
+          <td>翌日</td>
+          <td>在社時間</td>
+          <td>備考</td>
+          <td>指示者確認㊞️</td>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <% @attendances.each do |day| %>
+        <% 
+          css_class = 
+          case %w{日 月 火 水 木 金 土}[day.worked_on.wday]
+          when '土'
+            'text-primary'
+          when '日'
+            'text-danger'
+          end
+        %>      
+          <tr>
+            <td><%= l(day.worked_on, format: :short) %></td>
+            <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+</div>
