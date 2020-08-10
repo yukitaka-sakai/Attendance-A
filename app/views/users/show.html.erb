@@ -53,11 +53,20 @@
     </thead>
     
     <tbody>
-      <% (@first_day..@last_day).each do |day| %>
+      <% @attendances.each do |day| %>
+      <% 
+        css_class = 
+        case %w{日 月 火 水 木 金 土}[day.worked_on.wday]
+        when '土'
+          'text-primary'
+        when '日'
+          'text-danger'
+        end
+      %>      
         <tr>
           <td></td>
-          <td><%= l(day, format: :short) %></td>
-          <td><%= $day_of_the_week[day.wday] %></td>
+          <td><%= l(day.worked_on, format: :short) %></td>
+          <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
           <td></td>
           <td></td>
           <td></td>

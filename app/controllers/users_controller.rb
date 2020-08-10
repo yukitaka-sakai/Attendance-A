@@ -2,12 +2,13 @@ class UsersController < ApplicationController
   before_action :set_user,       only: [:show, :edit, :update, :destroy]
   before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy]
   before_action :correct_user,   only: [:edit, :update]
-  before_action :admin_user,     only:  :destroy
+  before_action :admin_user,     only: [:destroy, :edit, :update]
+  before_action :set_one_month,  only:  :show
   
   def show # 送られてきたパラメータ（id）と同じidを持つレコードをuserモデルから探し@userに代入
     # @user = User.find(params[:id])
-    @first_day = Date.current.beginning_of_month
-    @last_day = @first_day.end_of_month
+    # @first_day = Date.current.beginning_of_month
+    # @last_day = @first_day.end_of_month
   end
   
   def index

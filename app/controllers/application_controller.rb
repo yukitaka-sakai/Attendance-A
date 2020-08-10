@@ -3,5 +3,25 @@ class ApplicationController < ActionController::Base
   #モジュールを読み込みヘルパーで定義したメソッドがどのコントローラーでも使える様になる
   include SessionsHelper
   
-  $day_of_the_week = %w{日 月 火 水 木 金 土}
+  $days_of_the_week = %w{日 月 火 水 木 金 土}
+
+
+  def set_one_month
+    @first_day = Date.current.beginning_of_month
+    @last_day = @first_day.end_of_month
+    one_month = [*@first_day..@last_day] # 対象の月の日数を代入
+    # ユーザーに紐づく一ヶ月分の勤怠データを検索取得
+    @attendances = @user.attendances.where(worked_on: @first_day..@last_day)
+    
+    unless one_month.count == @attendances.count # それぞれの件数が一致するか
+      ActiveRecord::Base.transaction do  # トランザクションを開始する
+        # 繰り返し処理により、1ヶ月分の勤怠データを生成する
+        one_month.each { |day| @user.attendances.create!(worked_on: day) }
+      end
+    end
+  
+  rescue ActiveRecord::RecordInvalid #トランザクションによるエラー分岐
+    flash[:danger] = "失敗"
+    redirect_to root_url
+  end
 end
