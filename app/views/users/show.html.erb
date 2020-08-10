@@ -19,7 +19,7 @@
       <td>氏名：<%= @user.name %></td>
       <td>コード</td>
       <td></td>
-      <td>出勤日数</td>
+      <td>出勤日数:<%= @worked_sum %>日</td>
       <td>締め:<%= l(@last_day, format: :short) %></td>
     </tr>
   </table>
@@ -119,7 +119,7 @@
         </td>
       </tr>
       <tr>
-        <td colspan="2"></td>
+        <td colspan="2"><%= @worked_sum %>日</td>
         <td colspan="6"></td>
         <td></td>
         <td colspan="5"></td>

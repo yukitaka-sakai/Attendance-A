@@ -9,6 +9,7 @@ class UsersController < ApplicationController
     # @user = User.find(params[:id])
     # @first_day = Date.current.beginning_of_month
     # @last_day = @first_day.end_of_month
+    @worked_sum = @attendances.where.not(started_at: nil).count # 1ヶ月分の勤怠データの中で出社がない状態ではないものを代入
   end
   
   def index
