@@ -91,7 +91,11 @@
           <td><%= day.finished_at.hour if day.finished_at.present? %></td>
           <td><%= day.finished_at.floor_to(15.minutes).min if day.finished_at.present? %></td>
           <td></td>
-          <td></td>
+          <td>
+            <% if day.started_at.present? && day.finished_at.present? %>
+              <%= working_times(day.started_at, day.finished_at) %>
+              <% end %>
+          </td>
           <td></td>
           <td></td>
           <td></td>
