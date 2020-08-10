@@ -18,10 +18,11 @@
       <td>締め</td>
     </tr>
   </table>
+</div>
   
-  
-  <div>
-    <table class="table table-bordered table-condensed" id="attendance-table" >
+<div>
+  <table class="table table-bordered table-condensed" id="attendance-table" >
+    <thead>
       <tr>
         <td rowspan="3">残業申請</td>
         <td rowspan="3">日付</td>
@@ -37,7 +38,7 @@
         <td colspan="2">終了予定時間</td>
         <td rowspan="2">時間外時間</td>
         <td rowspan="2">業務処理内容</td>
-        <td rowspan="2">指示者確認印</td>
+        <td rowspan="2">指示者確認㊞</td>
       </tr>
       <tr>
         <td>時</td>
@@ -49,6 +50,29 @@
         <td>時</td>
         <td>分</td>
       </tr>
-    </table> 
-  </div>
+    </thead>
+    
+    <tbody>
+      <% (@first_day..@last_day).each do |day| %>
+        <tr>
+          <td></td>
+          <td><%= l(day, format: :short) %></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table> 
 </div>

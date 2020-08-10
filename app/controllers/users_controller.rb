@@ -6,6 +6,8 @@ class UsersController < ApplicationController
   
   def show # 送られてきたパラメータ（id）と同じidを持つレコードをuserモデルから探し@userに代入
     # @user = User.find(params[:id])
+    @first_day = Date.current.beginning_of_month
+    @last_day = @first_day.end_of_month
   end
   
   def index
