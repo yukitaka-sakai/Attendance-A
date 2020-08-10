@@ -94,7 +94,7 @@
           <td>
             <% if day.started_at.present? && day.finished_at.present? %>
               <%= str_times = working_times(day.started_at, day.finished_at) %>
-              <%= @total_working_times = @total_working_times.to_f + str_times.to_f %>
+              <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
             <% end %>
           </td>
           <td></td>
