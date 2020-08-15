@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  
   get     '/login', to: 'sessions#new'
   post    '/login', to: 'sessions#create'
   delete  '/login', to: 'sessions#destroy'
@@ -6,6 +7,7 @@ Rails.application.routes.draw do
   root 'static_pages#top'
   get  '/signup', to:'users#new'
   
+  resources :offices
   resources :users do
     member do
       get 'attendances/edit_one_month'

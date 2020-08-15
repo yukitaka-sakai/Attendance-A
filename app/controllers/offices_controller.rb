@@ -15,6 +15,7 @@ class OfficesController < ApplicationController
       flash[:success] = '拠点登録に成功しました。' # 成功メッセージを出す
       redirect_to new_office_url
     else
+      flash.now[:danger] = '入力項目が足りません'
       render :new # 失敗したらnewに戻る
     end
   end
