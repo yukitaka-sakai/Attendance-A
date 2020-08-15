@@ -3,8 +3,9 @@
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
-
+  　
     <%= form_with(model: @office, local: true) do |f| %>
+    <%= render "shared/error_messages", object: f.object %>
     
       <%= f.label :office_name, class: "label-offices" %>
       <%= f.text_field :office_name, class: "form-control" %>
