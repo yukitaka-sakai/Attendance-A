@@ -1,0 +1,24 @@
+<% provide(:title, "All offices")%>
+<h1>拠点一覧</h1>
+
+<div>
+  <table class="table table-bordered table-condensed table-hover" id="table-offices">
+    <tr>
+      <td></td>
+      <td></td>
+      <td>拠点番号</td>
+      <td>拠点名</td>
+      <td>勤怠種類</td>
+    </tr>
+    
+    <% @offices.each do |office| %>
+    <tr>
+      <td></td>
+      <td></td>
+      <td><%= office.office_number %></td>
+      <td><%= office.office_name%></td>
+      <td></td>
+    </tr>
+    <% end %>
+  </table>
+</div>
