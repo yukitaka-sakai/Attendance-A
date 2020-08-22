@@ -1,6 +1,7 @@
-<%= form_with(model: @user, local: true) do |f| %>
+<%= form_with(model: user, local: true) do |f| %>
 <!--　エラーがある場合shared/error_messagesが呼び出されてエラー表示される-->
- 
+  <%= render "shared/error_messages", object: f.object %>　
+
   <%= f.label :name, class: "label-#{yield(:class_text)}" %>
   <%= f.text_field :name, class: "form-control" %>
   

@@ -3,22 +3,30 @@
 
 <div>
   <table class="table table-bordered table-condensed table-hover" id="table-offices">
-    <tr>
-      <td></td>
-      <td></td>
-      <td>拠点番号</td>
-      <td>拠点名</td>
-      <td>勤怠種類</td>
-    </tr>
+    <thead>
+      
+        <tr>
+          <td></td>
+          <td></td>
+          <td>拠点番号</td>
+          <td>拠点名</td>
+          <td>勤怠種類</td>
+        </tr>
+      
+    </thead>
     
     <% @offices.each do |office| %>
     <tr>
-      <td></td>
-      <td></td>
+      <td><%= link_to "修正", "#", remote: true, class: "btn btn-primary" %></td>
+      <td><%= link_to "削除", "#", remote: true, class: "btn btn-primary" %></td>
       <td><%= office.office_number %></td>
       <td><%= office.office_name%></td>
       <td></td>
     </tr>
     <% end %>
   </table>
+</div>
+
+<div class="jumbotron">
+  <%= link_to "拠点情報追加", new_office_path, class: "btn btn-lg btn-primary" %>
 </div>
