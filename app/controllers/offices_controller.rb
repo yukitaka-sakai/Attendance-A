@@ -27,5 +27,5 @@ class OfficesController < ApplicationController
     end
     
     def mk_number
-      
+    end
 end

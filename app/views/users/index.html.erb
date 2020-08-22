@@ -1,29 +1,58 @@
 <% provide(:title, "All Users") %>
-<h1>ユーザー一覧</h1>
+<% provide(:class_text, "user--edit") %>
+<% provide(:button_text, "更新") %>
 
-<div>
-  <table class="table table-bordered table-condensed table-hover" id="table-users">
-    <tr>
-      <td>社員番号</td>
-      <td>名前</td>
-      <td></td>
-    </tr>
-    
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= "#" %></td>
-        <td><%= user.name %></td>
-        <!--今ログインしているのは管理者かつ、今のユーザーがログインしているユーザー-->
-        <td>
-          <% if current_user.admin? && !current_user?(user) %>
-          <%= link_to "削除", user, method: :delete,
-              data: { confirm: "削除してもいい？" },
-              class: "btn btn-danger" %>
-          <%= link_to "編集", edit_user_path(user), class: "btn btn-info" %>
-          <% end %>
-        </td>
-      </tr>
+<h1>
+  <% if params[:search] %>
+    <%= "検索結果" %>
+  <% else %>
+    <%= "全てのユーザー" %>
+  <% end %>
+</h1>
+
+<div class="row container">
+  <div class="col-md-4 col-md-offset-8" >
+    <h5>ユーザー名検索</h5>
+    <form class="form-inline" >
+      <%= form_with url: users_path, method: :get, local: true do |f| %>
+      <%= f.text_field :search, placeholder: 'キーワードを入力', class: "form-control" %>
+      <%= f.submit '検索', :name => nil, class: "btn btn-md btn-primary" %>
     <% end %>
-  </table>
+    
+    </form>
+  </div>
 </div>
 
+<!-- paginate -->
+<div class="col-md-10 col-md-offset-1">
+  <%= will_paginate %>
+ <!--今ログインしているのは管理者かつ、今のユーザーがログインしているユーザー-->
+ <div>
+    <% @users.each do |user| %>
+    <div>
+      <div>
+        <p><%= user.name %></p>
+        <p> | 
+          <% if current_user.admin? && !current_user?(user) %>
+          <%= link_to "削除", user, method: :delete,
+          data: { confirm: "#{user.name}を削除してよろしいですか？" },
+          class: "btn btn-primary" %>
+         <% end %>
+        </p>
+      </div>
+      <div class="acd jumbotron">
+          <a class="btn btn-lg btn-primary"
+              data-toggle="collapse"
+              href="#collapse<%= user.id %>"
+              role="button"
+              aria-controls="collapse">編集</a>
+      </div>
+          <div class="collapse" id="collapse<%= user.id %>">
+              <%= render 'form', { user: user } %>
+          </div>
+    </div>
+    <% end %>
+</div>
+
+  <%= will_paginate %>
+</div>
