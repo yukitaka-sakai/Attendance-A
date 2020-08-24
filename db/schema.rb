@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200817055905) do
+ActiveRecord::Schema.define(version: 20200824074340) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 20200817055905) do
     t.integer "office_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "office_type"
+    t.integer "office_type"
     t.index ["office_number"], name: "index_offices_on_office_number", unique: true
   end
 
