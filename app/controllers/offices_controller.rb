@@ -1,7 +1,7 @@
 class OfficesController < ApplicationController
   
   def new
-    @office = Office.new  
+    @office = Office.new
   end
   
   def index
