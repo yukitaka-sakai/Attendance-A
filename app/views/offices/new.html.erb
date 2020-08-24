@@ -13,6 +13,9 @@
       <%= f.label :office_number, class: "label-offices" %>
       <%= f.text_field :office_number, class: "form-control" %>
       
+      <%= f.label :office_type, class: "label-offices" %>
+      <%= f.select :office_type, Office.office_types.keys.map {|k| [k, k]}, {}, { class: 'form-control', style: 'margin-bottom: 5px;', data: {} } %>
+      
       <%= f.submit "登録", class: "btn btn-primary btn-block btn-offices" %>
     <% end %>
   </div>

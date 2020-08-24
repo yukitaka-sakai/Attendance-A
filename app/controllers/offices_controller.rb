@@ -23,7 +23,7 @@ class OfficesController < ApplicationController
   
     def offices_params # ストロングパラメーター　officeのパラメーターは
       # requireメソッドでオブジェクト名を定める。permitでキーを指定する。
-      params.require(:office).permit(:office_name, :office_number)
+      params.require(:office).permit(:office_name, :office_number, :office_type)
     end
     
     def mk_number
