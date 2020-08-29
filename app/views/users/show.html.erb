@@ -8,14 +8,14 @@
         <%= l(@first_day, format: :middle) %> 時間管理表
         <%= link_to "➡︎︎", user_path(date: @first_day.next_month), class: "btn btn-default" %>
         </td>
-      <td>指定勤務開始時間:<%= format_basic_info(@user.work_time) %><br/>
-      指定勤務終了時間:<%= format_basic_info(@user.end_of_worktime) %></td>
-      <td colspan="3">基本時間<%= format_basic_info(@user.basic_time) %></td>
+      <td>指定勤務開始時間:<%= format_basic_info(@user.designated_work_start_time) %><br/>
+      指定勤務終了時間:<%= format_basic_info(@user.designated_work_end_time) %></td>
+      <td colspan="3">基本時間<%= format_basic_info(@user.basic_work_time) %></td>
       <td>初日:<%= l(@first_day, format: :short) %></td>
     </tr>
     
     <tr>
-      <td>所属：<%= @user.department.present? ? @user.department : "未所属" %></td>
+      <td>所属：<%= @user.affiliation.present? ? @user.affiliation : "未所属" %></td>
       <td>氏名：<%= @user.name %></td>
       <td>コード</td>
       <td></td>
@@ -125,7 +125,7 @@
       </tr>
       <tr>
         <td colspan="2"><%= @attendances.count %>日</td>
-        <td colspan="6"><%= format_basic_info(@user.work_time).to_f * @worked_sum %></td>
+        <td colspan="6"><%= format_basic_info(@user.designated_work_start_time).to_f * @worked_sum %></td>
         <td><%= format("%.2f", @total_working_times.to_f) %></td>
         <td colspan="5"></td>
       </tr>

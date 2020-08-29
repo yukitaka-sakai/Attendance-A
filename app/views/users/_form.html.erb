@@ -1,4 +1,4 @@
-<%= form_with(model: user, local: true) do |f| %>
+<%= form_with(model: @user, local: true) do |f| %>
 <!--　エラーがある場合shared/error_messagesが呼び出されてエラー表示される-->
   <%= render "shared/error_messages", object: f.object %>　
 
@@ -8,14 +8,17 @@
   <%= f.label :email, class: "label-#{yield(:class_text)}" %>
   <%= f.email_field :email, class: "form-control" %>
   
-  <%= f.label :department, class: "label-#{yield(:class_text)}" %>
-  <%= f.text_field :department, class: "form-control" %>
+  <%= f.label :affiliation, class: "label-#{yield(:class_text)}" %>
+  <%= f.text_field :affiliation, class: "form-control" %>
   
-  <%= f.label :basic_time, class: "label-#{yield(:class_text)}" %>
-  <%= f.time_field :basic_time, class: "form-control" %>
+  <%= f.label :basic_work_time, class: "label-#{yield(:class_text)}" %>
+  <%= f.time_field :basic_work_time, class: "form-control" %>
   
-  <%= f.label :work_time, class: "label-#{yield(:class_text)}" %>
-  <%= f.time_field :work_time, class: "form-control" %>  
+  <%= f.label :designated_work_start_time, class: "label-#{yield(:class_text)}" %>
+  <%= f.time_field :designated_work_start_time, class: "form-control" %>  
+  
+  <%= f.label :designated_work_end_time, class: "label-#{yield(:class_text)}" %>
+  <%= f.time_field :designated_work_end_time, class: "form-control" %>  
   
   <%= f.label :password, class: "label-#{yield(:class_text)}" %>
   <%= f.password_field :password, class: "form-control" %>

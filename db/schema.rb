@@ -29,7 +29,6 @@ ActiveRecord::Schema.define(version: 20200824074340) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "office_type"
-    t.index ["office_number"], name: "index_offices_on_office_number", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -40,14 +39,13 @@ ActiveRecord::Schema.define(version: 20200824074340) do
     t.string "password_digest"
     t.string "remember_digest"
     t.boolean "admin", default: false
-    t.string "department"
-    t.datetime "basic_time", default: "2020-08-24 23:00:00"
-    t.datetime "end_of_worktime", default: "2020-08-25 08:30:00"
-    t.datetime "work_time", default: "2020-08-24 22:30:00"
+    t.string "affiliation"
+    t.datetime "basic_work_time", default: "2020-08-28 23:00:00"
+    t.datetime "designated_work_start_time", default: "2020-08-29 08:30:00"
+    t.datetime "designated_work_end_time", default: "2020-08-28 22:30:00"
     t.boolean "superior", default: false
     t.integer "uid"
-    t.string "office_name"
-    t.integer "office_number"
+    t.integer "employee_number"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

@@ -15,7 +15,8 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
     end
-    resources :attendances, only: :update
+      resources :attendances, only: :update
+      collection { post :import }
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

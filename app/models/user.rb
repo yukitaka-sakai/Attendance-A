@@ -11,12 +11,30 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum: 100 },
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: true    
-  validates :basic_time, presence: true
-  validates :end_of_worktime, presence: true
-  validates :work_time, presence: true
-  validates :department, length: { in: 2..30 }, allow_blank: true #ブランクをスルー
+  validates :basic_work_time, presence: true
+  validates :designated_work_end_time, presence: true
+  validates :designated_work_start_time, presence: true
+  validates :affiliation, length: { in: 2..30 }, allow_blank: true #ブランクをスルー
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true # nilをスルー
+
+
+  def self.import(file)
+    CSV.foreach(file.path, headers: true,) do |row|
+      # IDが見つかれば、レコードを呼び出し、見つかれなければ、新しく作成
+      user = find_by(id: row["id"]) || new
+      # CSVからデータを取得し、設定する
+      user.attributes = row.to_hash.slice(*updatable_attributes)
+      # debugger
+      # 保存する
+      user.save
+    end
+  end
+
+  # 更新を許可するカラムを定義
+  def self.updatable_attributes
+    ["id", "name", "email" ,"affiliation", "employee_number", "uid", "basic_work_time", "designated_work_start_time", "designated_work_end_time", "superior", "admin", "password"]
+  end
 
 
   # 渡された文字列のハッシュ値を返す

@@ -16,6 +16,12 @@ class UsersController < ApplicationController
     @users = User.paginate(page: params[:page]).search(params[:search])
   end
   
+  def import
+    # fileはtmpに自動で一時保存される
+    User.import(params[:file])
+    redirect_to users_url
+  end
+  
   def new
     @user = User.new
   end
@@ -55,6 +61,6 @@ class UsersController < ApplicationController
   
     def user_params # ストロングパラメーター　ユーザーのパラメーターは
       # requireメソッドでオブジェクト名を定める。permitでキーを指定する。
-      params.require(:user).permit(:name, :email, :department, :basic_time, :work_time,:password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :affiliation, :basic_work_time, :designated_work_start_time, :designated_work_end_time, :password, :password_confirmation)
     end
 end
