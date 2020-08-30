@@ -5,6 +5,14 @@ class AttendancesController < ApplicationController
   
   UPDATE_ERROR_MSG = "勤怠登録に失���しました。やり直して下さい。"
 
+  def csv_download
+    attendances_params.each do |id, item|
+      attendance = Attendance.find(id)
+      attendance.update_attributes!(item)
+    end
+    send_data render_to_string, filename: 'users.csv', type: :csv
+  end
+    
   def update
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])

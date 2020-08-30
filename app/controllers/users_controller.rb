@@ -9,7 +9,14 @@ class UsersController < ApplicationController
     # @user = User.find(params[:id])
     # @first_day = Date.current.beginning_of_month
     # @last_day = @first_day.end_of_month
-    @worked_sum = @attendances.where.not(started_at: nil).count # 1ヶ月分の勤怠データの中で出社がない状態ではないものを代入
+    @worked_sum = @attendances.where.not(started_at: nil).count # 
+      respond_to do |format|
+        format.html 
+        format.csv do
+            send_data render_to_string, filename: "#{@user.name}(#{l(@first_day, format: :middle)}).csv", type: :csv #csv用の処理を書く
+        endw
+      end
+    end
   end
   
   def index
@@ -17,9 +24,20 @@ class UsersController < ApplicationController
   end
   
   def import
-    # fileはtmpに自動で一時保存される
-    User.import(params[:file])
-    redirect_to users_url
+    if params[:csv_file].blank?
+      flash[:danger] = "インポート するCSVファイルを選択してください。"
+      redirect_to users_url
+    else
+      num = User.import(params[:csv_file])  # fileはtmpに自動で一時保存される
+      if num > 0
+        # debugger
+        flash[:success] = "#{num.to_s}件のユーザー情報を追加しました。"
+        redirect_to users_url
+      else
+        flash[:danger] = "読み込みエラーが発生しました。"
+        redirect_to users_url
+      end
+    end
   end
   
   def new
