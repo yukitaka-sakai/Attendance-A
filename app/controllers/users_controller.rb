@@ -13,10 +13,10 @@ class UsersController < ApplicationController
       respond_to do |format|
         format.html 
         format.csv do
-            send_data render_to_string, filename: "#{@user.name}(#{l(@first_day, format: :middle)}).csv", type: :csv #csv用の処理を書く
-        endw
+            send_data render_to_string, 
+            filename: "#{@user.name}.csv", type: :csv #csv用の処理を書く
+        end
       end
-    end
   end
   
   def index
