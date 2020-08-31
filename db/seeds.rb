@@ -5,16 +5,14 @@ User.create!(name: "花田 光司",
              affiliation: "総務部",
              password: "password",
              password_confirmation: "password",
-             superior: true,
-             admin: true)
+             superior: true)
              
 User.create!(name: "花田 虎上",
              email: "superior1@email.com",
              affiliation: "総務部",
              password: "password",
              password_confirmation: "password",
-             superior: true,
-             admin: true)             
+             superior: true)             
              
 User.create!(name: "貴乃花",
              email: "admin@email.com",

@@ -1,3 +1,4 @@
+<% unless @user.admin? %>
 <% provide(:title, @user.name) %>
 
 <div>
@@ -132,3 +133,4 @@
     </tfoot>
   </table> 
 </div>
+<% end %>
