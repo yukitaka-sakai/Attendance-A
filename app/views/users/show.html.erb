@@ -26,6 +26,14 @@
   </table>
 </div>
 
+<% if current_user.superior? %>
+  <div class= alert_msg>
+    <div>【所属長承認申請のお知らせ】</div>
+    <div>【勤怠変更申請のお知らせ】</div>
+    <div>【残業申請のお知らせ】</div>
+  </div>
+<% end %>
+
 <div>
   <tr>
     <td class="pull-left"><%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-md btn-primary btn-attendance"%>
