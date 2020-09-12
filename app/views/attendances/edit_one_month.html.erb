@@ -34,14 +34,18 @@
               <% if !current_user.admin? && (Date.current < day.worked_on) %>
                 <td><%= attendance.time_field :started_at, readonly: true, class: "form-control" %></td>
                 <td><%= attendance.time_field :finished_at, readonly: true, class: "form-control" %></td>
+                <td></td>
+                <td></td>
+                <td><%= attendance.text_field :note, readonly:true, class: "form-control" %></td>
+                <td></td>
               <% else %>
                 <td><%= attendance.time_field :started_at, class: "form-control" %></td>
                 <td><%= attendance.time_field :finished_at, class: "form-control" %></td> 
+                <td></td>
+                <td></td>
+                <td><%= attendance.text_field :note, class: "form-control" %></td>
+                <td></td>
               <% end %>
-              <td></td>
-              <td></td>
-              <td><%= attendance.text_field :note, class: "form-control" %></td>
-              <td></td>
             </tr>
           <% end %>
         <% end %>
