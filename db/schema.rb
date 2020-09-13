@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20200912120738) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "next_day"
+    t.string "next_day"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
@@ -41,9 +41,9 @@ ActiveRecord::Schema.define(version: 20200912120738) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "affiliation"
-    t.datetime "basic_work_time", default: "2020-09-11 23:00:00"
-    t.datetime "designated_work_start_time", default: "2020-09-12 08:30:00"
-    t.datetime "designated_work_end_time", default: "2020-09-11 22:30:00"
+    t.datetime "basic_work_time", default: "2020-09-12 23:00:00"
+    t.datetime "designated_work_start_time", default: "2020-09-13 08:30:00"
+    t.datetime "designated_work_end_time", default: "2020-09-12 22:30:00"
     t.boolean "superior", default: false
     t.integer "uid"
     t.integer "employee_number"

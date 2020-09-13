@@ -18,7 +18,7 @@ class AttendancesController < ApplicationController
       end
     elsif @attendance.finished_at.nil?
       if @attendance.update_attributes(finished_at: Time.current.change(sec: 0))
-        flash[:info] = "おつかレーション"
+        flash[:info] = "おつかレ"
       else
         flash[:danger] = UPDATE_ERROR_MSG
       end
@@ -35,11 +35,14 @@ class AttendancesController < ApplicationController
         attendance = Attendance.find(id)
         attendance.update_attributes!(item)
       end
+      # debugger
     end
     flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
     redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
+    
+  
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
     
