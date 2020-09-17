@@ -37,14 +37,14 @@
                 <td><%= attendance.check_box :next_day, {disabled: true} %></td>
                 <td></td>
                 <td><%= attendance.text_field :note, readonly:true, class: "form-control" %></td>
-                <td><%= f.collection_select :name, @superiors, :id, :name, {include_blank: true, selected: nil}, disabled: true, class: "form-control" %></td>
+                <td><%= attendance.collection_select :application_superior, @superiors, :id, :name, {include_blank: true, selected: nil}, disabled: true, class: "form-control" %></td>
               <% else %>
                 <td><%= attendance.time_field :started_at, class: "form-control" %></td>
                 <td><%= attendance.time_field :finished_at, class: "form-control" %></td> 
                 <td><%= attendance.check_box :next_day %></td>
                 <td></td>
                 <td><%= attendance.text_field :note, placeholder: "入力必須", class: "form-control" %></td>
-                <td><%= f.collection_select :name, @superiors, :id, :name, {include_blank: true, selected: nil}, class: "form-control" %></td>
+                <td><%= attendance.collection_select :application_superior_name, @superiors, :name, :name, {include_blank: true, selected: nil}, class: "form-control" %></td>
               <% end %>
             </tr>
           <% end %>

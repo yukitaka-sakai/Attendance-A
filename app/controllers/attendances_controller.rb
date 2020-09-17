@@ -27,7 +27,8 @@ class AttendancesController < ApplicationController
   end
   
   def edit_one_month
-    @superiors = User.where(superior: true).select(:name)
+    @superiors = User.where(superior: true).select(:id, :name)
+    # debugger
   end
   
   def update_one_month
@@ -50,6 +51,6 @@ class AttendancesController < ApplicationController
   private
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :next_day])[:attendances]
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :next_day, :application_superior, :application_superior_name])[:attendances]
     end
 end
