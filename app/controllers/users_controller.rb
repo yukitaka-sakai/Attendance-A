@@ -32,7 +32,6 @@ class UsersController < ApplicationController
     else
       num = User.import(params[:csv_file])  # fileはtmpに自動で一時保存される
       if num > 0
-        # debugger
         flash[:success] = "#{num.to_s}件のユーザー情報を追加しました。"
         redirect_to users_url
       else

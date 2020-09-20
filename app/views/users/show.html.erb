@@ -8,40 +8,48 @@
         <%= link_to "⬅︎", user_path(date: @first_day.prev_month), class: "btn btn-default" %>
         <%= l(@first_day, format: :middle) %> 時間管理表
         <%= link_to "➡︎︎", user_path(date: @first_day.next_month), class: "btn btn-default" %>
-        </td>
-      <td>指定勤務開始時間:<%= format_basic_info(@user.designated_work_start_time) %><br/>
-      指定勤務終了時間:<%= format_basic_info(@user.designated_work_end_time) %></td>
-      <td colspan="3">基本時間<%= format_basic_info(@user.basic_work_time) %></td>
-      <td>初日:<%= l(@first_day, format: :short) %></td>
+      </td>
+      
+      <td>
+        指定勤務開始時間:      <%= format_basic_info(@user.designated_work_start_time) %><br/>
+        指定勤務終了時間:      <%= format_basic_info(@user.designated_work_end_time) %>
+      </td>
+      <td colspan="3">基本時間 <%= format_basic_info(@user.basic_work_time) %></td>
+      <td>          初日:       <%= l(@first_day, format: :short) %></td>
     </tr>
     
     <tr>
-      <td>所属：<%= @user.affiliation.present? ? @user.affiliation : "未所属" %></td>
-      <td>氏名：<%= @user.name %></td>
+      <td>所属：    <%= @user.affiliation.present? ? @user.affiliation : "未所属" %></td>
+      <td>氏名：    <%= @user.name %></td>
       <td>コード</td>
       <td></td>
-      <td>出勤日数:<%= @worked_sum %>日</td>
-      <td>締め:<%= l(@last_day, format: :short) %></td>
+      <td>出勤日数  <%= @worked_sum %>日</td>
+      <td>締め:     <%= l(@last_day, format: :short) %></td>
     </tr>
   </table>
 </div>
 
-<% if current_user.superior? %>
-  <div class= alert_msg>
-    <div>【所属長承認申請のお知らせ】</div>
-    <div>【勤怠変更申請のお知らせ】</div>
-    <div>【残業申請のお知らせ】</div>
-  </div>
-<% end %>
+<!--上長へのお知らせ-->
+<div> 
+  <% if current_user.superior? %>
+    <div class= alert_msg>
+      <div>【所属長承認申請のお知らせ】</div>
+      <div>【勤怠変更申請のお知らせ】</div>
+      <div>【残業申請のお知らせ】</div>
+    </div>
+  <% end %>
+</div>
 
+<!--テーブル上ボタン群-->
 <div>
   <tr>
     <td class="pull-left"><%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-md btn-primary btn-attendance"%>
-      <%= link_to "CSV出力", user_path(format: :csv), class: 'btn btn-success' %></td>
-    <td colspan="2"><%= link_to "勤怠修正ログ（承認済み）", "#", class: "btn btn-md btn-primary btn-attendance"%></td>
+                          <%= link_to "CSV出力", user_path(format: :csv), class: 'btn btn-success' %></td>
+    <td colspan="2">      <%= link_to "勤怠修正ログ（承認済み）", "#", class: "btn btn-md btn-primary btn-attendance"%></td>
   </tr>
 </div>
-  
+
+<!--勤怠情報テーブル-->
 <div>
   <table class="table table-bordered table-condensed" id="table-attendances" >
     <thead>
@@ -75,15 +83,14 @@
     </thead>
     
     <tbody>
+      <!--set_one_monthをdayに対して繰り返す-->
       <% @attendances.each do |day| %>
-      <% 
-        css_class = 
-        case %w{日 月 火 水 木 金 土}[day.worked_on.wday]
-        when '土'
-          'text-primary'
-        when '日'
-          'text-danger'
-        end
+      <!--土日に色を付ける-->
+      <% css_class = 
+          case %w{日 月 火 水 木 金 土}[day.worked_on.wday]
+          when '土' then 'text-primary'
+          when '日' then 'text-danger'
+          end
       %>      
         <tr>
           <td><%= link_to "残業申請", "#", class: "btn btn-primary btn-attendance"%></td>
@@ -103,11 +110,11 @@
           <td>
             <% if day.started_at.present? && day.finished_at.present? %>
             <!--ヘルパーのworking_timesに引数next_dayを追加(workingtimesはst時間、fn時間、nxのcbを参照する)-->
-              <%= @str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes), day.next_day) %>
-              <% @total_working_times = @total_working_times.to_f + @str_times.to_f %>
+              <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes), day.next_day) %>
+              <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
             <% end %>
           </td>
-          <td><%= day.note %></td>
+          <td class="text-field"><%= day.note %></td>
           <td></td>
           <td></td>
           <td></td>
