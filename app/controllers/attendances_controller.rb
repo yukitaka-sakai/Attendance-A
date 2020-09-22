@@ -13,6 +13,7 @@ class AttendancesController < ApplicationController
     @attendance = Attendance.find(params[:id])
     # 出勤時間が未登録である事を判定する
     if @attendance.started_at.nil?
+    # 出勤データが入ったら編集用出勤カラムにも同じ内容を代入する。
        @attendance.edit_started_at = @attendance.started_at
       if @attendance.update_attributes(started_at: Time.current.change(sec: 0), edit_started_at: Time.current.change(sec: 0))
         flash[:info] = "goodmorningですな"
