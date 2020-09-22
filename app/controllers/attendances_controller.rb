@@ -1,7 +1,7 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :update_one_month]
+  before_action :set_user, only: [:edit_one_month, :update_one_month, :approval_edit]
   before_action :logged_in_user, only: [:updafte, :edit_ont_month, :import, :update_one_month]
-  before_action :set_one_month, only: :edit_one_month
+  before_action :set_one_month, only: [:edit_one_month, :approval_edit]
   before_action :edit_one_month_approval, only: :edit_approval_page
   
   
@@ -77,9 +77,13 @@ class AttendancesController < ApplicationController
     redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
-    
-  
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
+  end
+  
+  def approval_edit
+  end
+  
+  def update_approval_edit
   end
     
   private
