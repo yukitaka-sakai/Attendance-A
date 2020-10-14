@@ -1,6 +1,10 @@
 <% provide(:title, @user.name) %>
+
+<!--@userのフォーム-->
+
 <%= form_with(model: @user, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
-  <div><div>
+
+  <div>
   <h1>勤怠編集</h1>
     <table class="table table-bordered table-condensed" id="table-attendances">
       <thead>
@@ -17,16 +21,15 @@
       </thead>
       
       <tbody>
+<!--@attendancesをdayとして取り出して繰り返す-->
         <% @attendances.each do |day| %>
+<!--attendanceのフォーム-->
           <%= f.fields_for "attendances[]", day do |attendance| %>
-          <% 
-            css_class = 
-            case %w{日 月 火 水 木 金 土}[day.worked_on.wday]
-            when '土'
-              'text-primary'
-            when '日'
-              'text-danger'
-            end
+          <%  css_class = 
+              case %w{日 月 火 水 木 金 土}[day.worked_on.wday]
+              when '土' then 'text-primary'
+              when '日' then 'text-danger'
+              end
           %>      
             <tr>
               <td><%= l(day.worked_on, format: :short) %></td>
@@ -45,6 +48,7 @@
                 <td></td>
                 <td><%= attendance.text_field :note, placeholder: "入力必須", class: "form-control" %></td>
                 <td><%= attendance.collection_select :application_superior_name, @superiors, :name, :name, {include_blank: true, selected: nil}, class: "form-control" %></td>
+                    <%= attendance.hidden_field :application_superior, :value => @user.id %>
               <% end %>
             </tr>
           <% end %>

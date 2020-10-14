@@ -1,7 +1,7 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :update_one_month, :approval_edit]
+  before_action :set_user, only: [:edit_one_month, :update_one_month, ]
   before_action :logged_in_user, only: [:updafte, :edit_ont_month, :import, :update_one_month]
-  before_action :set_one_month, only: [:edit_one_month, :approval_edit]
+  before_action :set_one_month, only: [:edit_one_month, ]
   before_action :edit_one_month_approval, only: :edit_approval_page
   
   
@@ -16,19 +16,19 @@ class AttendancesController < ApplicationController
     # 出勤データが入ったら編集用出勤カラムにも同じ内容を代入する。
        @attendance.edit_started_at = @attendance.started_at
       if @attendance.update_attributes(started_at: Time.current.change(sec: 0), edit_started_at: Time.current.change(sec: 0))
-        flash[:info] = "goodmorningですな"
+        flash[:info] = "goodmorning"
       else
         flash[:danger] = UPDATE_ERROR_MSG
       end
     elsif @attendance.finished_at.nil?
           @attendance.edit_finished_at = @attendance.finished_at
       if @attendance.update_attributes(finished_at: Time.current.change(sec: 0), edit_finished_at: Time.current.change(sec: 0))
-        flash[:info] = "おつかレ"
+        flash[:info] = "おつかれ"
       else
         flash[:danger] = UPDATE_ERROR_MSG
       end
-         @attendance.edit_next_day = @attendance.next_day if @attendance.started_at.presente? || @attendance.finished_at
       # debugger
+         @attendance.edit_next_day = @attendance.next_day if @attendance.started_at.present? || @attendance.finished_at
     end
     redirect_to @user
   end
@@ -43,16 +43,18 @@ class AttendancesController < ApplicationController
   
   # 勤怠情報の編集申請（するときの処理）
   def update_one_month
-    # トランザクションを開始する
+    
     ActiveRecord::Base.transaction do
       # ストロングパラメータの内容に基づいて　idとitemに対して繰り返す。
       attendances_params.each do |id, item|
+        # debugger
       # before_actionのset_one_monthからattendanceのidを代入する
         attendance = Attendance.find(id)
       #上長が選択されているなら
-        if item[:application_superior_name].present?
-      # 編集画面の　出社時間　がないなら
+        if item[:application_superior_name].present? 
+          # 編集画面の　出社時間　がないなら
           if item[:edit_started_at].blank?
+            # debugger
             flash[:danger] = "出社時間の入力がないよ"
             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
       # 編集画面の　退社時間　がないなら
@@ -60,35 +62,34 @@ class AttendancesController < ApplicationController
             flash[:danger] = "退社時間がないよ"
             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
       # 編集画面の　備考　がないなら
-          elsif item[:edit_next_day] == "0" && (item[:edit_started_at] > item[:edit_finished_at])
+          elsif (item[:edit_next_day] =="0") && (item[:edit_started_at] > item[:edit_finished_at])
             flash[:danger] = "出社時間より早い退社時間はできません。"
             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
       # 編集画面の　備考　がないなら
           elsif item[:note].blank?
             flash[:danger] = "備考がないよ"
             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
+          
           end
+          item[:edit_status] = "申請中"
           attendance.update_attributes!(item)
+          # debugger
         end
       end
     end
     flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
-    # debugger
     redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
-  def approval_edit
-  end
-  
-  def update_approval_edit
-  end
-    
+
   private
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :edit_started_at, :edit_finished_at, :note, :next_day, :edit_next_day, :application_superior_name,])[:attendances]
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :next_day, :note,
+                            :edit_started_at, :edit_finished_at, :edit_next_day, :edit_status, 
+                            :application_superior, :application_superior_name,])[:attendances]
     end
 end

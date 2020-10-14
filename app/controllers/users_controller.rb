@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user,       only: [:show, :edit, :update, :destroy]
+  before_action :set_user,       only: [:show, :edit, :update, :destroy,]
   before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy]
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: [:destroy, :edit, :update]
@@ -9,6 +9,7 @@ class UsersController < ApplicationController
   def show
     @superiors = User.where(superior: true).select(:name)
     @worked_sum = @attendances.where.not(started_at: nil).count
+
     respond_to do |format|
       format.html 
       format.csv do
@@ -78,11 +79,66 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
   
+# 勤怠情報確認モーダルへ遷移（するときの処理）
+  def approval_edit_month
+    # ログインしているユーザーを特定する。
+    @user = User.find(params[:user_id])
+    # Attendanceテーブルから特定された上長名がカラムにデータを持つ勤怠データを＠attendanceに代入する。
+    @attendances = Attendance.where(application_superior_name: @user.name, edit_status: "申請中").order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
+
+  end
+  
+  def update_approval_edit_month
+    ActiveRecord::Base.transaction do
+      edit_approval_params.each do |id, item|
+      if item[:edit_confirmation].present?
+        attendance = Attendance.find(id)
+        if item[:edit_status] == "なし"
+          attendance.edit_started_at = nil
+          attendance.edit_finished_at = nil
+          attendance.next_day = nil
+          attendance.note = nil
+          item[:edit_status] = nil
+          item[:edit_confirmation] = nil
+          attendance.application_superior_name = nil
+        elsif item[:edit_status] == "承認"
+          attendance.started_at = attendance.edit_started_at
+          attendance.finished_at = attendance.edit_finished_at
+          attendance.next_day = item[:edit_next_day]
+          # debugger
+          item[:edit_confirmation] = "勤怠編集承認済み"
+        elsif item[:edit_status] == "否認"
+          attendance.edit_started_at = nil
+          attendance.edit_finished_at = nil
+          attendance.next_day = nil
+          item[:edit_confirmation] = "勤怠編集承否認"
+        end
+        # debugger
+          attendance.update_attributes!(item)
+      end
+    end
+  end
+  # debugger
+    flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
+    redirect_to user_url(params[:user_id])
+  rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+    flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
+    redirect_to attendances_edit_one_month_user_url(params[:user_id])
+  end
+    
+  
   private
   
 # ストロングパラメーター  
     def user_params　# ユーザーのパラメーターは
       # requireメソッドでオブジェクト名を定める。permitでキーを指定する。
       params.require(:user).permit(:name, :email, :affiliation, :basic_work_time, :designated_work_start_time, :designated_work_end_time, :password, :password_confirmation)
+    end
+    
+    def edit_approval_params
+      params.require(:attendance)
+      .permit(attendances: [:started_at, :finished_at, 
+                            :edit_started_at, :edit_finished_at, :next_day, :note,
+                            :edit_status, :edit_confirmation])[:attendances]
     end
 end

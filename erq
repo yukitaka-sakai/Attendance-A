@@ -1,0 +1,16 @@
+=> [32m#<User:0x00007faaeaac1330[0m
+ id: [1;34m2[0m,
+ name: [31m[1;31m"[0m[31m花田 虎上[1;31m"[0m[31m[0m,
+ email: [31m[1;31m"[0m[31msuperior1@email.com[1;31m"[0m[31m[0m,
+ created_at: [1;34;4mSat[0m, [1;34m26[0m [1;34;4mSep[0m [1;34m2020[0m [1;34m23[0m:[1;34m22[0m:[1;34m12[0m [1;34;4mJST[0m [1;34m+09[0m:[1;34m00[0m,
+ updated_at: [1;34;4mSat[0m, [1;34m26[0m [1;34;4mSep[0m [1;34m2020[0m [1;34m23[0m:[1;34m22[0m:[1;34m12[0m [1;34;4mJST[0m [1;34m+09[0m:[1;34m00[0m,
+ password_digest: [31m[1;31m"[0m[31m$2a$12$//zfjbDK1KOcMIhOdWJdMebrTK1b2qnTrioARb26hFYgl61V2nl86[1;31m"[0m[31m[0m,
+ remember_digest: [1;36mnil[0m,
+ admin: [1;36mfalse[0m,
+ affiliation: [31m[1;31m"[0m[31m総務部[1;31m"[0m[31m[0m,
+ basic_work_time: [1;34;4mSat[0m, [1;34m26[0m [1;34;4mSep[0m [1;34m2020[0m [1;34m08[0m:[1;34m00[0m:[1;34m00[0m [1;34;4mJST[0m [1;34m+09[0m:[1;34m00[0m,
+ designated_work_start_time: [1;34;4mSat[0m, [1;34m26[0m [1;34;4mSep[0m [1;34m2020[0m [1;34m17[0m:[1;34m30[0m:[1;34m00[0m [1;34;4mJST[0m [1;34m+09[0m:[1;34m00[0m,
+ designated_work_end_time: [1;34;4mSat[0m, [1;34m26[0m [1;34;4mSep[0m [1;34m2020[0m [1;34m07[0m:[1;34m30[0m:[1;34m00[0m [1;34;4mJST[0m [1;34m+09[0m:[1;34m00[0m,
+ superior: [1;36mtrue[0m,
+ uid: [1;36mnil[0m,
+ employee_number: [1;36mnil[0m[32m>[0m

@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20200922051844) do
     t.string "edit_next_day"
     t.string "edit_status"
     t.string "status"
+    t.string "edit_confirmation"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
@@ -48,9 +49,9 @@ ActiveRecord::Schema.define(version: 20200922051844) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "affiliation"
-    t.datetime "basic_work_time", default: "2020-09-21 23:00:00"
-    t.datetime "designated_work_start_time", default: "2020-09-22 08:30:00"
-    t.datetime "designated_work_end_time", default: "2020-09-21 22:30:00"
+    t.datetime "basic_work_time", default: "2020-10-11 23:00:00"
+    t.datetime "designated_work_start_time", default: "2020-10-12 08:30:00"
+    t.datetime "designated_work_end_time", default: "2020-10-11 22:30:00"
     t.boolean "superior", default: false
     t.integer "uid"
     t.integer "employee_number"

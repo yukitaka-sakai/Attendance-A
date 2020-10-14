@@ -1,0 +1,78 @@
+<% provide(:title, @user.name) %>
+<h1>勤怠編集</h1>
+<!--@userのフォーム-->
+  <%= form_with(model: @user, url: user_update_approval_edit_month_path(@user), local: true, method: :patch) do |f| %>
+    <% @attendances.each do |id, attendances| %>
+      <% user = User.find(id) %>
+
+      <div>
+        <h3 class><%= "【#{user.name}からの勤怠変更申請】"%></h3>
+        <table class="table table-bordered table-condensed" id="table-attendances">
+          <thead>
+            <tr>
+              <td rowspan="3">日付</td>
+              <td rowspan="3">曜日</td>
+              <td colspan="4">変更前</td>
+              <td colspan="4">変更後</td>
+              <td rowspan="3">翌日</td>
+              <td rowspan="3">備考</td>
+              <td rowspan="3">指示者確認㊞</td>
+              <td rowspan="3">変更</td>
+              <td rowspan="3">勤怠確認</td>
+            </tr>
+            <tr>
+              <td colspan="2">出社</td>
+              <td colspan="2">退社</td>
+              <td colspan="2">出社</td>
+              <td colspan="2">退社</td>
+            </tr>
+            <tr>
+              <td>時</td>
+              <td>分</td>
+              <td>時</td>
+              <td>分</td>
+              <td>時</td>
+              <td>分</td>
+              <td>時</td>
+              <td>分</td>
+            </tr>
+          </thead>
+          
+          <tbody>
+            <% attendances.each do |attendance| %>
+              <%= f.fields_for "attendances[]", attendance do |at| %>
+                <%  css_class = 
+                    case %w{日 月 火 水 木 金 土}[attendance.worked_on.wday]
+                    when '土' then 'text-primary'
+                    when '日' then 'text-danger'
+                    end
+                %> 
+                <tr>
+                  <td><%= l(attendance.worked_on, format: :short) %></td>
+                  <td class="<%= css_class %>"><%= $days_of_the_week[attendance.worked_on.wday] %></td>
+                  <td><%= attendance.started_at.hour if attendance.started_at.present? %></td>
+                  <td><%= attendance.started_at.floor_to(15.minutes).min if attendance.started_at.present? %></td>
+                  <td><%= attendance.finished_at.hour if attendance.finished_at.present? %></td>
+                  <td><%= attendance.finished_at.floor_to(15.minutes).min if attendance.finished_at.present? %></td>
+    
+                  <td><%= attendance.edit_started_at.hour if attendance.edit_started_at.present? %></td>
+                  <td><%= attendance.edit_started_at.floor_to(15.minutes).min if attendance.edit_started_at.present? %></td>
+                  <td><%= attendance.edit_finished_at.hour if attendance.edit_finished_at.present? %></td>
+                  <td><%= attendance.edit_finished_at.floor_to(15.minutes).min if attendance.edit_finished_at.present? %></td>
+    
+                  <td><%= at.check_box :edit_next_day %></td>
+                  <td><%= attendance.note %></td>
+                  <td><%= at.select :edit_status, ["なし", "申請中", "承認", "否認"], {include_blank: ""}, class: "form-control" %></td>
+                  <td><%= at.check_box :edit_confirmation %></td>
+                  <td><%= link_to "確認", "#", class: "btn btn-primary btn-attendance" %></td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+    <div class="center">
+      <%= f.submit "編集を保存する", class: "btn btn-lg btn-primary" %>
+    </div>
+  <% end %>

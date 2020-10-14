@@ -1,10 +1,15 @@
+<% provide(:class_text, 'approval-edit') %>
+
 <div class="modal-dialog modal-lg modal-dialog-center">
   <div class="modal-content">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <button type="button" class="close" data-dismiss="modal" aria-label="close">
         <span aria-hidden="true">&times;</span>
-        
-        <div>【<%= @user.name%>からの勤怠変更申請】</div>
+      </button>
+
+      <%= form_with(model: @user, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
+
+<% binding.pry %>
           <table class="table table-bordered table-condensed" id="table-attendances" >
             <thead>
               <tr>
@@ -37,6 +42,7 @@
             
             <tbody>
               <% @attendances.each do |day| %>
+              <%= f.fields_for "attendances[]", day do |attendance| %>
               <!--土日に色を付ける-->
               <% css_class = 
                   case %w{日 月 火 水 木 金 土}[day.worked_on.wday]
@@ -57,18 +63,18 @@
                   <td><%= day.edit_finished_at.hour if day.finished_at.present? %></td>
                   <td><%= day.edit_finished_at.floor_to(15.minutes).min if day.finished_at.present? %></td>
 
-                  <td class="text-field"><%= day.note %></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                  <td><%= attendance.text_field :note, readonly:true, class: "form-control" %></td>
+                  <td><%= day.check_box :edit_next_day %></td>
+                  <td><%= day.select :edit_status, ["なし", "申請中", "承認", "否認"], {include_blank: ""}, class: "form-control" %></td>
                 </tr>
                   <div class="center">
                     <%= f.submit "変更を送信する", class: "btn btn-lg btn-primary" %>
                   </div>
               <% end %>
             </tbody>
-          </table>
-      </button>
+            <% end %>
+          <% end %>
+        <% end %>
     </div>
   </div>
 </div>

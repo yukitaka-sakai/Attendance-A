@@ -22,11 +22,13 @@ Rails.application.routes.draw do
       # 勤怠情報編集
       get   'attendances/edit_one_month'
       patch 'attendances/update_one_month'
-      
-      # 勤怠情報編集確認
-      get   'approval_edit'
-      patch 'update_approval_edit'
+
     end
+    
+          
+      # 勤怠情報編集確認
+      get   'approval_edit_month'
+      patch 'update_approval_edit_month'
     
       # 勤怠情報に紐付ける
       resources :attendances, only: [:update, :edit]

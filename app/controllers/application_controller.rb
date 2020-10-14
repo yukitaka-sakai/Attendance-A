@@ -43,9 +43,6 @@ class ApplicationController < ActionController::Base
       @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
     end
   
-  def edit_one_month_approval
-    # @attendances = @user.attendances.where.not(apprication_superior_name: nil).order(:worked_on)
-  end
   
   rescue ActiveRecord::RecordInvalid #トランザクションによるエラー分岐
     flash[:danger] = "失敗"

@@ -34,7 +34,7 @@
   <% if current_user.superior? %>
     <div class= alert_msg>
       <div>【所属長承認申請のお知らせ】</div>
-      <div><%= link_to "【勤怠変更申請のお知らせ】", approval_edit_user_path(@user), remote: true, class: "success" %></div>
+      <div><%= link_to "【勤怠変更申請のお知らせ】", user_approval_edit_month_path(@user), class: "success" %></div>
       <div>【残業申請のお知らせ】</div>
     </div>
   <% end %>
@@ -119,7 +119,11 @@
           <td></td>
           <td></td>
           <td></td>
-          <td><%= day.application_superior_name %></td>
+          <td><% if day.application_superior_name != nil %>
+                <%= day.application_superior_name %>
+              <% elsif day.edit_confirmation != nil %>
+                <%= day.edit_confirmation %></td>
+              <% end %>
         </tr>
       <% end %>
     </tbody>
@@ -152,4 +156,4 @@
 <% end %>
 
 <!--モーダルウィンドウ表示-->
-<div id="approval_edit" class="modal fade" tabindex"-1" role="dialog" aria-hidden="true"></div>
+<!--<div id="approval-edit" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>-->
