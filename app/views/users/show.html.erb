@@ -34,7 +34,11 @@
   <% if current_user.superior? %>
     <div class= alert_msg>
       <div>【所属長承認申請のお知らせ】</div>
-      <div><%= link_to "【勤怠変更申請のお知らせ】", user_approval_edit_month_path(@user), class: "success" %></div>
+      <div>【勤怠変更申請のお知らせ】
+        <% if @approval_edit_sum > 0 %>
+          <%= link_to ": #{@approval_edit_sum}件の通知があります。", user_approval_edit_month_path(@user), class: "danger" %> 
+        <% end %>
+      </div>
       <div>【残業申請のお知らせ】</div>
     </div>
   <% end %>
@@ -119,11 +123,12 @@
           <td></td>
           <td></td>
           <td></td>
-          <td><% if day.application_superior_name != nil %>
-                <%= day.application_superior_name %>
-              <% elsif day.edit_confirmation != nil %>
-                <%= day.edit_confirmation %></td>
+          <td><% if (day.application_superior_name != nil) && (day.edit_confirmation != nil) %>
+                <%= day.edit_confirmation %>:<%= day.application_superior_name %>
+              <% elsif day.application_superior_name != nil %>
+                <%= "#{day.application_superior_name} へ勤務変更申請中" %>
               <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>

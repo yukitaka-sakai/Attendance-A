@@ -9,7 +9,8 @@ class UsersController < ApplicationController
   def show
     @superiors = User.where(superior: true).select(:name)
     @worked_sum = @attendances.where.not(started_at: nil).count
-
+    @approval_edit_sum = Attendance.where(application_superior_name: @user.name, edit_status: "申請中").count
+# debugger
     respond_to do |format|
       format.html 
       format.csv do
@@ -106,7 +107,7 @@ class UsersController < ApplicationController
           attendance.started_at = attendance.edit_started_at
           attendance.finished_at = attendance.edit_finished_at
           attendance.next_day = item[:edit_next_day]
-          item[:edit_confirmation] = "勤怠編集承認済み"
+          item[:edit_confirmation] = "承認済"
           flash[:success] = "勤怠情報を承認しました。"
         elsif item[:edit_status] == "否認"
           attendance.edit_started_at = nil
