@@ -105,7 +105,6 @@ class UsersController < ApplicationController
           attendance.started_at = attendance.edit_started_at
           attendance.finished_at = attendance.edit_finished_at
           attendance.next_day = item[:edit_next_day]
-          # debugger
           item[:edit_confirmation] = "勤怠編集承認済み"
         elsif item[:edit_status] == "否認"
           attendance.edit_started_at = nil
@@ -123,7 +122,7 @@ class UsersController < ApplicationController
     redirect_to user_url(params[:user_id])
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
-    redirect_to attendances_edit_one_month_user_url(params[:user_id])
+    redirect_to user_url(params[:user_id])
   end
     
   
