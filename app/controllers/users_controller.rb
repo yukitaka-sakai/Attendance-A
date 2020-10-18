@@ -101,16 +101,19 @@ class UsersController < ApplicationController
           item[:edit_status] = nil
           item[:edit_confirmation] = nil
           attendance.application_superior_name = nil
+          flash[:danger] = "勤務変更を削除しました。"
         elsif item[:edit_status] == "承認"
           attendance.started_at = attendance.edit_started_at
           attendance.finished_at = attendance.edit_finished_at
           attendance.next_day = item[:edit_next_day]
           item[:edit_confirmation] = "勤怠編集承認済み"
+          flash[:success] = "勤怠情報を承認しました。"
         elsif item[:edit_status] == "否認"
           attendance.edit_started_at = nil
           attendance.edit_finished_at = nil
           attendance.next_day = nil
           item[:edit_confirmation] = "勤怠編集承否認"
+          flash[:danger] = "勤怠情報を否認しました。"
         end
         # debugger
           attendance.update_attributes!(item)
@@ -118,7 +121,6 @@ class UsersController < ApplicationController
     end
   end
   # debugger
-    flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
     redirect_to user_url(params[:user_id])
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
@@ -135,7 +137,7 @@ class UsersController < ApplicationController
     end
     
     def edit_approval_params
-      params.require(:attendance)
+      params.require(:user)
       .permit(attendances: [:started_at, :finished_at, 
                             :edit_started_at, :edit_finished_at, :next_day, :note,
                             :edit_status, :edit_confirmation])[:attendances]
