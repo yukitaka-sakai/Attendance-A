@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
-  before_action :set_user,       only: [:show, :edit, :update, :destroy,]
-  before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy]
+  before_action :set_user,       only: [:show, :edit, :update, :destroy, :approval_show]
+  before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy, :approval_show]
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: [:destroy, :edit, :update]
-  before_action :set_one_month,  only:  :show
+  before_action :set_one_month,  only: [:show, :approval_show]
   
 # ユーザーの勤怠画面へ遷移（するときの処理）
   def show
@@ -92,11 +92,11 @@ class UsersController < ApplicationController
   def update_approval_edit_month
     ActiveRecord::Base.transaction do
       edit_approval_params.each do |id, item|
-      if item[:edit_confirmation].present?
-        attendance = Attendance.find(id)
-        if item[:edit_status] == "なし"
-          attendance.edit_started_at = nil
-          attendance.edit_finished_at = nil
+      if item[:edit_confirmation].present? # 変更check boxが選択されているなら。
+        attendance = Attendance.find(id) # attendanceにAttendanceテーブルのIDを代入する
+        if item[:edit_status] == "なし" # 勤怠申請自体が無かったことにする。
+          # attendance.edit_started_at = nil 
+          # attendance.edit_finished_at = nil
           attendance.next_day = nil
           attendance.note = nil
           item[:edit_status] = nil
@@ -104,13 +104,13 @@ class UsersController < ApplicationController
           attendance.application_superior_name = nil
           flash[:danger] = "勤務変更を削除しました。"
         elsif item[:edit_status] == "承認"
-          attendance.started_at = attendance.edit_started_at
+          attendance.started_at = attendance.edit_started_at # 承認なら変更時間を勤怠時間に代入する。
           attendance.finished_at = attendance.edit_finished_at
           attendance.next_day = item[:edit_next_day]
-          item[:edit_confirmation] = "承認済"
+          item[:edit_confirmation] = "編集承認済"
           flash[:success] = "勤怠情報を承認しました。"
         elsif item[:edit_status] == "否認"
-          attendance.edit_started_at = nil
+          attendance.edit_started_at = nil # 否認なら変更時間を削除し、勤怠編集否認のメッセージ
           attendance.edit_finished_at = nil
           attendance.next_day = nil
           item[:edit_confirmation] = "勤怠編集承否認"
@@ -118,6 +118,8 @@ class UsersController < ApplicationController
         end
         # debugger
           attendance.update_attributes!(item)
+      else
+        item[:edit_status] = nil 
       end
     end
   end
@@ -126,6 +128,11 @@ class UsersController < ApplicationController
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
     redirect_to user_url(params[:user_id])
+  end
+  
+  def approval_show
+    @user = User.find(params[:id])
+    @worked_sum = @attendances.where.not(started_at: nil).count
   end
     
   
@@ -140,7 +147,7 @@ class UsersController < ApplicationController
     def edit_approval_params
       params.require(:user)
       .permit(attendances: [:started_at, :finished_at, 
-                            :edit_started_at, :edit_finished_at, :next_day, :note,
+                            :edit_started_at, :edit_finished_at, :next_day, :edit_next_day, :note,
                             :edit_status, :edit_confirmation])[:attendances]
     end
 end

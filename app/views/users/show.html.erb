@@ -36,7 +36,7 @@
       <div>【所属長承認申請のお知らせ】</div>
       <div>【勤怠変更申請のお知らせ】
         <% if @approval_edit_sum > 0 %>
-          <%= link_to ": #{@approval_edit_sum}件の通知があります。", user_approval_edit_month_path(@user), class: "danger" %> 
+          <%= link_to ": #{@approval_edit_sum}件の通知があります。", user_approval_edit_month_path(@user), remote:true, class: "danger" %> 
         <% end %>
       </div>
       <div>【残業申請のお知らせ】</div>
@@ -123,10 +123,10 @@
           <td></td>
           <td></td>
           <td></td>
-          <td><% if (day.application_superior_name != nil) && (day.edit_confirmation != nil) %>
-                <%= day.edit_confirmation %>:<%= day.application_superior_name %>
-              <% elsif day.application_superior_name != nil %>
+          <td><% if day.edit_status == "申請中" %>
                 <%= "#{day.application_superior_name} へ勤務変更申請中" %>
+              <% else %>
+                <%= day.edit_confirmation %>
               <% end %>
           </td>
         </tr>
@@ -160,5 +160,5 @@
 </div>
 <% end %>
 
-<!--モーダルウィンドウ表示-->
-<!--<div id="approval-edit-month" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>-->
+モーダルウィンドウ表示
+<div id="approval-edit-month" class="modal fade" tabindex="10" role="dialog" aria-hidden="true"></div>

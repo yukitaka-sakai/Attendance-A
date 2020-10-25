@@ -1,0 +1,126 @@
+<% unless @user.admin? %>
+<% provide(:title, @user.name) %>
+
+<div>
+  <div class="row">
+    <table class="table table-bordered table-condensed user-table">
+      <tr>
+        <td>
+          <%= l(@first_day, format: :middle) %> 時間管理表
+        </td>
+        
+        <td>
+          指定勤務開始時間:      <%= format_basic_info(@user.designated_work_start_time) %><br/>
+          指定勤務終了時間:      <%= format_basic_info(@user.designated_work_end_time) %>
+        </td>
+        <td colspan="3">基本時間 <%= format_basic_info(@user.basic_work_time) %></td>
+        <td>          初日:      <%= l(@first_day, format: :short) %></td>
+      </tr>
+      
+      <tr>
+        <td>所属：    <%= @user.affiliation.present? ? @user.affiliation : "未所属" %></td>
+        <td>氏名：    <%= @user.name %></td>
+        <td>コード</td>
+        <td></td>
+        <td>出勤日数  <%= @worked_sum %>日</td>
+        <td>締め:     <%= l(@last_day, format: :short) %></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!--勤怠情報テーブル-->
+<div>
+  <div class="row" >
+    <table class="table table-bordered table-condensed" id="table-attendances" >
+      <thead>
+        <tr>
+          <td width="40" rowspan="3">日付</td>
+          <td width="40" rowspan="3">曜日</td>
+          <td width="315" colspan="6">【実績】</td>
+          <td width="314" colspan="5">所定外勤務</td>
+        </tr>
+        <tr>
+          <td colspan="2">出社</td>
+          <td colspan="2">退社</td>
+          <td width="100" rowspan="2">在社時間</td>
+          <td rowspan="2">備考</td>
+          <td colspan="2">終了予定時間</td>
+          <td width="100" rowspan="2">時間外時間</td>
+          <td rowspan="2">業務処理内容</td>
+          <td width="130" rowspan="2">指示者確認㊞</td>
+        </tr>
+        <tr>
+          <td width="40">時</td>
+          <td width="40">分</td>
+          <td width="40">時</td>
+          <td width="40">分</td>
+          <td width="40">時</td>
+          <td width="40">分</td>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <% @attendances.each do |day| %>
+        <% css_class = 
+            case %w{日 月 火 水 木 金 土}[day.worked_on.wday]
+            when '土' then 'text-primary'
+            when '日' then 'text-danger'
+            end
+        %>      
+          <tr>
+            <td><%= l(day.worked_on, format: :short) %></td>
+            <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
+            <td><%= day.started_at.hour if day.started_at.present? %></td>
+            <td><%= day.started_at.floor_to(15.minutes).min if day.started_at.present? %></td>
+            <td><%= day.finished_at.hour if day.finished_at.present? %></td>
+            <td><%= day.finished_at.floor_to(15.minutes).min if day.finished_at.present? %></td>
+            <td>
+              <% if day.started_at.present? && day.finished_at.present? %>
+              <!--ヘルパーのworking_timesに引数next_dayを追加(workingtimesはst時間、fn時間、nxのcbを参照する)-->
+                <%= @str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes), day.next_day) %>
+                <% @total_working_times = @total_working_times.to_f + @str_times.to_f %>
+              <% end %>
+            </td>
+            <td class="text-field"><%= day.note %></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><% if (day.application_superior_name != nil) && (day.edit_confirmation != nil) %>
+                  <%= day.edit_confirmation %>:<%= day.application_superior_name %>
+                <% elsif day.application_superior_name != nil %>
+                  <%= "#{day.application_superior_name} へ変更申請中" %>
+                <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      
+      <tfoot>
+        <tr>
+          <td rowspan="2"></td>
+          <td colspan="2">累計日数</td>
+          <td colspan="6"></td>
+          <td>在社時間合計</td>
+          <td colspan="5"></td>
+            <ol>
+              <li></li>
+              <li></li>
+            </ol>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2"><%= @attendances.count %>日</td>
+          <td colspan="6"><%= format_basic_info(@user.designated_work_start_time).to_f * @worked_sum %></td>
+          <td><%= format("%.2f", @total_working_times.to_f) %></td>
+          <td colspan="5"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+<% end %>
+
+<!--モーダルウィンドウ表示-->
+<!--<div id="approval-edit-month" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>-->

@@ -43,37 +43,26 @@ class AttendancesController < ApplicationController
   
   # 勤怠情報の編集申請（するときの処理）
   def update_one_month
-    
     ActiveRecord::Base.transaction do
-      # ストロングパラメータの内容に基づいて　idとitemに対して繰り返す。
-      attendances_params.each do |id, item|
-        # debugger
-      # before_actionのset_one_monthからattendanceのidを代入する
-        attendance = Attendance.find(id)
-      #上長が選択されているなら
-        if item[:application_superior_name].present? 
-          # 編集画面の　出社時間　がないなら
-          if item[:edit_started_at].blank?
-            # debugger
+      attendances_params.each do |id, item| # ストロングパラメータの内容に基づいて　idとitemに対して繰り返す。
+        attendance = Attendance.find(id) # before_actionのset_one_monthからattendanceのidを代入する
+        if item[:application_superior_name].present? #上長が選択されているなら
+          if item[:edit_started_at].blank? # 編集画面の　出社時間　がないなら
             flash[:danger] = "出社時間の入力がないよ"
             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
-      # 編集画面の　退社時間　がないなら
-          elsif item[:edit_finished_at].blank?
+          elsif item[:edit_finished_at].blank? # 編集画面の　退社時間　がないなら
             flash[:danger] = "退社時間がないよ"
             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
-      # 編集画面の　備考　がないなら
+      # 編集画面の　翌日　且つ　出社時間より退社時間が早いなら
           elsif (item[:edit_next_day] =="0") && (item[:edit_started_at] > item[:edit_finished_at])
             flash[:danger] = "出社時間より早い退社時間はできません。"
             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
-      # 編集画面の　備考　がないなら
-          elsif item[:note].blank?
+          elsif item[:note].blank? # 編集画面の　備考　がないなら
             flash[:danger] = "備考がないよ"
             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
-          
           end
           item[:edit_status] = "申請中"
           attendance.update_attributes!(item)
-          # debugger
         end
       end
     end
