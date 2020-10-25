@@ -11,7 +11,7 @@ CSV.generate do |csv|
       $days_of_the_week[day.worked_on.wday],
       (day.started_at.floor_to(15.minutes).strftime("%H:%M") if day.started_at.present?),
       (day.finished_at.floor_to(15.minutes).strftime("%H:%M") if day.finished_at.present?),
-      (format("%.2f", working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes))) if day.finished_at.present?)
+      (format("%.2f", working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes), day.next_day)) if day.finished_at.present?)
     ]
     csv << column_values
   end
