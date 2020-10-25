@@ -23,6 +23,10 @@ Rails.application.routes.draw do
       get   'attendances/edit_one_month'
       patch 'attendances/update_one_month'
       get   'approval_show'
+      
+      # 残業申請依頼
+      get   'attendances/overtime_request'
+      patch 'attendances/update_overtime_request'
     end
     
           

@@ -97,7 +97,7 @@
           end
       %>      
         <tr>
-          <td><%= link_to "残業申請", "#", class: "btn btn-primary btn-attendance"%></td>
+          <td><%= link_to "残業申請", attendances_overtime_request_user_path(@user, day), class: "btn btn-primary btn-attendance"%></td>
           <td><%= l(day.worked_on, format: :short) %></td>
           <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
           <td><%= day.started_at.hour if day.started_at.present? %></td>
@@ -162,3 +162,4 @@
 
 モーダルウィンドウ表示
 <div id="approval-edit-month" class="modal fade" tabindex="10" role="dialog" aria-hidden="true"></div>
+<div id="overtime-request" class="modal fade" tabindex="10" role="dialog" aria-hidden="true"></div>
