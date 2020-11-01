@@ -79,14 +79,21 @@ class UsersController < ApplicationController
     flash[:success] = "#{@user.name}のデータを削除しました。"
     redirect_to users_url
   end
+
+# 残業申請確認モーダルへ遷移（するときの処理）
+  def approval_overtime
+    # ログインしているユーザーを特定する。
+    @user = User.find(params[:user_id])
+    # Attendanceテーブルから特定された上長名がカラムにデータを持つ勤怠データを＠attendanceに代入する。
+    @attendances = Attendance.where(application_superior_name: @user.name, edit_status: "申請中").order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
+  end
   
-# 勤怠情報確認モーダルへ遷移（するときの処理）
+  # 勤怠情報確認モーダルへ遷移（するときの処理）
   def approval_edit_month
     # ログインしているユーザーを特定する。
     @user = User.find(params[:user_id])
     # Attendanceテーブルから特定された上長名がカラムにデータを持つ勤怠データを＠attendanceに代入する。
     @attendances = Attendance.where(application_superior_name: @user.name, edit_status: "申請中").order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
-
   end
   
   def update_approval_edit_month

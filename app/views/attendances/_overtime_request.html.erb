@@ -1,0 +1,54 @@
+<% provide(:title, @user.name) %>
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    
+<!--headerにタイトルと、クローズボタン-->
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h1 class="modal-title">残業申請</h1>
+    </div>
+    
+    <div class="modal-body">
+      <%= form_with(model: @attendance, url: update_overtime_request_user_attendance_path(@user, @attendance), method: :patch) do |f| %>
+        <div>
+          <table class="table table-bordered table-condensed" id="table-attendances">
+            <thead>
+              <tr>
+                <td>日付</td>
+                <td>曜日</td>
+                <td>終了予定時間</td>
+                <td>翌日</td>
+                <td>業務処理内容</td>
+                <td>指示者確認㊞</td>
+              </tr>
+            </thead>
+            
+            <tbody>
+              <%  css_class = 
+                  case %w{日 月 火 水 木 金 土}[@attendance.worked_on.wday]
+                  when '土' then 'text-primary'
+                  when '日' then 'text-danger'
+                  end
+              %> 
+              <tr>
+                <td><%= l(@attendance.worked_on, format: :short) %></td>
+                <td class="<%= css_class %>"><%= $days_of_the_week[@attendance.worked_on.wday] %></td>
+                <td><%= f.time_field :overtime_finished_at, class: "form-control" %></td>
+                <td><%= f.check_box :overtime_next_day %></td>
+                <td><%= f.text_field :overtime_note, class: "form-control" %></td>
+                <td><%= f.collection_select :application_superior_name, @superiors, :name, :name, {include_blank: true, selected: nil}, class: "form-control" %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="center">
+          <%= f.submit "残業申請送信", class: "btn btn-lg btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+  
+ 

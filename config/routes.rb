@@ -23,23 +23,23 @@ Rails.application.routes.draw do
       get   'attendances/edit_one_month'
       patch 'attendances/update_one_month'
       get   'approval_show'
-      
-      # 残業申請依頼
-      get   'attendances/overtime_request'
-      patch 'attendances/update_overtime_request'
+    end
+
+    # 勤怠情報編集確認
+    get   'approval_edit_month'
+    patch 'update_approval_edit_month'
+
+    # 勤怠情報に紐付ける
+    resources :attendances, only: [:update, :edit] do
+      member do
+        # 残業申請依頼
+        get   'overtime_request'
+        patch 'update_overtime_request'
+      end
     end
     
-          
-      # 勤怠情報編集確認
-      get   'approval_edit_month'
-      patch 'update_approval_edit_month'
-      
-    
-      # 勤怠情報に紐付ける
-      resources :attendances, only: [:update, :edit]
-      
-      # ユーザー情報をCSVからインポート
-      collection { post :import }
+    # ユーザー情報をCSVからインポート
+    collection { post :import }
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

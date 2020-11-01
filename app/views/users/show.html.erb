@@ -33,7 +33,11 @@
 <div> 
   <% if current_user.superior? %>
     <div class= alert_msg>
-      <div>【所属長承認申請のお知らせ】</div>
+      <div>【所属長承認申請のお知らせ】
+        <% if @approval_edit_sum > 0 %>
+          <%= link_to ": #{@approval_edit_sum}件の通知があります。", user_approval_edit_month_path(@user), remote:true, class: "danger" %> 
+        <% end %>
+      </div>
       <div>【勤怠変更申請のお知らせ】
         <% if @approval_edit_sum > 0 %>
           <%= link_to ": #{@approval_edit_sum}件の通知があります。", user_approval_edit_month_path(@user), remote:true, class: "danger" %> 
@@ -97,7 +101,7 @@
           end
       %>      
         <tr>
-          <td><%= link_to "残業申請", attendances_overtime_request_user_path(@user, day), class: "btn btn-primary btn-attendance"%></td>
+          <td><%= link_to "残業申請", overtime_request_user_attendance_path(@user, day), remote:true, class: "btn btn-primary btn-attendance"%></td>
           <td><%= l(day.worked_on, format: :short) %></td>
           <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
           <td><%= day.started_at.hour if day.started_at.present? %></td>
