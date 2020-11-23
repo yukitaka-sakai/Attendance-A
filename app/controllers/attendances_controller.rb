@@ -50,7 +50,7 @@ class AttendancesController < ApplicationController
           if item[:edit_started_at].blank? # 編集画面の　出社時間　がないなら
             flash[:danger] = "出社時間の入力がないよ"
             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
-          elsif item[:edit_finished_at].blank? # 編集画面の　退社時間　がないなら
+          elsif item[:edit_finished_at].blank? # ���集画面の　退社時間　がないなら
             flash[:danger] = "退社時間がないよ"
             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
       # 編集画面の　翌日　且つ　出社時間より退社時間が早いなら
@@ -82,13 +82,15 @@ class AttendancesController < ApplicationController
   def update_overtime_request
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
-    @attendance.overtime_status = "申請中"
-    if @attendance.update_attributes(overtime_params)
-      flash[:success] = "更新成功"
-      redirect_to user_url(@user)
-    else
-      flash[:danger] = "更新失敗"
-      redirect_to user_url(@user)
+    if @attendance.overtime_finished_at.blank? || @attendance.application_superior_name.blank?
+      @attendance.overtime_status = "申請中"
+      if @attendance.update_attributes(overtime_params)
+        flash[:success] = "残業申請を行いました。"
+        redirect_to user_url(@user)
+      else
+        flash[:danger] = "申請に失敗しました。"
+        redirect_to user_url(@user)
+      end
     end
   end
   
