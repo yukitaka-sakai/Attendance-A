@@ -34,8 +34,8 @@
   <% if current_user.superior? %>
     <div class= alert_msg>
       <div>【所属長承認申請のお知らせ】
-        <% if @approval_edit_sum > 0 %>
-          <%= link_to ": #{@approval_edit_sum}件の通知があります。", user_approval_edit_month_path(@user), remote:true, class: "danger" %> 
+        <% if @approval_overtime_sum > 0 %>
+          <%= link_to ": #{@approval_overtime_sum}件の通知があります。", user_approval_edit_month_path(@user), remote:true, class: "danger" %> 
         <% end %>
       </div>
       <div>【勤怠変更申請のお知らせ】

@@ -10,6 +10,7 @@ class UsersController < ApplicationController
     @superiors = User.where(superior: true).select(:name)
     @worked_sum = @attendances.where.not(started_at: nil).count
     @approval_edit_sum = Attendance.where(application_superior_name: @user.name, edit_status: "申請中").count
+    @approval_overtime_sum = Attendance.where(application_superior_name: @user.name, overtime_status: "申請中").count
 # debugger
     respond_to do |format|
       format.html 
