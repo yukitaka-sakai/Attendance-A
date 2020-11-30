@@ -29,6 +29,10 @@ Rails.application.routes.draw do
     get   'approval_edit_month'
     patch 'update_approval_edit_month'
 
+    # 残業申請確認
+    get   'approval_overtime_request'
+    patch 'update_approval_overtime_request'
+    
     # 勤怠情報に紐付ける
     resources :attendances, only: [:update, :edit] do
       member do

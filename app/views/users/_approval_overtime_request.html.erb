@@ -45,20 +45,12 @@
                     <tr>
                       <td><%= l(attendance.worked_on, format: :short) %></td>
                       <td class="<%= css_class %>"><%= $days_of_the_week[attendance.worked_on.wday] %></td>
-                      <td><%= attendance.overtime_finished_at if attendance.started_at.present? %></td>
-                      <td><%= attendance.started_at.floor_to(15.minutes).min if attendance.started_at.present? %></td>
-                      <td><%= attendance.finished_at.hour if attendance.finished_at.present? %></td>
-                      <td><%= attendance.finished_at.floor_to(15.minutes).min if attendance.finished_at.present? %></td>
-                      
-                      <td><%= attendance.edit_started_at.hour if attendance.edit_started_at.present? %></td>
-                      <td><%= attendance.edit_started_at.floor_to(15.minutes).min if attendance.edit_started_at.present? %></td>
-                      <td><%= attendance.edit_finished_at.hour if attendance.edit_finished_at.present? %></td>
-                      <td><%= attendance.edit_finished_at.floor_to(15.minutes).min if attendance.edit_finished_at.present? %></td>
-                      
-                      <td><%= at.check_box :edit_next_day %></td>
-                      <td><%= attendance.note %></td>
-                      <td><%= at.select :edit_status, ["なし", "申請中", "承認", "否認"], {include_blank: ""}, class: "form-control" %></td>
-                      <td><%= at.check_box :edit_confirmation %></td>
+                      <td><%= l(attendance.overtime_finished_at, format: :time) %></td>
+                      <td><%= l(@user.designated_work_end_time, format: :time) %></td>
+                      <td></td>
+                      <td><%= attendance.overtime_note if attendance.overtime_finished_at.present? %></td>
+                      <td><%= at.select :overtime_status, ["なし", "申請中", "承認", "否認"], {include_blank: ""}, class: "form-control" %></td>
+                      <td><%= at.check_box :overtime_confirmation %></td>
                       <td><%= link_to "確認", approval_show_user_path(id: user.id, date: attendance.worked_on.beginning_of_month), class: "btn btn-primary btn-attendance" %></td>
                     </tr>
                   <% end %>

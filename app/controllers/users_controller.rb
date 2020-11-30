@@ -82,11 +82,11 @@ class UsersController < ApplicationController
   end
 
 # 残業申請確認モーダルへ遷移（するときの処理）
-  def approval_overtime
+  def approval_overtime_request
     # ログインしているユーザーを特定する。
     @user = User.find(params[:user_id])
     # Attendanceテーブルから特定された上長名がカラムにデータを持つ勤怠データを＠attendanceに代入する。
-    @attendances = Attendance.where(application_superior_name: @user.name, edit_status: "申請中").order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
+    @attendances = Attendance.where(application_superior_name: @user.name, overtime_status: "申請中").order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
   end
   
   # 勤怠情報確認モーダルへ遷移（するときの処理）

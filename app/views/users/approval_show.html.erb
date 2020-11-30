@@ -10,8 +10,8 @@
         </td>
         
         <td>
-          指定勤務開始時間:      <%= format_basic_info(@user.designated_work_start_time) %><br/>
-          指定勤務終了時間:      <%= format_basic_info(@user.designated_work_end_time) %>
+          指定勤務開始時間:      <%= l(@user.designated_work_start_time, format: :time) %><br/>
+          指定勤務終了時間:      <%= l(@user.designated_work_end_time, format: :time) %>
         </td>
         <td colspan="3">基本時間 <%= format_basic_info(@user.basic_work_time) %></td>
         <td>          初日:      <%= l(@first_day, format: :short) %></td>
@@ -90,7 +90,8 @@
             <td><% if (day.application_superior_name != nil) && (day.edit_confirmation != nil) %>
                   <%= day.edit_confirmation %>:<%= day.application_superior_name %>
                 <% elsif day.application_superior_name != nil %>
-                  <%= "#{day.application_superior_name} へ変更申請中" %>
+                  <%= "#{day.application_superior_name} へ" %><br/>
+                  <%= "変更申請中" %>
                 <% end %>
             </td>
           </tr>

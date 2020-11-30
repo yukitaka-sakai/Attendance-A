@@ -11,8 +11,8 @@
       </td>
       
       <td>
-        指定勤務開始時間:      <%= format_basic_info(@user.designated_work_start_time) %><br/>
-        指定勤務終了時間:      <%= format_basic_info(@user.designated_work_end_time) %>
+        指定勤務開始時間:      <%= l(@user.designated_work_start_time, format: :time) %><br/>
+        指定勤務終了時間:      <%= l(@user.designated_work_end_time, format: :time) %>
       </td>
       <td colspan="3">基本時間 <%= format_basic_info(@user.basic_work_time) %></td>
       <td>          初日:      <%= l(@first_day, format: :short) %></td>
@@ -33,17 +33,16 @@
 <div> 
   <% if current_user.superior? %>
     <div class= alert_msg>
-      <div>【所属長承認申請のお知らせ】
-        <% if @approval_overtime_sum > 0 %>
-          <%= link_to ": #{@approval_overtime_sum}件の通知があります。", user_approval_edit_month_path(@user), remote:true, class: "danger" %> 
-        <% end %>
-      </div>
+      <div>【所属長承認申請のお知らせ】</div>
       <div>【勤怠変更申請のお知らせ】
         <% if @approval_edit_sum > 0 %>
           <%= link_to ": #{@approval_edit_sum}件の通知があります。", user_approval_edit_month_path(@user), remote:true, class: "danger" %> 
         <% end %>
       </div>
-      <div>【残業申請のお知らせ】</div>
+      <div>【残業申請のお知らせ】
+        <% if @approval_overtime_sum > 0 %>
+          <%= link_to ": #{@approval_overtime_sum}件の通知があります。", user_approval_overtime_request_path(@user), remote:true, class: "danger" %> 
+        <% end %></div>
     </div>
   <% end %>
 </div>
@@ -168,4 +167,5 @@
 
 モーダルウィンドウ表示
 <div id="approval-edit-month" class="modal fade" tabindex="10" role="dialog" aria-hidden="true"></div>
+<div id="approval-overtime-request" class="modal fade" tabindex="10" role="dialog" aria-hidden="true"></div>
 <div id="overtime-request" class="modal fade" tabindex="10" role="dialog" aria-hidden="true"></div>

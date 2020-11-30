@@ -1,0 +1,4 @@
+<!--１行目で_approval_edit_monthをレンダリングする-->
+$("#approval-overtime-request").html("<%= escape_javascript(render 'approval_overtime_request') %>");
+<!--２行目でmモーダルウインドウとして表示している。-->
+$("#approval-overtime-request").modal("show");
