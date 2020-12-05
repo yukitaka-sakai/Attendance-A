@@ -64,7 +64,7 @@ class UsersController < ApplicationController
   def edit
   end
   
-# ユーザー情報の更新処理
+# ユーザ���情報の更新処理
   def update
     if @user.update_attributes(user_params)
       flash[:success] = "更新成功"
@@ -87,6 +87,33 @@ class UsersController < ApplicationController
     @user = User.find(params[:user_id])
     # Attendanceテーブルから特定された上長名がカラムにデータを持つ勤怠データを＠attendanceに代入する。
     @attendances = Attendance.where(application_superior_name: @user.name, overtime_status: "申請中").order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
+  end
+  
+  def update_approval_overtime_request
+    ActiveRecord::Base.transaction do
+      overtime_request_params.each do |id,item|
+        if item[:overtime_confirmation].present?
+          attendance = Attendance.find(id)
+          if item[:overtime_status] == "なし"
+            attendance.next_day = nil
+            attendance.note = nil
+            item[:overtime_status] = nil
+            item[:overtime_confirmation] = nil
+            attendance.application_superior_name = nil
+            flash[:danger] = "残業申請を削除しました。"
+          elsif item[:overtime_status] == "承認"
+            attendance.next_day = item[:overtime_next_day]
+            item[:overtime_confirmation] = "編集承認済"
+            flash[:success] = "残業申請を承認しました。"
+          elsif item[:overtime_status] == "否認"
+            attendance.edit_started_at = nil # 否認なら変更時間を削除し、残業申請否認のメッセージ
+            attendance.next_day = nil
+            item[:overtime_confirmation] = "残業申請否認"
+            flash[:danger] = "残業申請は否認されました。"
+          end
+        end
+      end
+    end
   end
   
   # 勤怠情報確認モーダルへ遷移（するときの処理）
@@ -157,5 +184,10 @@ class UsersController < ApplicationController
       .permit(attendances: [:started_at, :finished_at, 
                             :edit_started_at, :edit_finished_at, :next_day, :edit_next_day, :note,
                             :edit_status, :edit_confirmation])[:attendances]
+    end
+    
+    def overtime_request_params
+      params.require(:user)
+      .permit(attendance: [:overtime_finished_at, :overtime_next_day, :overtime_confirmation, :application_superior_name])[:attendances]
     end
 end
