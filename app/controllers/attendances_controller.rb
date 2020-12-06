@@ -82,7 +82,8 @@ class AttendancesController < ApplicationController
   def update_overtime_request
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
-    @attendance.overtime_status = "申請中" if @attendance.overtime_finished_at.blank? || @attendance.application_superior_name.blank?
+    @attendance.overtime_status = "申請中" if @attendance.overtime_finished_at.presence || @attendance.application_superior_name.presence
+    @attendance.overtime_confirmation = nil
       if @attendance.update_attributes(overtime_params)
         flash[:success] = "残業申請を行いました。"
         redirect_to @user

@@ -91,31 +91,37 @@ class UsersController < ApplicationController
   
   def update_approval_overtime_request
     ActiveRecord::Base.transaction do
-      overtime_request_params.each do |id,item|
+      overtime_request_params.each do |id, item|
         if item[:overtime_confirmation].present?
           attendance = Attendance.find(id)
           if item[:overtime_status] == "なし"
-            attendance.next_day = nil
-            attendance.note = nil
+            item[:next_day] = nil
+            item[:note] = nil
             item[:overtime_status] = nil
             item[:overtime_confirmation] = nil
-            attendance.application_superior_name = nil
+            item[:application_superior_name] = nil
             flash[:danger] = "残業申請を削除しました。"
           elsif item[:overtime_status] == "承認"
-            attendance.next_day = item[:overtime_next_day]
-            item[:overtime_confirmation] = "編集承認済"
+            item[:next_day] = item[:overtime_next_day]
+            item[:overtime_confirmation] = "残業申請承認済"
             flash[:success] = "残業申請を承認しました。"
           elsif item[:overtime_status] == "否認"
-            attendance.edit_started_at = nil # 否認なら変更時間を削除し、残業申請否認のメッセージ
-            attendance.next_day = nil
+            item[:next_day] = nil
             item[:overtime_confirmation] = "残業申請否認"
             flash[:danger] = "残業申請は否認されました。"
           end
+          attendance.update_attributes!(item)
+        else
+          item[:overtime_status] = nil
         end
       end
     end
+    redirect_to user_url(params[:user_id])
+  rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+    flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
+    redirect_to user_url(params[:user_id])
   end
-  
+
   # 勤怠情報確認モーダルへ遷移（するときの処理）
   def approval_edit_month
     # ログインしているユーザーを特定する。
@@ -127,37 +133,36 @@ class UsersController < ApplicationController
   def update_approval_edit_month
     ActiveRecord::Base.transaction do
       edit_approval_params.each do |id, item|
-      if item[:edit_confirmation].present? # 変更check boxが選択されているなら。
-        attendance = Attendance.find(id) # attendanceにAttendanceテーブルのIDを代入する
-        if item[:edit_status] == "なし" # 勤怠申請自体が無かったことにする。
-          # attendance.edit_started_at = nil 
-          # attendance.edit_finished_at = nil
-          attendance.next_day = nil
-          attendance.note = nil
-          item[:edit_status] = nil
-          item[:edit_confirmation] = nil
-          attendance.application_superior_name = nil
-          flash[:danger] = "勤務変更を削除しました。"
-        elsif item[:edit_status] == "承認"
-          attendance.started_at = attendance.edit_started_at # 承認なら変更時間を勤怠時間に代入する。
-          attendance.finished_at = attendance.edit_finished_at
-          attendance.next_day = item[:edit_next_day]
-          item[:edit_confirmation] = "編集承認済"
-          flash[:success] = "勤怠情報を承認しました。"
-        elsif item[:edit_status] == "否認"
-          attendance.edit_started_at = nil # 否認なら変更時間を削除し、勤怠編集否認のメッセージ
-          attendance.edit_finished_at = nil
-          attendance.next_day = nil
-          item[:edit_confirmation] = "勤怠編集承否認"
-          flash[:danger] = "勤怠情報を否認しました。"
+        if item[:edit_confirmation].present? # 変更check boxが選択されているなら。
+          attendance = Attendance.find(id) # attendanceにAttendanceテーブルのIDを代入する
+          if item[:edit_status] == "なし" # 勤怠申請自体が無かったことにする。
+            # attendance.edit_started_at = nil 
+            # attendance.edit_finished_at = nil
+            attendance.next_day = nil
+            attendance.note = nil
+            item[:edit_status] = nil
+            item[:edit_confirmation] = nil
+            attendance.application_superior_name = nil
+            flash[:danger] = "勤務変更を削除しました。"
+          elsif item[:edit_status] == "承認"
+            attendance.started_at = attendance.edit_started_at # 承認なら変更時間を勤怠時間に代入する。
+            attendance.finished_at = attendance.edit_finished_at
+            attendance.next_day = item[:edit_next_day]
+            item[:edit_confirmation] = "編集承認済"
+            flash[:success] = "勤怠情報を承認しました。"
+          elsif item[:edit_status] == "否認"
+            attendance.edit_started_at = nil # 否認なら変更時間を削除し、勤怠編集否認のメッセージ
+            attendance.edit_finished_at = nil
+            attendance.next_day = nil
+            item[:edit_confirmation] = "勤怠編集承否認"
+            flash[:danger] = "勤怠情報を否認しました。"
+          end
+            attendance.update_attributes!(item)
+        else
+          item[:edit_status] = nil 
         end
-        # debugger
-          attendance.update_attributes!(item)
-      else
-        item[:edit_status] = nil 
       end
     end
-  end
   # debugger
     redirect_to user_url(params[:user_id])
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
@@ -188,6 +193,6 @@ class UsersController < ApplicationController
     
     def overtime_request_params
       params.require(:user)
-      .permit(attendance: [:overtime_finished_at, :overtime_next_day, :overtime_confirmation, :application_superior_name])[:attendances]
+      .permit(attendances: [:overtime_finished_at, :overtime_next_day, :overtime_confirmation, :overtime_status, :next_day, :note, :application_superior_name])[:attendances]
     end
 end

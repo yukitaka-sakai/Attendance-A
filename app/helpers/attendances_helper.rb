@@ -14,7 +14,7 @@ module AttendancesHelper
 
   def working_times(start, finish, next_day)
     if next_day == "1"
-      format("%.2f", (24 + ((finish - start) / 60) / 60.0))
+      format("%.2f", (((finish - start) / 60) / 60.0)+ 24)
     else
       format("%.2f", (((finish - start) / 60) / 60.0))
     end
@@ -22,10 +22,9 @@ module AttendancesHelper
   
   def overtimes(overtime_finished_at, designated_work_end_time, overtime_next_day)
     if overtime_next_day == "1"
-      format("%.2f", (24 + ((overtime_finished_at - designated_work_end_time) / 60) / 60.0))
+      format("%.2f", (((overtime_finished_at - designated_work_end_time) / 60) / 60.0))
     else
       format("%.2f", (((overtime_finished_at - designated_work_end_time) / 60) / 60.0))
-
     end
   end
 end 

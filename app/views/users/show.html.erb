@@ -126,13 +126,18 @@
           <td><%= day.overtime_finished_at.min if day.overtime_finished_at.present? %></td>
           <td></td>
           <td class="text-field"><%= day.overtime_note %></td>
-          <td><% if day.edit_status == "申請中" %>
-                <%= "#{day.application_superior_name} へ勤務変更申請中" %>
-              <% elsif day.overtime_status == "申請中" %>
-                <%= "#{day.application_superior_name} へ残業申請中" %>
-              <% else %>
-                <%= day.edit_confirmation %>
-              <% end %>
+          <td>
+            <% if day.edit_status == "申請中" %>
+              <%= "#{day.application_superior_name} へ勤務変更申請中" %>
+            <% else %>
+              <%= day.edit_confirmation %>
+            <% end %>
+            </br>
+            <% if day.overtime_status == "申請中" %>
+              <%= "#{day.application_superior_name} へ残業申請中" %>
+            <% else %>
+              <%= day.overtime_confirmation %>
+            <% end %>
           </td>
         </tr>
       <% end %>
