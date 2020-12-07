@@ -103,16 +103,16 @@
           <td><%= link_to "残業申請", overtime_request_user_attendance_path(@user, day), remote:true, class: "btn btn-primary btn-attendance"%></td>
           <td><%= l(day.worked_on, format: :short) %></td>
           <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
-          <td><%= day.started_at.hour if day.started_at.present? %></td>
-          <td><%= day.started_at.floor_to(15.minutes).min if day.started_at.present? %></td>
+          <td><%= format_hour(day.started_at) if day.started_at.present? %></td>
+          <td><%= format_min(day.started_at) if day.started_at.present? %></td>
           <td>
             <!-- もし今日と、出勤日が同じ　　且つ　勤務開始時間がないなら-->
             <% if btn_text = attendance_state(day) %>
               <%= link_to "#{btn_text}", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
             <% end %>
           </td>
-          <td><%= day.finished_at.hour if day.finished_at.present? %></td>
-          <td><%= day.finished_at.floor_to(15.minutes).min if day.finished_at.present? %></td>
+          <td><%= format_hour(day.finished_at) if day.finished_at.present? %></td>
+          <td><%= format_min(day.finished_at) if day.finished_at.present? %></td>
           <td></td>
           <td>
             <% if day.started_at.present? && day.finished_at.present? %>
@@ -122,8 +122,8 @@
             <% end %>
           </td>
           <td class="text-field"><%= day.note %></td>
-          <td><%= day.overtime_finished_at.hour if day.overtime_finished_at.present? %></td>
-          <td><%= day.overtime_finished_at.min if day.overtime_finished_at.present? %></td>
+          <td><%= format_hour(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
+          <td><%= format_min(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
           <td></td>
           <td class="text-field"><%= day.overtime_note %></td>
           <td>

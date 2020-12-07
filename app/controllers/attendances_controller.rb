@@ -62,6 +62,7 @@ class AttendancesController < ApplicationController
             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
           end
           item[:edit_status] = "申請中"
+          item[:edit_confirmation] = nil
           attendance.update_attributes!(item)
         end
       end
@@ -82,8 +83,9 @@ class AttendancesController < ApplicationController
   def update_overtime_request
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
-    @attendance.overtime_status = "申請中" if @attendance.overtime_finished_at.presence || @attendance.application_superior_name.presence
-    @attendance.overtime_confirmation = nil
+    
+    params[:attendance][:overtime_status] = "申請中" if params[:attendance][:overtime_finished_at].present?
+    params[:attendance][:overtime_confirmation] = nil
       if @attendance.update_attributes(overtime_params)
         flash[:success] = "残業申請を行いました。"
         redirect_to @user
@@ -100,11 +102,12 @@ class AttendancesController < ApplicationController
     def attendances_params
       params.require(:user).permit(attendances: [:started_at, :finished_at, :next_day, :note,
                             :edit_started_at, :edit_finished_at, :edit_next_day, :edit_status, 
-                            :application_superior, :application_superior_name])[:attendances]
+                            :application_superior, :application_superior_name, :edit_confirmation])[:attendances]
     end
     
     def overtime_params
       params.require(:attendance).permit(:overtime_finished_at, :overtime_next_day, :overtime_note,
                             :overtime_status, :overtime_confirmation, :application_superior_name)
+      # debugger
     end
 end
