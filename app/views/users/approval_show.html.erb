@@ -71,10 +71,10 @@
           <tr>
             <td><%= l(day.worked_on, format: :short) %></td>
             <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
-            <td><%= day.started_at.hour if day.started_at.present? %></td>
-            <td><%= day.started_at.floor_to(15.minutes).min if day.started_at.present? %></td>
-            <td><%= day.finished_at.hour if day.finished_at.present? %></td>
-            <td><%= day.finished_at.floor_to(15.minutes).min if day.finished_at.present? %></td>
+            <td><%= format_hour(day.started_at) if day.started_at.present? %></td>
+            <td><%= format_min(day.started_at) if day.started_at.present? %></td>
+            <td><%= format_hour(day.finished_at) if day.finished_at.present? %></td>
+            <td><%= format_min(day.started_at) if day.finished_at.present? %></td>
             <td>
               <% if day.started_at.present? && day.finished_at.present? %>
               <!--ヘルパーのworking_timesに引数next_dayを追加(workingtimesはst時間、fn時間、nxのcbを参照する)-->
@@ -83,9 +83,13 @@
               <% end %>
             </td>
             <td class="text-field"><%= day.note %></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td><%= format_hour(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
+            <td><%= format_min(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
+            <td>
+              <% if day.overtime_finished_at.present? && @user.designated_work_end_time.present? %>
+                <%= overtimes(day.overtime_finished_at.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.overtime_next_day) %>
+              <% end %></td>
+            </td>
             <td></td>
             <td><% if (day.application_superior_name != nil) && (day.edit_confirmation != nil) %>
                   <%= day.edit_confirmation %>:<%= day.application_superior_name %>

@@ -50,7 +50,8 @@
                       <td>
                         <% if attendance.overtime_finished_at.present? && @user.designated_work_end_time.present? %>
                           <%= overtimes(attendance.overtime_finished_at.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), attendance.overtime_next_day) %>
-                        <% end %></td>
+                        <% end %>
+                      </td>
                       <td><%= attendance.overtime_note if attendance.overtime_finished_at.present? %></td>
                       <td><%= at.select :overtime_status, ["なし", "申請中", "承認", "否認"], {include_blank: ""}, class: "form-control" %></td>
                       <td><%= at.check_box :overtime_confirmation %></td>

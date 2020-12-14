@@ -124,7 +124,11 @@
           <td class="text-field"><%= day.note %></td>
           <td><%= format_hour(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
           <td><%= format_min(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
-          <td></td>
+          <td>
+            <% if day.overtime_finished_at.present? && @user.designated_work_end_time.present? %>
+              <%= overtimes(day.overtime_finished_at.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.overtime_next_day) %>
+            <% end %>
+          </td>
           <td class="text-field"><%= day.overtime_note %></td>
           <td>
             <% if day.edit_status == "申請中" %>
