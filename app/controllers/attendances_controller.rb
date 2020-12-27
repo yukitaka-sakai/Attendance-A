@@ -78,14 +78,14 @@ class AttendancesController < ApplicationController
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
     @superiors = User.where(superior: true).where.not(id: @user.id).select(:name)
+    
   end
   
   def update_overtime_request
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
-    
-    params[:attendance][:overtime_status] = "申請中" if params[:attendance][:overtime_finished_at].present?
-    params[:attendance][:overtime_confirmation] = nil
+    if params[:attendance][:overtime_finished_at].present?
+      params[:attendance][:overtime_status] = "申請中" 
       if @attendance.update_attributes(overtime_params)
         flash[:success] = "残業申請を行いました。"
         redirect_to @user
@@ -93,7 +93,7 @@ class AttendancesController < ApplicationController
         flash[:danger] = "申請に失敗しました。"
         redirect_to @user
       end
-    
+    end
   end
   
 
@@ -106,8 +106,9 @@ class AttendancesController < ApplicationController
     end
     
     def overtime_params
-      params.require(:attendance).permit(:overtime_finished_at, :overtime_next_day, :overtime_note,
-                            :overtime_status, :overtime_confirmation, :application_superior_name)
+      params.require(:attendance).permit(:overtime_finished_at, :overtime_next_day,
+                            :overtime_note, :overtimes, :overtime_status, 
+                            :overtime_confirmation, :application_superior_name)
       # debugger
     end
 end

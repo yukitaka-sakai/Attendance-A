@@ -10,6 +10,8 @@ class Attendance < ApplicationRecord
   # 出社。退社時間どちらも存在する場合、出社時間より早い退社時間は無効
   validate :started_at_than_finished_at_fast_if_invalid
   # validate :empty_notes_when_editing
+  validate :not_selected_supelior
+  
   
   def finished_at_is_invalid_without_a_started_at
     errors.add(:started_at, "が必要です") if started_at.blank? && finished_at.present?
@@ -21,9 +23,7 @@ class Attendance < ApplicationRecord
     end
   end
   
-  # def empty_notes_when_editing
-  #   errors.add(:started_at, "が必要です")
-  #   if (started_at.present? && finished_at.present?) && will_save_change_to_start_time?
-  #   end
-  # end
+  def not_selected_supelior
+    errors.add(:application_superior_name,"を選択してください。") if (overtime_finished_at.present? && overtime_note.present?) && application_superior_name.blank?
+  end
 end

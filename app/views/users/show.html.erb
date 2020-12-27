@@ -17,7 +17,6 @@
       <td colspan="3">基本時間 <%= format_basic_info(@user.basic_work_time) %></td>
       <td>          初日:      <%= l(@first_day, format: :short) %></td>
     </tr>
-    
     <tr>
       <td>所属：    <%= @user.affiliation.present? ? @user.affiliation : "未所属" %></td>
       <td>氏名：    <%= @user.name %></td>
@@ -125,8 +124,12 @@
           <td><%= format_hour(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
           <td><%= format_min(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
           <td>
-            <% if day.overtime_finished_at.present? && @user.designated_work_end_time.present? %>
-              <%= overtimes(day.overtime_finished_at.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.overtime_next_day) %>
+            <% if day.overtime_finished_at.present? && day.finished_at.present? %>
+              <%= overtimes_2(day.finished_at.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.edit_next_day) %>
+            <% elsif day.overtime_finished_at.present? && @user.designated_work_end_time.present? %>
+              <%= overtimes_1(day.overtime_finished_at.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.overtime_next_day) %>
+            <% elsif day.overtime_finished_at.blank? && day.finished_at.present? %>
+              <%= overtimes_2(day.finished_at.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.edit_next_day) %>
             <% end %>
           </td>
           <td class="text-field"><%= day.overtime_note %></td>

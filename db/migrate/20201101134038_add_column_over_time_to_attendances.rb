@@ -5,5 +5,6 @@ class AddColumnOverTimeToAttendances < ActiveRecord::Migration[5.1]
     add_column :attendances, :overtime_note, :string
     add_column :attendances, :overtime_status, :string
     add_column :attendances, :overtime_confirmation, :string
+    add_column :attendances, :overtimes, :string
   end
 end
