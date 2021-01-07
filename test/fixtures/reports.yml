@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  application_onemonth_superior_name: MyString
+  approval_month: false
+  user: one
+
+two:
+  application_onemonth_superior_name: MyString
+  approval_month: false
+  user: two

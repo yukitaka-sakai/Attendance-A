@@ -7,12 +7,13 @@ class UsersController < ApplicationController
   
 # ユーザーの勤怠画面へ遷移（するときの処理）
   def show
-    @superiors = User.where(superior: true).select(:name)
+    @superiors = User.where(superior: true).where.not(id: @user.id).select(:name)
     @worked_sum = @attendances.where.not(started_at: nil).count
     @approval_edit_sum = Attendance.where(application_superior_name: @user.name, edit_status: "申請中").count
     @approval_overtime_sum = Attendance.where(application_superior_name: @user.name, overtime_status: "申請中").count
-# debugger
-    respond_to do |format|
+    @approval_onemonth_sum = Attendance.where(application_superior_name: @user.name, one_month_status: "申請中").count
+# CSV出力
+    respond_to do |format| 
       format.html 
       format.csv do
           send_data render_to_string, 
@@ -66,6 +67,7 @@ class UsersController < ApplicationController
   
 # ユーザ���情報の更新処理
   def update
+    debugger
     if @user.update_attributes(user_params)
       flash[:success] = "更新成功"
       redirect_to @user
@@ -170,6 +172,16 @@ class UsersController < ApplicationController
     redirect_to user_url(params[:user_id])
   end
   
+  def approval_one_month
+    # ログインしているユーザーを特定する。
+    @user = User.find(params[:user_id])
+    # Attendanceテーブルから特定された上長名がカラムにデータを持つ勤怠データを＠attendanceに代入する。
+    @attendances = Attendance.where(application_superior_name: @user.name, edit_status: "申請中").order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
+  end
+  
+  def update_approval_one_month
+  end
+  
   def approval_show
     @user = User.find(params[:id])
     @worked_sum = @attendances.where.not(started_at: nil).count
@@ -195,4 +207,5 @@ class UsersController < ApplicationController
       params.require(:user)
       .permit(attendances: [:overtime_finished_at, :overtime_next_day, :overtime_confirmation, :overtime_status, :next_day, :note, :application_superior_name])[:attendances]
     end
+    
 end

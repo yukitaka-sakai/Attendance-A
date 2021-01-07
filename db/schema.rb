@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201101134038) do
+ActiveRecord::Schema.define(version: 20210106213308) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -35,6 +35,8 @@ ActiveRecord::Schema.define(version: 20201101134038) do
     t.string "overtime_status"
     t.string "overtime_confirmation"
     t.string "overtimes"
+    t.string "application_onemonth_superior_name"
+    t.string "one_month_status"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
@@ -46,6 +48,15 @@ ActiveRecord::Schema.define(version: 20201101134038) do
     t.integer "office_type"
   end
 
+  create_table "reports", force: :cascade do |t|
+    t.string "application_onemonth_superior_name"
+    t.boolean "approval_month_status"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_reports_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -55,9 +66,9 @@ ActiveRecord::Schema.define(version: 20201101134038) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "affiliation"
-    t.datetime "basic_work_time", default: "2020-12-26 23:00:00"
-    t.datetime "designated_work_start_time", default: "2020-12-26 23:30:00"
-    t.datetime "designated_work_end_time", default: "2020-12-27 08:30:00"
+    t.datetime "basic_work_time", default: "2021-01-06 23:00:00"
+    t.datetime "designated_work_start_time", default: "2021-01-06 23:30:00"
+    t.datetime "designated_work_end_time", default: "2021-01-07 08:30:00"
     t.boolean "superior", default: false
     t.integer "uid"
     t.integer "employee_number"
