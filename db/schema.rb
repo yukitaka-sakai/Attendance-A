@@ -35,8 +35,6 @@ ActiveRecord::Schema.define(version: 20210106213308) do
     t.string "overtime_status"
     t.string "overtime_confirmation"
     t.string "overtimes"
-    t.string "application_onemonth_superior_name"
-    t.string "one_month_status"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
@@ -66,9 +64,9 @@ ActiveRecord::Schema.define(version: 20210106213308) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "affiliation"
-    t.datetime "basic_work_time", default: "2021-01-06 23:00:00"
-    t.datetime "designated_work_start_time", default: "2021-01-06 23:30:00"
-    t.datetime "designated_work_end_time", default: "2021-01-07 08:30:00"
+    t.datetime "basic_work_time", default: "2021-01-13 23:00:00"
+    t.datetime "designated_work_start_time", default: "2021-01-13 23:30:00"
+    t.datetime "designated_work_end_time", default: "2021-01-14 08:30:00"
     t.boolean "superior", default: false
     t.integer "uid"
     t.integer "employee_number"

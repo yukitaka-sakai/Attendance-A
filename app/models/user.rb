@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :attendances, dependent: :destroy
+  has_many :reports, dependent: :destroy
   #remember_tokenという仮想属性を作成
   attr_accessor :remember_token
   # 現在のメールアドレス(self.email)の値をdowncaseで小文字に変換

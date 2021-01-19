@@ -4,6 +4,7 @@ class UsersController < ApplicationController
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: [:destroy, :edit, :update]
   before_action :set_one_month,  only: [:show, :approval_show]
+  before_action :set_month,  only: :show
   
 # ユーザーの勤怠画面へ遷移（するときの処理）
   def show
@@ -11,7 +12,7 @@ class UsersController < ApplicationController
     @worked_sum = @attendances.where.not(started_at: nil).count
     @approval_edit_sum = Attendance.where(application_superior_name: @user.name, edit_status: "申請中").count
     @approval_overtime_sum = Attendance.where(application_superior_name: @user.name, overtime_status: "申請中").count
-    @approval_onemonth_sum = Attendance.where(application_superior_name: @user.name, one_month_status: "申請中").count
+    @approval_onemonth_sum = Report.where(application_onemonth_superior_name: @user.name, approval_month_status: "申請中").count
 # CSV出力
     respond_to do |format| 
       format.html 

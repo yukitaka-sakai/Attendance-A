@@ -46,6 +46,8 @@ Rails.application.routes.draw do
       end
     end
     
+    resources :reports, only: :update
+    
     # ユーザー情報をCSVからインポート
     collection { post :import }
   end

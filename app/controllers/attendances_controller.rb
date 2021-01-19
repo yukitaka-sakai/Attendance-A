@@ -11,7 +11,6 @@ class AttendancesController < ApplicationController
   def update
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
-    @attendance.application_onemonth_superior_name = params[:application_onemonth_superior_name] if params[:application_onemonth_superior_name].present?
     # 出勤時間が未登録である事を判定する
     if @attendance.started_at.nil?
     # 出勤データが入ったら編集用出勤カラムにも同じ内容を代入する。
@@ -31,7 +30,6 @@ class AttendancesController < ApplicationController
       # debugger
          @attendance.edit_next_day = @attendance.next_day if @attendance.started_at.present? || @attendance.finished_at
     end
-    debugger
     redirect_to @user
   end
   
@@ -50,7 +48,7 @@ class AttendancesController < ApplicationController
         attendance = Attendance.find(id) # before_actionのset_one_monthからattendanceのidを代入する
         if item[:application_superior_name].present? #上長が選択されているなら
           if item[:edit_started_at].blank? # 編集画面の　出社時間　がないなら
-            flash[:danger] = "出社時間の入力がないよ"
+            flash[:danger] = "出社時間の入力が��いよ"
             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
           elsif item[:edit_finished_at].blank? # ���集画面の　退社時間　がないなら
             flash[:danger] = "退社時間がないよ"
@@ -111,7 +109,6 @@ class AttendancesController < ApplicationController
       params.require(:attendance).permit(:overtime_finished_at, :overtime_next_day,
                             :overtime_note, :overtimes, :overtime_status, 
                             :overtime_confirmation, :application_superior_name)
-      # debugger
     end
     
     def approval_one_month_params

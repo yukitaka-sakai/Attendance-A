@@ -34,7 +34,7 @@
     <div class= alert_msg>
       <div>【所属長承認申請のお知らせ】
         <% if @approval_onemonth_sum > 0 %>
-          <%= link_to ": #{@approval_onemonth_sum}件の通知があります。", user_approval_one_month_path(@user), remote:true, class: "danger" %> 
+          <%= link_to ": #件の通知があります。", "#", remote:true, class: "danger" %> 
         <% end %>
       </div>
       <div>【勤怠変更申請のお知らせ】
@@ -83,7 +83,7 @@
       <tr>
         <td>時</td>
         <td>分</td>
-        <td></td>application_onemonth_superior_name
+        <td></td>
         <td>時</td>
         <td>分</td>
         <td></td>
@@ -168,7 +168,9 @@
             <li>所属長承認</li>
             <li>未申請</li>
             <li>
-              <%= form_with(model: @attendance, local: true, method: :patch) do |f| %>
+              <%= form_with(model: @report, url: user_report_path(@user, date: @first_day), local: true, method: :patch) do |f| %>
+                <%= f.hidden_field :user_id, :value => @user.id %>
+                <%= f.hidden_field :approval_month_status, :value => "true" %>
                 <%= f.collection_select :application_onemonth_superior_name, @superiors, :name, :name, {include_blank: true, selected: nil}, class: "form-control" %>
                 <%= f.submit "申請送信", class: "btn btn-block btn-primary" %>
               <% end %>
