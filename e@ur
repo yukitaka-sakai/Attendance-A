@@ -1,0 +1,21 @@
+
+[1mFrom:[0m /home/ec2-user/environment/attendance_A_app/app/controllers/users_controller.rb:16 UsersController#show:
+
+    [1;34m10[0m:   [32mdef[0m [1;34mshow[0m
+    [1;34m11[0m:     @superiors = [1;34;4mUser[0m.where([35msuperior[0m: [1;36mtrue[0m).where.not([35mid[0m: @user.id).select([33m:name[0m)
+    [1;34m12[0m:     @worked_sum = @attendances.where.not([35mstarted_at[0m: [1;36mnil[0m).count
+    [1;34m13[0m:     @approval_edit_sum = [1;34;4mAttendance[0m.where([35mapplication_superior_name[0m: @user.name, [35medit_status[0m: [31m[1;31m"[0m[31m申請中[1;31m"[0m[31m[0m).count
+    [1;34m14[0m:     @approval_overtime_sum = [1;34;4mAttendance[0m.where([35mapplication_superior_name[0m: @user.name, [35movertime_status[0m: [31m[1;31m"[0m[31m申請中[1;31m"[0m[31m[0m).count
+    [1;34m15[0m:     @approval_onemonth_sum = [1;34;4mReport[0m.where([35mapplication_onemonth_superior_name[0m: @user.name, [35mapproval_month_status[0m: [31m[1;31m"[0m[31m申請中[1;31m"[0m[31m[0m).count
+ => [1;34m16[0m:     binding.pry
+    [1;34m17[0m:     [1;34m# @report = User.reports[0m
+    [1;34m18[0m: [1;34m# CSV出力[0m
+    [1;34m19[0m:     respond_to [32mdo[0m |format| 
+    [1;34m20[0m:       format.html 
+    [1;34m21[0m:       format.csv [32mdo[0m
+    [1;34m22[0m:           send_data render_to_string, 
+    [1;34m23[0m:           [35mfilename[0m: [31m[1;31m"[0m[31m#{@user.name}[0m[31m-#{@first_day.year}[0m[31m_#{@first_day.month}[0m[31m.csv[1;31m"[0m[31m[0m, [35mtype[0m: [33m:csv[0m [1;34m#csv用の処理を書く[0m
+    [1;34m24[0m:       [32mend[0m
+    [1;34m25[0m:     [32mend[0m
+    [1;34m26[0m:   [32mend[0m
+

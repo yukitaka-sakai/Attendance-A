@@ -34,7 +34,7 @@
     <div class= alert_msg>
       <div>【所属長承認申請のお知らせ】
         <% if @approval_onemonth_sum > 0 %>
-          <%= link_to ": #件の通知があります。", "#", remote:true, class: "danger" %> 
+          <%= link_to ": #{@approval_onemonth_sum}件の通知があります。", "#", remote:true, class: "danger" %> 
         <% end %>
       </div>
       <div>【勤怠変更申請のお知らせ】
@@ -165,15 +165,20 @@
         <td colspan="5"></td>
         <td rowspan="2">
           <ol>
-            <li>所属長承認</li>
-            <li>未申請</li>
-            <li>
-              <%= form_with(model: @report, url: user_report_path(@user, date: @first_day), local: true, method: :patch) do |f| %>
+            <% if @report.approval_month_status == nil %>
+              <li>所属長承認</li>
+              <li>未申請</li>
+              <li>
+              <%= form_with(model: @report, url: user_report_path(@user, @report), local: true, method: :patch) do |f| %>
                 <%= f.hidden_field :user_id, :value => @user.id %>
-                <%= f.hidden_field :approval_month_status, :value => "true" %>
-                <%= f.collection_select :application_onemonth_superior_name, @superiors, :name, :name, {include_blank: true, selected: nil}, class: "form-control" %>
+                <%= f.hidden_field :approval_month_status, :value => "申請中" %>
+                <%= f.hidden_field :report_month, :value => @first_day %>
+                <%= f.collection_select :application_onemonth_superior_name, @superiors, :name, :name, {prompt: "選択してください"}, class: "form-control" %>
                 <%= f.submit "申請送信", class: "btn btn-block btn-primary" %>
               <% end %>
+            <% else %>
+              <li>所属長承認待ち</li>
+            <% end %>
             </li>
           </ol>
         </td>

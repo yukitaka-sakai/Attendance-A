@@ -48,7 +48,8 @@ ActiveRecord::Schema.define(version: 20210106213308) do
 
   create_table "reports", force: :cascade do |t|
     t.string "application_onemonth_superior_name"
-    t.boolean "approval_month_status"
+    t.string "approval_month_status"
+    t.date "report_month"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -64,9 +65,9 @@ ActiveRecord::Schema.define(version: 20210106213308) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "affiliation"
-    t.datetime "basic_work_time", default: "2021-01-13 23:00:00"
-    t.datetime "designated_work_start_time", default: "2021-01-13 23:30:00"
-    t.datetime "designated_work_end_time", default: "2021-01-14 08:30:00"
+    t.datetime "basic_work_time", default: "2021-01-24 23:00:00"
+    t.datetime "designated_work_start_time", default: "2021-01-24 23:30:00"
+    t.datetime "designated_work_end_time", default: "2021-01-25 08:30:00"
     t.boolean "superior", default: false
     t.integer "uid"
     t.integer "employee_number"

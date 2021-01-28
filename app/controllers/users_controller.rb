@@ -13,6 +13,7 @@ class UsersController < ApplicationController
     @approval_edit_sum = Attendance.where(application_superior_name: @user.name, edit_status: "申請中").count
     @approval_overtime_sum = Attendance.where(application_superior_name: @user.name, overtime_status: "申請中").count
     @approval_onemonth_sum = Report.where(application_onemonth_superior_name: @user.name, approval_month_status: "申請中").count
+    # .where(application_onemonth_superior_name: @user.name, approval_month_status: "申請中")
 # CSV出力
     respond_to do |format| 
       format.html 
@@ -68,7 +69,7 @@ class UsersController < ApplicationController
   
 # ユーザ���情報の更新処理
   def update
-    debugger
+    # debugger
     if @user.update_attributes(user_params)
       flash[:success] = "更新成功"
       redirect_to @user

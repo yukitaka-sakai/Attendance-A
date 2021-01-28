@@ -10,7 +10,6 @@ class OfficesController < ApplicationController
   
   def create
     @office = Office.new(offices_params) #officeモデルの新しいパラメーターを＠officeに代入
-    debugger
     if @office.save #  @officeの登録に成功したら
       flash[:success] = '拠点登録に成功しました。' # 成功メッセージを出す
       redirect_to offices_url

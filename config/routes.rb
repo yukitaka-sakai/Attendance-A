@@ -35,7 +35,7 @@ Rails.application.routes.draw do
     
     # 1ヶ月の申請確認
     get   'approval_one_month'
-    patch 'update_approval_one_month'
+    patch  'update_approval_one_month'
     
     # 勤怠情報に紐付ける
     resources :attendances, only: [:update, :edit] do

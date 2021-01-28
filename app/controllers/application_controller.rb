@@ -53,21 +53,10 @@ class ApplicationController < ActionController::Base
     @first_day = params[:date].nil? ?
     Date.current.beginning_of_month : params[:date].to_date
     @last_day = @first_day.end_of_month
-    one_month = [*@first_day..@last_day] # 対象の月の日数を代入
-    # ユーザーに紐づく一ヶ月分の勤怠データを検索取得
-    @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
 
-    unless one_month.count == @attendances.count # それぞれの件数が一致するか
-      ActiveRecord::Base.transaction do  # トランザクションを開始する
-        # 繰り返し処理により、1ヶ月分の勤怠データを生成する
-        one_month.each { |day| @user.attendances.create!(worked_on: day) }
-      end
-      @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
+    unless @report = @user.reports.find_by(report_month: @first_day)
+      @user.reports.create!(report_month: @first_day)
     end
-  
-  
-  rescue ActiveRecord::RecordInvalid #トランザクションによるエラー分岐
-    flash[:danger] = "失敗"
-    redirect_to root_url
+    @report = @user.reports.find_by(report_month: @first_day)
   end
 end
