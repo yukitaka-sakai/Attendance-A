@@ -44,13 +44,12 @@ class AttendancesController < ApplicationController
   
   # 勤怠情報の編集申請（するときの処理）
   def update_one_month
-
     ActiveRecord::Base.transaction do
       attendances_params.each do |id, item| # ストロングパラメータの内容に基づいて　idとitemに対して繰り返す。
-        attendance = Attendance.find(id) # before_actionのset_one_monthからattendanceのidを代入する
         if item[:application_superior_name].present? #上長が選択されているなら
+        attendance = Attendance.find(id) # before_actionのset_one_monthからattendanceのidを代入する
           if item[:edit_started_at].blank? # 編集画面の　出社時間　がないなら
-            flash[:danger] = "出社時間の入力が��いよ"
+            flash[:danger] = "出社時間の入力がないよ"
             redirect_to attendances_edit_one_month_user_url(@user) and return
           elsif item[:edit_finished_at].blank? # ���集画面の　退社時間　がないなら
             flash[:danger] = "退社時間がないよ"
@@ -69,6 +68,7 @@ class AttendancesController < ApplicationController
         end
       end
     end
+
     flash[:success] = "勤怠変更申請を送信しました。"
     redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid
@@ -83,7 +83,7 @@ class AttendancesController < ApplicationController
     
   end
   
-  def update_overtime_request
+  def update_overtime_request #一件のみ保存する
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
     if params[:attendance][:overtime_finished_at].present?

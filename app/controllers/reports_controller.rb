@@ -12,6 +12,8 @@ class ReportsController < ApplicationController
       redirect_to @user
     end
   end
+  
+
     
   private
   
@@ -19,4 +21,6 @@ class ReportsController < ApplicationController
       # debugger
       params.require(:report).permit(:application_onemonth_superior_name, :approval_month_status, :report_month)
     end
+    
+
 end

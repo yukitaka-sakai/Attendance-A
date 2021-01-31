@@ -13,7 +13,6 @@ class UsersController < ApplicationController
     @approval_edit_sum = Attendance.where(application_superior_name: @user.name, edit_status: "申請中").count
     @approval_overtime_sum = Attendance.where(application_superior_name: @user.name, overtime_status: "申請中").count
     @approval_onemonth_sum = Report.where(application_onemonth_superior_name: @user.name, approval_month_status: "申請中").count
-    # .where(application_onemonth_superior_name: @user.name, approval_month_status: "申請中")
 # CSV出力
     respond_to do |format| 
       format.html 
@@ -96,7 +95,7 @@ class UsersController < ApplicationController
   def update_approval_overtime_request
     ActiveRecord::Base.transaction do
       overtime_request_params.each do |id, item|
-        if item[:overtime_confirmation].present?
+        if item[:overtime_confirmation] == "1"
           attendance = Attendance.find(id)
           if item[:overtime_status] == "なし"
             item[:next_day] = nil
@@ -137,7 +136,7 @@ class UsersController < ApplicationController
   def update_approval_edit_month
     ActiveRecord::Base.transaction do
       edit_approval_params.each do |id, item|
-        if item[:edit_confirmation].present? # 変更check boxが選択されているなら。
+        if item[:edit_confirmation] == "1" # 変更check boxが選択されているなら。
           attendance = Attendance.find(id) # attendanceにAttendanceテーブルのIDを代入する
           if item[:edit_status] == "なし" # 勤怠申請自体が無かったことにする。
             # attendance.edit_started_at = nil 
@@ -188,7 +187,44 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @worked_sum = @attendances.where.not(started_at: nil).count
   end
-    
+  
+  def approval_month_report
+    @user = User.find(params[:user_id])
+    @reports = Report.where(application_onemonth_superior_name: @user.name, approval_month_status: "申請中").order(user_id: "ASC", report_month: "ASC").group_by(&:user_id)
+    # @superiors = User.where(superior: true).where.not(id: @user.id).select(:name)
+  end
+  
+  def update_approval_month_report
+    ActiveRecord::Base.transaction do
+      approval_month_report_params.each do |id, item|
+        if item[:report_confirmation] == "1"
+          report = Report.find(id)
+          if item[:approval_month_status] == "なし"
+            item[:approval_month_status] = nil
+            item[:report_confirmation] = nil
+            item[:application_onemonth_superior_name] = nil
+            flash[:danger] = "1ヶ月の勤務申請を削除しました。"
+          elsif item[:approval_month_status] == "承認"
+            item[:report_confirmation] = "1ヶ月の勤務申請承認済"
+            flash[:success] = "1ヶ月の勤務申請を承認しました。"
+          elsif item[:approval_month_status] == "否認"
+            item[:report_confirmation] = "1ヶ月の勤務申請否認"
+            flash[:danger] = "1ヶ月の勤務申請は否認されました。"
+          elsif item[:approval_month_status] == "申請中"
+            item[:report_confirmation] = nil
+            flash[:danger] = "変更が選択されませんでした。"
+          end
+          report.update_attributes!(item)
+        else
+          item[:approval_month_status] = nil
+        end
+      end
+    end
+    redirect_to user_url(params[:user_id])
+  rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+    flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
+    redirect_to user_url(params[:user_id])
+  end
   
   private
   
@@ -207,7 +243,14 @@ class UsersController < ApplicationController
     
     def overtime_request_params
       params.require(:user)
-      .permit(attendances: [:overtime_finished_at, :overtime_next_day, :overtime_confirmation, :overtime_status, :next_day, :note, :application_superior_name])[:attendances]
+      .permit(attendances: [:overtime_finished_at, :overtime_next_day, :overtime_confirmation,
+                            :overtime_status, :next_day, :note, :application_superior_name])[:attendances]
     end
     
+    def approval_month_report_params
+      # debugger
+      params.require(:user)
+      .permit(reports: [:application_onemonth_superior_name, :approval_month_status, :report_month,
+                        :report_confirmation])[:reports]
+    end    
 end

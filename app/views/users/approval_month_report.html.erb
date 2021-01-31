@@ -1,0 +1,38 @@
+<% provide(:title, @user.name) %>
+
+      <h1 class="modal-title">残業申請承認</h1>
+<!--@userのフォーム-->
+      <%= form_with(model: @user, url: user_update_approval_month_report_path(@reports), local: true, method: :patch) do |f| %>
+        <% @reports.each do |id, reports| %>
+          <% user = User.find(id) %>
+          <div>
+            <h3 class><%= "【#{user.name}からの勤怠変更申請】"%></h3>
+            <table class="table table-bordered table-condensed" id="table-attendances">
+              <thead>
+                <tr>
+                  <td>月</td>
+                  <td>指示者確認㊞</td>
+                  <td>変更</td>
+                  <td>勤怠を確認する</td>
+                </tr>
+              </thead>
+              
+              <tbody>
+                <% reports.each do |report| %>
+                  <%= f.fields_for "reports[]", report do |re| %>
+                    <tr>
+                      <td><%= "#{report.report_month.month} 月" %></td>
+                      <td><%= re.select :approval_month_status, ["なし", "申請中", "承認", "否認"], {include_blank: ""}, class: "form-control" %></td>
+                      <td><%= re.check_box :report_confirmation %></td>
+                      <td><%= link_to "確認", approval_show_user_path(id: user.id), class: "btn btn-primary btn-attendance" %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+        <div class="center">
+          <%= f.submit "編集を保存する", class: "btn btn-lg btn-primary" %>
+        </div>
+      <% end %>

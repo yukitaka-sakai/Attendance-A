@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20210106213308) do
     t.string "application_onemonth_superior_name"
     t.string "approval_month_status"
     t.date "report_month"
+    t.string "report_confirmation"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -65,9 +66,9 @@ ActiveRecord::Schema.define(version: 20210106213308) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "affiliation"
-    t.datetime "basic_work_time", default: "2021-01-24 23:00:00"
-    t.datetime "designated_work_start_time", default: "2021-01-24 23:30:00"
-    t.datetime "designated_work_end_time", default: "2021-01-25 08:30:00"
+    t.datetime "basic_work_time", default: "2021-01-30 23:00:00"
+    t.datetime "designated_work_start_time", default: "2021-01-30 23:30:00"
+    t.datetime "designated_work_end_time", default: "2021-01-31 08:30:00"
     t.boolean "superior", default: false
     t.integer "uid"
     t.integer "employee_number"
