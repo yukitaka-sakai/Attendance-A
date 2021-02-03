@@ -19,6 +19,7 @@ class UsersController < ApplicationController
       format.csv do
           send_data render_to_string, 
           filename: "#{@user.name}-#{@first_day.year}_#{@first_day.month}.csv", type: :csv #csv用の処理を書く
+          debugger
       end
     end
   end

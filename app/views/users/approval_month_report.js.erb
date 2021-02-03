@@ -1,0 +1,4 @@
+<!--１行目で_approval_edit_monthをレンダリングする-->
+$("#approval-report").html("<%= escape_javascript(render 'approval_month_report') %>");
+<!--２行目でmモーダルウインドウとして表示している。-->
+$("#approval-report").modal("show");

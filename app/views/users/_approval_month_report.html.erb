@@ -1,7 +1,16 @@
 <% provide(:title, @user.name) %>
 
-      <h1 class="modal-title">残業申請承認</h1>
-<!--@userのフォーム-->
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h1 class="modal-title">勤務申請承認</h1>
+    </div>
+<!--@reportのフォーム-->
+    <div class="modal-body">
       <%= form_with(model: @user, url: user_update_approval_month_report_path(@reports), local: true, method: :patch) do |f| %>
         <% @reports.each do |id, reports| %>
           <% user = User.find(id) %>
@@ -36,3 +45,6 @@
           <%= f.submit "編集を保存する", class: "btn btn-lg btn-primary" %>
         </div>
       <% end %>
+    </div>
+  </div>
+</div>
