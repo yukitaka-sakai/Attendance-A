@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       get   'attendances/edit_one_month'
       patch 'attendances/update_one_month'
       get   'approval_show'
+      get   'attendances/approval_log'
     end
 
     # 勤怠情報編集確認
