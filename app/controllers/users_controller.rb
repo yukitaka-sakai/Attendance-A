@@ -67,7 +67,7 @@ class UsersController < ApplicationController
   def edit
   end
   
-# ユーザ���情報の更新処理
+# ユーザ情報の更新処理
   def update
     # debugger
     if @user.update_attributes(user_params)
@@ -149,9 +149,12 @@ class UsersController < ApplicationController
             attendance.application_superior_name = nil
             flash[:danger] = "勤務変更を削除しました。"
           elsif item[:edit_status] == "承認"
+            item[:before_started_at] = attendance.started_at
+            item[:before_finished_at] = attendance.finished_at
             attendance.started_at = attendance.edit_started_at # 承認なら変更時間を勤怠時間に代入する。
             attendance.finished_at = attendance.edit_finished_at
             attendance.next_day = item[:edit_next_day]
+            item[:edit_approval_date] = Date.current
             item[:edit_confirmation] = "編集承認済"
             flash[:success] = "勤怠情報を承認しました。"
           elsif item[:edit_status] == "否認"
@@ -167,7 +170,6 @@ class UsersController < ApplicationController
         end
       end
     end
-  # debugger
     redirect_to user_url(params[:user_id])
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
@@ -185,7 +187,6 @@ class UsersController < ApplicationController
   end
   
   def approval_show
-    @user = User.find(params[:id])
     @worked_sum = @attendances.where.not(started_at: nil).count
   end
   
@@ -239,7 +240,8 @@ class UsersController < ApplicationController
       params.require(:user)
       .permit(attendances: [:started_at, :finished_at, 
                             :edit_started_at, :edit_finished_at, :next_day, :edit_next_day, :note,
-                            :edit_status, :edit_confirmation])[:attendances]
+                            :edit_status, :edit_confirmation, :edit_approval_date,
+                            :before_started_at, :before_finished_at])[:attendances]
     end
     
     def overtime_request_params

@@ -2,7 +2,7 @@
 
 <!--@userのフォーム-->
 
-<%= form_with(model: @user, url: attendances_update_one_month_user_path(@user), local: true, method: :patch) do |f| %>
+<%= form_with(model: @user, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
 
   <div>
   <h1>勤怠編集</h1>
@@ -38,7 +38,13 @@
                 <td><%= attendance.time_field :edit_started_at, readonly: true, class: "form-control" %></td>
                 <td><%= attendance.time_field :edit_finished_at, readonly: true, class: "form-control" %></td>
                 <td><%= attendance.check_box :edit_next_day, {disabled: true} %></td>
-                <td></td>
+                <td>
+                  <% if day.started_at.present? && day.finished_at.present? %>
+            <!--ヘルパーのworking_timesに引数next_dayを追加(workingtimesはst時間、fn時間、nxのcbを参照する)-->
+                    <%= @str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes), day.next_day) %>
+                    <% @total_working_times = @total_working_times.to_f + @str_times.to_f %>
+                  <% end %>
+                </td>
                 <td><%= attendance.text_field :note, readonly:true, class: "form-control" %></td>
                 <td><%= attendance.collection_select :application_superior_name, @superiors, :name, :name, {include_blank: true, selected: nil}, disabled: true, class: "form-control" %></td>
               <% else %>

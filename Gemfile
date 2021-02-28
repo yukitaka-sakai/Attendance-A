@@ -17,7 +17,7 @@ gem 'bootstrap-will_paginate'
 gem 'rails-i18n'
 gem 'rounding'
 gem 'roo'
-
+gem 'rack-mini-profiler'
 
 
 group :development, :test do
@@ -34,4 +34,4 @@ end
 
 # Windows環境ではtzinfo-dataというgemを含める必要があります
 # Mac環境でもこのままでOKです
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data'#, platforms: [:mingw, :mswin, :x64_mingw, :jruby]

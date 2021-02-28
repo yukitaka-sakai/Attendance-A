@@ -1,6 +1,6 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :update_one_month]
-  before_action :logged_in_user, only: [:update, :edit_ont_month, :import, :update_one_month]
+  before_action :set_user, only: [:edit_one_month, :update_one_month, :approval_log]
+  before_action :logged_in_user, only: [:update, :edit_ont_month, :import, :update_one_month, :approval_log]
   before_action :set_one_month, only: [:edit_one_month]
   before_action :edit_one_month_approval, only: :edit_approval_page
   
@@ -16,6 +16,7 @@ class AttendancesController < ApplicationController
     if @attendance.started_at.nil?
     # 出勤データが入ったら編集用出勤カラムにも同じ内容を代入する。
        @attendance.edit_started_at = @attendance.started_at
+       
       if @attendance.update_attributes(started_at: Time.current.change(sec: 0), edit_started_at: Time.current.change(sec: 0))
         flash[:info] = "goodmorning"
       else
@@ -45,7 +46,8 @@ class AttendancesController < ApplicationController
   # 勤怠情報の編集申請（するときの処理）
   def update_one_month
     ActiveRecord::Base.transaction do
-      attendances_params.each do |id, item| # ストロングパラメータの内容に基づいて　idとitemに対して繰り返す。
+      attendances_params.each do |id, item| 
+        # ストロングパラメータの内容に基づいて　idとitemに対して繰り返す。
         if item[:application_superior_name].present? #上長が選択されているなら
         attendance = Attendance.find(id) # before_actionのset_one_monthからattendanceのidを代入する
           if item[:edit_started_at].blank? # 編集画面の　出社時間　がないなら
@@ -98,9 +100,16 @@ class AttendancesController < ApplicationController
     end
   end
   
-  
-  
-
+  def approval_log
+    # binding.pry
+    if params[:"edit_approval_date(1i)"].present?
+      @search_date = Date.new(params[:"edit_approval_date(1i)"].to_i,params[:"edit_approval_date(2i)"].to_i,params[:"edit_approval_date(3i)"].to_i)
+      @last_day = @search_date.end_of_month
+    end
+    @attendances = @user.attendances.where(edit_status: "承認", worked_on: @search_date..@last_day).order(:worked_on)
+    # binding.pry
+  end
+    
   private
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
@@ -118,4 +127,5 @@ class AttendancesController < ApplicationController
     def approval_one_month_params
       params.require(:attendance).permit(:application_onemonth_superior_name, :one_month_status)
     end
+    
 end

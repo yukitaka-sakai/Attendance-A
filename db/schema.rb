@@ -26,6 +26,10 @@ ActiveRecord::Schema.define(version: 20210106213308) do
     t.datetime "edit_started_at"
     t.datetime "edit_finished_at"
     t.string "edit_next_day"
+    t.datetime "before_started_at"
+    t.datetime "before_finished_at"
+    t.datetime "edit_update_at"
+    t.date "edit_approval_date"
     t.string "edit_status"
     t.string "status"
     t.string "edit_confirmation"
@@ -66,9 +70,9 @@ ActiveRecord::Schema.define(version: 20210106213308) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "affiliation"
-    t.datetime "basic_work_time", default: "2021-01-30 23:00:00"
-    t.datetime "designated_work_start_time", default: "2021-01-30 23:30:00"
-    t.datetime "designated_work_end_time", default: "2021-01-31 08:30:00"
+    t.datetime "basic_work_time", default: "2021-02-23 23:00:00"
+    t.datetime "designated_work_start_time", default: "2021-02-23 23:30:00"
+    t.datetime "designated_work_end_time", default: "2021-02-24 08:30:00"
     t.boolean "superior", default: false
     t.integer "uid"
     t.integer "employee_number"

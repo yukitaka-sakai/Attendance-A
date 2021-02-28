@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       patch 'attendances/update_one_month'
       get   'approval_show'
       get   'attendances/approval_log'
+      get   'attendances/ajax_approval_log', to: 'attendances#ajax_approval_log'
     end
 
     # 勤怠情報編集確認

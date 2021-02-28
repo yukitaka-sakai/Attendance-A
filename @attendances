@@ -1,0 +1,15 @@
+
+[1mFrom:[0m /home/ec2-user/environment/attendance_A_app/app/views/attendances/approval_log.html.erb:20 ActionView::CompiledTemplates#_app_views_attendances_approval_log_html_erb__3542286152841736000_70321626473980:
+
+    [1;34m15[0m:         </tr>
+    [1;34m16[0m:       </thead>
+    [1;34m17[0m:     
+    [1;34m18[0m:       <tbody>
+    [1;34m19[0m:         <% @attendances.each do |attendance| %>
+ => [1;34m20[0m:         <% binding.pry %>
+    [1;34m21[0m:           <%  css_class = 
+    [1;34m22[0m:               case %w{日 月 火 水 木 金 土}[attendance.worked_on.wday]
+    [1;34m23[0m:               when '土' then 'text-primary'
+    [1;34m24[0m:               when '日' then 'text-danger'
+    [1;34m25[0m:               end
+
