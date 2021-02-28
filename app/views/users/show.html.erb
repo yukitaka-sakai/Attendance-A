@@ -31,7 +31,7 @@
 <!--上長へのお知らせ-->
 <div> 
   <% if current_user.superior? %>
-    <div class= alert_msg>
+    <div class= "alert_msg">
       <div>【所属長承認申請のお知らせ】
         <% if @approval_onemonth_sum > 0 %>
           <%= link_to ": #{@approval_onemonth_sum}件の通知があります。", user_approval_month_report_path(@user), remote:true, class: "danger" %> 
