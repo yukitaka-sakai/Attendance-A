@@ -24,7 +24,6 @@ Rails.application.routes.draw do
       patch 'attendances/update_one_month'
       get   'approval_show'
       get   'attendances/approval_log'
-      get   'attendances/ajax_approval_log', to: 'attendances#ajax_approval_log'
     end
 
     # 勤怠情報編集確認
@@ -41,6 +40,8 @@ Rails.application.routes.draw do
     
     get   'approval_month_report'
     patch 'update_approval_month_report'
+    
+    get   'employee_index'
     
     # 勤怠情報に紐付ける
     resources :attendances, only: [:update, :edit] do

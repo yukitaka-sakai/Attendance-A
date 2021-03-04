@@ -25,6 +25,10 @@ class ApplicationController < ActionController::Base
   def admin_user
     redirect_to root_url unless current_user.admin?
   end
+  
+  def set_office
+    @office = Office.find(params[:id])
+  end
     
   def set_one_month
     # paramsにdateが存在するか？なければ,現在の月の始まりを、そうでなければパラメーターの日

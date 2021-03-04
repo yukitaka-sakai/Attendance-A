@@ -19,7 +19,6 @@ class UsersController < ApplicationController
       format.csv do
           send_data render_to_string, 
           filename: "#{@user.name}-#{@first_day.year}_#{@first_day.month}.csv", type: :csv #csv用の処理を書く
-          debugger
       end
     end
   end
@@ -27,6 +26,12 @@ class UsersController < ApplicationController
 # ユーザーの一覧ページへ画面遷移（するときの処理）
   def index
     @users = User.paginate(page: params[:page]).search(params[:search])
+  end
+  
+  def employee_index
+    @user = User.find(params[:user_id])
+    @users = User.all
+    # @attendances = Attendance.where(started_at: Date.today)
   end
   
 # CSVファイルインポート機能
@@ -69,7 +74,6 @@ class UsersController < ApplicationController
   
 # ユーザ情報の更新処理
   def update
-    # debugger
     if @user.update_attributes(user_params)
       flash[:success] = "更新成功"
       redirect_to @user

@@ -1,5 +1,4 @@
 class Office < ApplicationRecord
-  validates :office_number, presence: true, uniqueness: true 
   validates :office_name, presence: true, length: { in: 2..30 }, uniqueness: true  
   
   enum office_type: { 出勤: 0, 退勤: 1 }
