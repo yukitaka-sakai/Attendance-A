@@ -88,14 +88,22 @@ class AttendancesController < ApplicationController
   def update_overtime_request #一件のみ保存する
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
-    if params[:attendance][:overtime_finished_at].present?
-      params[:attendance][:overtime_status] = "申請中" 
-      if @attendance.update_attributes(overtime_params)
-        flash[:success] = "残業申請を行いました。"
-        redirect_to @user
-      else
-        flash[:danger] = "申請に失敗しました。"
-        redirect_to @user
+    t = Time.current
+    @time_current = t.strftime("%H:%M")
+    @next_day_judge = params[:attendance][:overtime_finished_at] < @time_current
+    if @next_day_judge && params[:attendance][:overtime_next_day] == "0"
+      flash[:danger] = "翌日になる場合は、翌日にチェックを入れてください。"
+      redirect_to @user and return
+    else
+      if params[:attendance][:overtime_finished_at].present?
+        params[:attendance][:overtime_status] = "申請中" 
+        if @attendance.update_attributes(overtime_params)
+          flash[:success] = "残業申請を行いました。"
+          redirect_to @user and return
+        else
+          flash[:danger] = "申請に失敗しました。"
+          redirect_to @user and return
+        end
       end
     end
   end

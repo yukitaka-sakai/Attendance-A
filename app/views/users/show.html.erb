@@ -128,12 +128,14 @@
           <td><%= format_hour(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
           <td><%= format_min(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
           <td>
-            <% if day.overtime_finished_at.present? && day.finished_at.present? %>
-              <%= overtimes_2(day.finished_at.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.edit_next_day) %>
-            <% elsif day.overtime_finished_at.present? && @user.designated_work_end_time.present? %>
-              <%= overtimes_1(day.overtime_finished_at.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.overtime_next_day) %>
-            <% elsif day.overtime_finished_at.blank? && day.finished_at.present? %>
-              <%= overtimes_2(day.finished_at.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.edit_next_day) %>
+
+              <!--残業終了予定時間があり、退社時間がある：予定残業時間-->
+            <% if day.started_at.present? && day.finished_at.present? %> 
+              <%= overtimes_3(day.started_at.floor_to(15.minutes),
+                              day.finished_at.floor_to(15.minutes),
+                              @user.designated_work_end_time.floor_to(15.minutes),
+                              day.next_day)
+              %>
             <% end %>
           </td>
           <td class="text-field"><%= day.overtime_note %></td>
@@ -190,15 +192,15 @@
             <% else %>
               <li>所属長承認 未</li>
               <li>
-              <%= form_with(model: @report, url: user_report_path(@user, @report), local: true, method: :patch) do |f| %>
-                <%= f.hidden_field :user_id, :value => @user.id %>
-                <%= f.hidden_field :approval_month_status, :value => "申請中" %>
-                <%= f.hidden_field :report_month, :value => @first_day %>
-                <%= f.collection_select :application_onemonth_superior_name, @superiors, :name, :name, {prompt: "選択してください"}, class: "form-control" %>
-                <%= f.submit "申請送信", class: "btn btn-block btn-primary" %>
-              <% end %>
+                <%= form_with(model: @report, url: user_report_path(@user, @report), local: true, method: :patch) do |f| %>
+                  <%= f.hidden_field :user_id, :value => @user.id %>
+                  <%= f.hidden_field :approval_month_status, :value => "申請中" %>
+                  <%= f.hidden_field :report_month, :value => @first_day %>
+                  <%= f.collection_select :application_onemonth_superior_name, @superiors, :name, :name, {prompt: "選択してください"}, class: "form-control" %>
+                  <%= f.submit "申請送信", class: "btn btn-block btn-primary" %>
+                <% end %>
+              </li>
             <% end %>
-            </li>
           </ol>
         </td>
       </tr>
@@ -213,7 +215,7 @@
 </div>
 <% end %>
 
-モーダルウィンドウ表示
+<!--モーダルウィンドウ表示-->
 <div id="approval-edit-month" class="modal fade" tabindex="10" role="dialog" aria-hidden="true"></div>
 <div id="approval-overtime-request" class="modal fade" tabindex="10" role="dialog" aria-hidden="true"></div>
 <div id="overtime-request" class="modal fade" tabindex="10" role="dialog" aria-hidden="true"></div>

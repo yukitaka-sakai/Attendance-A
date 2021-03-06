@@ -1,6 +1,10 @@
 <% provide(:title, "Top") %>
 <div class="center jumbotron">
 <h1>勤怠管理システム</h1>
-<p>このアプリケーションでは、すっとこどっこいができます。</p>
-<%= link_to "Sign up", signup_path, class: "btn btn-lg btn-primary" %>
+<p>このアプリケーションは勤怠を管理できます。</p>
+<% if logged_in? %>
+  <%= link_to "ログイン済み", signup_path, class: "btn btn-lg btn-primary btn-block disabled" %>
+<% else %>
+  <%= link_to "Sign up", signup_path, class: "btn btn-lg btn-primary btn-block" %>
+<% end %>
 </div>
