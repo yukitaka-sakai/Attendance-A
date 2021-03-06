@@ -5,6 +5,7 @@ User.create!(name: "花田 光司",
              affiliation: "総務部",
              password: "password",
              password_confirmation: "password",
+             uid: 1001,
              superior: true)
              
 User.create!(name: "花田 虎上",
@@ -12,6 +13,7 @@ User.create!(name: "花田 虎上",
              affiliation: "総務部",
              password: "password",
              password_confirmation: "password",
+             uid: 1002,
              superior: true)             
              
 User.create!(name: "貴乃花",
@@ -19,6 +21,7 @@ User.create!(name: "貴乃花",
              affiliation: "営業部",
              password: "password",
              password_confirmation: "password",
+             uid: 9001,
              admin: true)
              
 User.create!(name: "若乃花",
@@ -26,6 +29,7 @@ User.create!(name: "若乃花",
              affiliation: "営業部",
              password: "password",
              password_confirmation: "password",
+             uid: 9002,
              admin: true)
              
 6.times do |n|
@@ -36,5 +40,6 @@ User.create!(name: "若乃花",
                email: email,
                affiliation: "事務部",
                password: password,
-               password_confirmation: password)
+               password_confirmation: password,
+               uid: 2000+n+1,)
 end

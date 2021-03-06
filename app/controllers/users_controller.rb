@@ -30,8 +30,9 @@ class UsersController < ApplicationController
   
   def employee_index
     @user = User.find(params[:user_id])
-    @users = User.all
-    # @attendances = Attendance.where(started_at: Date.today)
+        # ログインしているユーザーを特定する。
+    @attendances = Attendance.where(worked_on: Date.today, finished_at: nil).where.not(started_at: nil).order(user_id:"asc").group_by(&:user_id)
+# binding.pry
   end
   
 # CSVファイルインポート機能
@@ -60,6 +61,20 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params) #フォームから送られて来た新しいパラメーターを＠userに代入
     if @user.save #  @userの登録に成功したら
+      if @user.affiliation == "総務部"
+        @user.uid = @user.id + 1000
+        @user.save
+      elsif @user.affiliation == "事務部"
+        @user.uid = @user.id + 2000
+        @user.save
+      elsif @user.affiliation == "人事部"
+        @user.uid = @user.id + 3000
+        @user.save
+      elsif @user.affiliation == "窓際部"
+        @user.uid = @user.id + 4000
+        @user.save
+      end
+    
       log_in @user #保存成功後、ログインする
       flash[:success] = '新規作成に成功しました。' # 成功メッセージを出す
       redirect_to @user # redirect_to user_url(@user)をシンプルに記述　＞showへ遷移
