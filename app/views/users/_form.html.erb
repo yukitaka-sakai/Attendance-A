@@ -9,7 +9,7 @@
   <%= f.email_field :email, class: "form-control" %>
   
   <%= f.label :affiliation, class: "label-#{yield(:class_text)}" %>
-  <%= f.text_field :affiliation, class: "form-control" %>
+  <%= f.select :affiliation, ["総務部", "事務部", "人事部", "窓際部"], {selected: :affiliation}, class: "form-control" %>
   
   <%= f.label :basic_work_time, class: "label-#{yield(:class_text)}" %>
   <%= f.time_field :basic_work_time, class: "form-control" %>
