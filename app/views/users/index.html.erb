@@ -9,7 +9,6 @@
     <% if params[:search] %>
       <%= "検索結果" %>
   </h1>
-  <h3><%= link_to "戻る", users_path %></h3>
     <% else %>
       <%= "全てのユーザー" %>
     <% end %>
@@ -17,11 +16,13 @@
 </div>
 
 <!-- CSVインポートフォーム -->
-<div class="col-md-4 csv-form">
-  <%= form_tag(import_users_path, method: :post, multipart: :true) do %>
-    <%= file_field_tag :csv_file, class: "form-control" %>
-    <%= submit_tag "インポート", class: "btn btn-md btn-block btn-primary" %>
-  <% end %>
+<div class="container">
+  <div class="col-md-4 csv-form">
+    <%= form_tag(import_users_path, method: :post, multipart: :true) do %>
+      <%= file_field_tag :csv_file, class: "form-control" %>
+      <%= submit_tag "インポート", class: "btn btn-md btn-block btn-primary" %>
+    <% end %>
+  </div>
 </div>
   
 <!-- ユーザー検索フォーム -->
@@ -32,6 +33,7 @@
       <%= form_with url: users_path, method: :get, local: true do |f| %>
       <%= f.text_field :search, placeholder: 'キーワードを入力', class: "form-control" %>
       <%= f.submit '検索', :name => nil, class: "btn btn-md btn-primary" %>
+      <%= link_to "リセット", users_path, class: "btn btn-md btn-primary" %>
     <% end %>
     
     </form>
