@@ -20,7 +20,7 @@
   <div class="col-md-4 csv-form">
     <%= form_tag(import_users_path, method: :post, multipart: :true) do %>
       <%= file_field_tag :csv_file, class: "form-control" %>
-      <%= submit_tag "インポート", class: "btn btn-md btn-block btn-primary" %>
+      <%= submit_tag "インポート", class: "btn btn-md btn-block btn-primary btn-attendance" %>
     <% end %>
   </div>
 </div>
@@ -32,8 +32,8 @@
     <form class="form-inline" >
       <%= form_with url: users_path, method: :get, local: true do |f| %>
       <%= f.text_field :search, placeholder: 'キーワードを入力', class: "form-control" %>
-      <%= f.submit '検索', :name => nil, class: "btn btn-md btn-primary" %>
-      <%= link_to "リセット", users_path, class: "btn btn-md btn-primary" %>
+      <%= f.submit '検索', :name => nil, class: "btn btn-md btn-primary btn-user" %>
+      <%= link_to "リセット", users_path, class: "btn btn-md btn-primary btn-user" %>
     <% end %>
     
     </form>

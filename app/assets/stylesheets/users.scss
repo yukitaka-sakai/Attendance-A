@@ -8,6 +8,15 @@
 .csv-form {
   vertical-align: middle;
   text-align: center;
+
+}
+
+#csv_file {
+  vertical-align: middle;
+  text-align: center;
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
+  height: 29px;
 }
 
 /* ユーザー勤怠情報テーブル　*/
@@ -32,8 +41,13 @@ ol {
 }
 
 .btn-attendance {
-  margin-top:    2.5px;
-  margin-bottom: 2.5px;
+  margin-top:    5px;
+  margin-bottom: 5px;
+}
+
+.btn-user {
+  border-left:  0px;
+  border-right: 0px;
 }
 
 .label-signup {
