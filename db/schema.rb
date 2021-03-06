@@ -64,19 +64,21 @@ ActiveRecord::Schema.define(version: 20210106213308) do
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
+    t.integer "office_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "password_digest"
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "affiliation"
-    t.datetime "basic_work_time", default: "2021-03-05 23:00:00"
-    t.datetime "designated_work_start_time", default: "2021-03-05 23:30:00"
-    t.datetime "designated_work_end_time", default: "2021-03-06 08:30:00"
+    t.datetime "basic_work_time", default: "2021-03-06 23:00:00"
+    t.datetime "designated_work_start_time", default: "2021-03-06 23:30:00"
+    t.datetime "designated_work_end_time", default: "2021-03-07 08:30:00"
     t.boolean "superior", default: false
     t.integer "uid"
     t.integer "employee_number"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["office_id"], name: "index_users_on_office_id"
   end
 
 end

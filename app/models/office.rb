@@ -1,4 +1,6 @@
 class Office < ApplicationRecord
+  has_many :users, dependent: :destroy
+  
   validates :office_name, presence: true, length: { in: 2..30 }, uniqueness: true  
   
   enum office_type: { 出勤: 0, 退勤: 1 }

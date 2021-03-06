@@ -1,22 +1,22 @@
 <h1>出勤中社員一覧</h1>
 
   <div class ="row">
-    <table class="table table-bordered table-condensed" id="table-attendances">
+    <table class="table table-bordered table-condensed user-table" >
       <thead>
-        <tr>
-          <th>社員番号</th>
-          <th>名前</th>
-        </tr>
+        <th>
+          <td>社員番号</td>
+          <td>名前</td>
+        </td>
       </thead>
       
       <% @attendances.each do |id, attendances| %>
       <% user = User.find(id) %>
-      <tbody>
-            <tr>
-              <td><%= user.uid %></td>
-              <td><%= user.name %></td>
-            </tr>
-      </tbody>
+        <tbody>
+              <tr>
+                <td><%= user.uid %></td>
+                <td><%= user.name %></td>
+              </tr>
+        </tbody>
       <% end %>
     </table>
   </div>
