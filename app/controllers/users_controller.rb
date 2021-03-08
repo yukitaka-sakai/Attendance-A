@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user,       only: [:show, :edit, :update, :destroy, :approval_show]
   before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy, :approval_show]
-  before_action :correct_user,   only: [:edit, :update]
+  before_action :correct_user,   only: [:show, :edit, :update, :destroy]
   before_action :admin_user,     only: [:destroy, :edit, :update]
   before_action :set_one_month,  only: [:show, :approval_show]
   before_action :set_month,  only: :show
@@ -26,6 +26,7 @@ class UsersController < ApplicationController
 # ユーザーの一覧ページへ画面遷移（するときの処理）
   def index
     @users = User.paginate(page: params[:page]).search(params[:search])
+    @offices = Office.all
   end
   
   def employee_index
@@ -55,23 +56,25 @@ class UsersController < ApplicationController
 # ユーザー新規登録画面へ遷移（するときの処理）
   def new
     @user = User.new
+    @offices = Office.all
   end
   
 # ユーザー新規登録の保存処理
   def create
+    @office = Office.find_by(params[:office_id])
     @user = User.new(user_params) #フォームから送られて来た新しいパラメーターを＠userに代入
     if @user.save #  @userの登録に成功したら
       if @user.affiliation == "総務部"
-        @user.uid = @user.id + 1000
+        @user.uid = @office.office_number.to_s+ "-" + (@user.id + 1000).to_s
         @user.save
       elsif @user.affiliation == "事務部"
-        @user.uid = @user.id + 2000
+        @user.uid = @office.office_number.to_s+ "-" + (@user.id + 2000).to_s
         @user.save
       elsif @user.affiliation == "人事部"
-        @user.uid = @user.id + 3000
+        @user.uid = @office.office_number.to_s+ "-" + (@user.id + 3000).to_s
         @user.save
       elsif @user.affiliation == "窓際部"
-        @user.uid = @user.id + 4000
+        @user.uid = @office.office_number.to_s+ "-" + (@user.id + 4000).to_s
         @user.save
       end
     
@@ -85,13 +88,14 @@ class UsersController < ApplicationController
   
 # ユーザー情報の編集画面へ遷移（するときの処理）
   def edit
+    @offices = Office.all
   end
   
 # ユーザ情報の更新処理
   def update
     if @user.update_attributes(user_params)
       flash[:success] = "更新成功"
-      redirect_to @user
+      redirect_to users_url
     else
       render :edit
     end
@@ -252,7 +256,8 @@ class UsersController < ApplicationController
 # ストロングパラメーター  
     def user_params # ユーザーのパラメーターは
       # requireメソッドでオブジェクト名を定める。permitでキーを指定する。
-      params.require(:user).permit(:name, :email, :affiliation, :basic_work_time, :designated_work_start_time, :designated_work_end_time, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :affiliation, :basic_work_time, :designated_work_start_time,
+                                   :designated_work_end_time, :password, :password_confirmation, :office_id)
     end
     
     def edit_approval_params

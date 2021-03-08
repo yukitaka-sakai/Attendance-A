@@ -1,5 +1,6 @@
 class OfficesController < ApplicationController
   before_action :set_office,       only: [:edit, :destroy, :update]
+  before_action :admin_user,     only: [:new, :create, :destroy, :edit, :update, :index]
 
   
   def new
@@ -31,10 +32,6 @@ class OfficesController < ApplicationController
   end
   
   def edit
-  end
-  
-  def update
-    binding.pry
   end
   
   def destroy
