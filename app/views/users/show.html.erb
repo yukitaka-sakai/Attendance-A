@@ -127,7 +127,6 @@
           <td><%= format_hour(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
           <td><%= format_min(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
           <td>
-
               <!--残業終了予定時間があり、退社時間がある：予定残業時間-->
             <% if day.started_at.present? && day.finished_at.present? %> 
               <%= overtimes_3(day.started_at.floor_to(15.minutes),

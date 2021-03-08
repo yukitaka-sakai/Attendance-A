@@ -86,12 +86,13 @@
             <td><%= format_hour(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
             <td><%= format_min(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
             <td>
-              <% if day.overtime_finished_at.present? && day.finished_at.present? %>
-                <%= overtimes_2(day.finished_at.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.edit_next_day) %>
-              <% elsif day.overtime_finished_at.present? && @user.designated_work_end_time.present? %>
-                <%= overtimes_1(day.overtime_finished_at.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.overtime_next_day) %>
-              <% elsif day.overtime_finished_at.blank? && day.finished_at.present? %>
-                <%= overtimes_2(day.finished_at.floor_to(15.minutes), @user.designated_work_end_time.floor_to(15.minutes), day.edit_next_day) %>
+                <!--残業終了予定時間があり、退社時間がある：予定残業時間-->
+              <% if day.started_at.present? && day.finished_at.present? %> 
+                <%= overtimes_3(day.started_at.floor_to(15.minutes),
+                                day.finished_at.floor_to(15.minutes),
+                                @user.designated_work_end_time.floor_to(15.minutes),
+                                day.next_day)
+                %>
               <% end %>
             </td>
             <td><%= day.overtime_note %></td>
