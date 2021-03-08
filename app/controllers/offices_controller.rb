@@ -1,7 +1,7 @@
 class OfficesController < ApplicationController
-  before_action :set_office,       only: [:edit, :destroy, :update]
+  before_action :set_office,     only: [:edit, :destroy, :update]
+  before_action :logged_in_user, only: [:new, :create, :destroy, :edit, :update, :index]
   before_action :admin_user,     only: [:new, :create, :destroy, :edit, :update, :index]
-
   
   def new
     @office = Office.new

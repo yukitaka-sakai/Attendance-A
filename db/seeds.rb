@@ -3,6 +3,10 @@ Office.create!(office_name: "東京",
                office_number: 101,
                office_type: "出勤")
                
+Office.create!(office_name: "大阪",
+               office_number: 102,
+               office_type: "出勤")
+               
 User.create!(name: "花田 光司",
              email: "superior@email.com",
              affiliation: "総務部",
