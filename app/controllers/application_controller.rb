@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
   
   
   rescue ActiveRecord::RecordInvalid #トランザクションによるエラー分岐
-    flash[:danger] = "失敗"
+    flash[:danger] = "登録に失敗しました。"
     redirect_to root_url
   end
 

@@ -14,14 +14,14 @@ class SessionsController < ApplicationController
         redirect_back_or user
       end
     else
-      flash.now[:danger] = "だめ"
+      flash.now[:danger] = "入力に誤りがあります。"
     render :new
     end
   end
   
   def destroy
     log_out if logged_in?
-    flash[:success] = "ログアウトしたよ"
+    flash[:success] = "ログアウトしました。"
     redirect_to root_url
   end
 end

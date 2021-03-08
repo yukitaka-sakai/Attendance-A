@@ -18,14 +18,14 @@ class AttendancesController < ApplicationController
        @attendance.edit_started_at = @attendance.started_at
        
       if @attendance.update_attributes(started_at: Time.current.change(sec: 0), edit_started_at: Time.current.change(sec: 0))
-        flash[:info] = "goodmorning"
+        flash[:info] = "おはようございます。"
       else
         flash[:danger] = UPDATE_ERROR_MSG
       end
     elsif @attendance.finished_at.nil?
           @attendance.edit_finished_at = @attendance.finished_at
       if @attendance.update_attributes(finished_at: Time.current.change(sec: 0), edit_finished_at: Time.current.change(sec: 0))
-        flash[:info] = "おつかれ"
+        flash[:info] = "お疲れ様でした。"
       else
         flash[:danger] = UPDATE_ERROR_MSG
       end
@@ -51,17 +51,17 @@ class AttendancesController < ApplicationController
         if item[:application_superior_name].present? #上長が選択されているなら
         attendance = Attendance.find(id) # before_actionのset_one_monthからattendanceのidを代入する
           if item[:edit_started_at].blank? # 編集画面の　出社時間　がないなら
-            flash[:danger] = "出社時間の入力がないよ"
+            flash[:danger] = "出社時間の入力が必要です。"
             redirect_to attendances_edit_one_month_user_url(@user) and return
           elsif item[:edit_finished_at].blank? # ���集画面の　退社時間　がないなら
-            flash[:danger] = "退社時間がないよ"
+            flash[:danger] = "退社時間の入力が必要です。"
             redirect_to attendances_edit_one_month_user_url(@user) and return
       # 編集画面の　翌日　且つ　出社時間より退社時間が早いなら
           elsif (item[:edit_next_day] =="0") && (item[:edit_started_at] > item[:edit_finished_at])
             flash[:danger] = "出社時間より早い退社時間はできません。"
             redirect_to attendances_edit_one_month_user_url(@user) and return
           elsif item[:note].blank? # 編集画面の　備考　がないなら
-            flash[:danger] = "備考がないよ"
+            flash[:danger] = "備考へ内容を記入してください。"
             redirect_to attendances_edit_one_month_user_url(@user) and return
           end
           item[:edit_status] = "申請中"
