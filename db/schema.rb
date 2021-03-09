@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20210309164245) do
     t.integer "office_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "office_type"
+    t.string "office_type"
   end
 
   create_table "reports", force: :cascade do |t|
