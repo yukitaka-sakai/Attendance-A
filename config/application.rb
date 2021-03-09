@@ -15,7 +15,9 @@ module AttendanceAApp
     config.time_zone = 'Asia/Tokyo'
     config.i18n.default_locale = :ja
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
-    config.web_console.whitelisted_ips = '14.133.38.241'
+    unless Rails.env.production?
+      config.web_console.whitelisted_ips = '14.133.38.241'
+    end
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
