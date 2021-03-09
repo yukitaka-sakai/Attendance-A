@@ -86,11 +86,9 @@ GEM
       mini_mime (>= 0.1.1)
     method_source (1.0.0)
     mini_mime (1.0.2)
-    mini_portile2 (2.5.0)
     minitest (5.14.4)
     nio4r (2.5.7)
-    nokogiri (1.11.1)
-      mini_portile2 (~> 2.5.0)
+    nokogiri (1.11.1-x86_64-linux)
       racc (~> 1.4)
     pg (0.20.0)
     pry (0.14.0)
@@ -187,7 +185,7 @@ GEM
     will_paginate (3.3.0)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   bcrypt
@@ -218,7 +216,7 @@ DEPENDENCIES
   will_paginate
 
 RUBY VERSION
-   ruby 2.6.3p62
+   ruby 2.6.6p146
 
 BUNDLED WITH
-   1.17.3
+   2.2.14
