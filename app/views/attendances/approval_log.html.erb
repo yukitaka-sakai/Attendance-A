@@ -6,7 +6,6 @@
   <form class="form-inline" >
     <%= form_with url: @user, method: :get, local: true do |f| %>
       <%= link_to "リセット", attendances_approval_log_user_path(@user), class: "btn btn-md btn-default" %>
-
       <%= f.date_select :edit_approval_date, {prompt: "--",
                                               selected: @search_date,
                                               use_month_numbers: true,
