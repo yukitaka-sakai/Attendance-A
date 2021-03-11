@@ -52,6 +52,6 @@ User.create!(name: "若乃花",
                affiliation: "事務部",
                password: password,
                password_confirmation: password,
-               uid: "101-2004+#{n+1}",
+               uid: "101-200#{4+n+1}",
                office_id: 1)
 end

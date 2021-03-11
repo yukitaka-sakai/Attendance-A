@@ -5,6 +5,8 @@
   <h1>勤怠ログ</h1>
   <form class="form-inline" >
     <%= form_with url: @user, method: :get, local: true do |f| %>
+      <%= link_to "リセット", attendances_approval_log_user_path(@user), class: "btn btn-md btn-default" %>
+
       <%= f.date_select :edit_approval_date, {prompt: "--",
                                               selected: @search_date,
                                               use_month_numbers: true,
@@ -14,7 +16,6 @@
                                               discard_day:true},
                                               {class: 'form-control  bootstrap-date', style: 'display: inline-block;width: auto;'} %>
       <%= f.submit '検索', class: "btn btn-md btn-primary" %>
-      <%= link_to "リセット", attendances_approval_log_user_path(@user), class: "btn btn-md btn-default" %>
     <% end %>
   </form>
 </div>

@@ -30,10 +30,10 @@ class UsersController < ApplicationController
   end
   
   def employee_index
-    @user = User.find(params[:user_id])
-        # ログインしているユーザーを特定する。
-    @attendances = Attendance.where(worked_on: Date.today, finished_at: nil).where.not(started_at: nil).order(user_id:"asc").group_by(&:user_id)
-# binding.pry
+    # @attendances = Attendance.where(finished_at: nil).where.not(started_at: nil).order(:user_id)
+    @users = User.includes(:attendances).references(:attendances).
+    where('attendances.started_at IS NOT NULL').
+    where('attendances.finished_at IS NULL')
   end
   
 # CSVファイルインポート機能
@@ -56,12 +56,11 @@ class UsersController < ApplicationController
 # ユーザー新規登録画面へ遷移（するときの処理）
   def new
     @user = User.new
-    @offices = Office.all
   end
   
 # ユーザー新規登録の保存処理
   def create
-    @office = Office.find_by(params[:office_id])
+    @office = Office.find_by(params[:user][:office_id])
     @user = User.new(user_params) #フォームから送られて来た新しいパラメーターを＠userに代入
     if @user.save #  @userの登録に成功したら
       if @user.affiliation == "総務部"
