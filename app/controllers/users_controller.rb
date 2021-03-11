@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user,       only: [:show, :edit, :update, :destroy, :approval_show]
   before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy, :approval_show]
   before_action :correct_user,   only: [:show, :edit, :update, :destroy]
-  before_action :admin_user,     only: [:destroy, :edit, :update]
+  before_action :admin_user,     only: [:destroy, :edit, :update, :index, :employee_index]
   before_action :set_one_month,  only: [:show, :approval_show]
   before_action :set_month,  only: :show
   
