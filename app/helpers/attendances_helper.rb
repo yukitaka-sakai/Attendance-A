@@ -42,15 +42,15 @@ module AttendancesHelper
   end
   
   def overtimes_3(day_start, day_finish, designated_work_end_time, next_day)
-    # debugger
-    @overtime_judge = format("%.2f",((@user.basic_work_time.hour + (@user.basic_work_time.min)/60.0))) 
-    if day_finish.present? && @overtime_judge.to_f < @total_working_times
+    @overtime_judge = format("%.2f",((@user.basic_work_time.hour + (@user.basic_work_time.min)/60.0))) #@overtime_judge 基本勤務時間
+    if day_finish.present? && @overtime_judge.to_f < @str_times.to_f
       if next_day == "1"
         (@str_times.to_f + 24) - @overtime_judge.to_f
       else
-        # debugger
         @str_times.to_f - @overtime_judge.to_f
       end
+    else
+      @str_times.to_f - @overtime_judge.to_f
     end
   end
 

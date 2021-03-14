@@ -129,11 +129,12 @@
           <td>
               <!--残業終了予定時間があり、退社時間がある：予定残業時間-->
             <% if day.started_at.present? && day.finished_at.present? %> 
-              <%= overtimes_3(day.started_at.floor_to(15.minutes),
-                              day.finished_at.floor_to(15.minutes),
-                              @user.designated_work_end_time.floor_to(15.minutes),
-                              day.next_day)
+              <%= @overtimes = overtimes_3(day.started_at.floor_to(15.minutes),
+                               day.finished_at.floor_to(15.minutes),
+                               @user.designated_work_end_time.floor_to(15.minutes),
+                               day.next_day)
               %>
+              <% @total_overtimes = @total_overtimes.to_f + @overtimes.to_f %>
             <% end %>
           </td>
           <td class="text-field"><%= day.overtime_note %></td>
@@ -162,7 +163,9 @@
         <td colspan="2">累計日数</td>
         <td colspan="6">基本勤務時間</td>
         <td>在社時間合計</td>
-        <td colspan="5"></td>
+        <td colspan="3"></td>
+        <td>時間外時間合計</td>
+        <td></td>
         <td rowspan="2">
           <ol>
             <% if @report.approval_month_status == "申請中"%>
@@ -206,7 +209,9 @@
         <td colspan="2"><%= @attendances.count %>日</td>
         <td colspan="6"><%= format_basic_info(@user.basic_work_time).to_f * @worked_sum %></td>
         <td><%= format("%.2f", @total_working_times.to_f) %></td>
-        <td colspan="5"></td>
+        <td colspan="3"></td>
+        <td><%= format("%.2f", @total_overtimes.to_f) %></td>
+        <td></td>
       </tr>
     </tfoot>
   </table> 
