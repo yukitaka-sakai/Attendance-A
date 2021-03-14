@@ -12,8 +12,8 @@ User.create!(name: "花田 光司",
              affiliation: "総務部",
              password: "password",
              password_confirmation: "password",
-             employee_number: "101-1001",
-             uid: "101-1001",
+             employee_number: "101-1101",
+             uid: "101-1101",
              office_id: 1,
              superior: true)
              
@@ -22,8 +22,8 @@ User.create!(name: "花田 虎上",
              affiliation: "総務部",
              password: "password",
              password_confirmation: "password",
-             employee_number: "101-1002",
-             uid: "101-1002",
+             employee_number: "101-1102",
+             uid: "101-1102",
              office_id: 1,
              superior: true)             
              
@@ -32,8 +32,8 @@ User.create!(name: "貴乃花",
              affiliation: "営業部",
              password: "password",
              password_confirmation: "password",
-             employee_number: "101-9001",
-             uid: "101-9001",
+             employee_number: "101-9101",
+             uid: "101-9101",
              office_id: 1,
              admin: true)
              
@@ -42,8 +42,8 @@ User.create!(name: "若乃花",
              affiliation: "営業部",
              password: "password",
              password_confirmation: "password",
-             employee_number: "101-9002",
-             uid: "101-9002",
+             employee_number: "101-9102",
+             uid: "101-9102",
              office_id: 1,
              admin: true)
              
@@ -56,7 +56,7 @@ User.create!(name: "若乃花",
                affiliation: "事務部",
                password: password,
                password_confirmation: password,
-               employee_number: "101-200#{4+n+1}",
-               uid: "101-200#{4+n+1}",
+               employee_number: "101-210#{4+n+1}",
+               uid: "101-210#{4+n+1}",
                office_id: 1)
 end

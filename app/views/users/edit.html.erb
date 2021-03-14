@@ -18,11 +18,19 @@
       <%= f.label :affiliation, class: "label-#{yield(:class_text)}" %>
       <%= f.select :affiliation, ["総務部", "事務部", "人事部", "窓際部"], {selected: :affiliation}, class: "form-control" %>
 
-      <%= f.label :employee_number, class: "label-#{yield(:class_text)}" %>
-      <%= f.text_field :employee_number, class: "form-control" %>
-      
-      <%= f.label :uid, class: "label-#{yield(:class_text)}" %>
-      <%= f.text_field :uid, class: "form-control" %>
+      <% unless current_user.admin? %>
+        <%= f.label :employee_number, class: "label-#{yield(:class_text)}" %>
+        <%= f.text_field :employee_number, readonly: true, class: "form-control" %>
+        
+        <%= f.label :uid, class: "label-#{yield(:class_text)}" %>
+        <%= f.text_field :uid, readonly: true, class: "form-control" %>
+      <% else %>
+        <%= f.label :employee_number, class: "label-#{yield(:class_text)}" %>
+        <%= f.text_field :employee_number, class: "form-control" %>
+        
+        <%= f.label :uid, class: "label-#{yield(:class_text)}" %>
+        <%= f.text_field :uid, class: "form-control" %>
+      <% end %>
             
       <%= f.label :basic_work_time, class: "label-#{yield(:class_text)}" %>
       <%= f.time_field :basic_work_time, class: "form-control" %>

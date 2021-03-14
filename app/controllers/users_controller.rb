@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user,       only: [:show, :edit, :update, :destroy, :approval_show]
   before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy, :approval_show]
   before_action :correct_user,   only: [:show, :edit, :update, :destroy]
-  before_action :admin_user,     only: [:destroy, :edit, :update, :index, :employee_index]
+  before_action :admin_user,     only: [:destroy, :update, :index, :employee_index]
   before_action :set_one_month,  only: [:show, :approval_show]
   before_action :set_month,  only: :show
   
@@ -64,16 +64,20 @@ class UsersController < ApplicationController
     @user = User.new(user_params) #フォームから送られて来た新しいパラメーターを＠userに代入
     if @user.save #  @userの登録に成功したら
       if @user.affiliation == "総務部"
-        @user.uid = @office.office_number.to_s+ "-" + (@user.id + 1000).to_s
+        @user.uid = @office.office_number.to_s + "-" + (@user.id + 1000).to_s
+        @user.employee_number = @user.uid
         @user.save
       elsif @user.affiliation == "事務部"
-        @user.uid = @office.office_number.to_s+ "-" + (@user.id + 2000).to_s
+        @user.uid = @office.office_number.to_s + "-" + (@user.id + 2000).to_s
+        @user.employee_number = @user.uid
         @user.save
       elsif @user.affiliation == "人事部"
-        @user.uid = @office.office_number.to_s+ "-" + (@user.id + 3000).to_s
+        @user.uid = @office.office_number.to_s + "-" + (@user.id + 3000).to_s
+        @user.employee_number = @user.uid
         @user.save
       elsif @user.affiliation == "窓際部"
-        @user.uid = @office.office_number.to_s+ "-" + (@user.id + 4000).to_s
+        @user.uid = @office.office_number.to_s + "-" + (@user.id + 4000).to_s
+        @user.employee_number = @user.uid
         @user.save
       end
     
