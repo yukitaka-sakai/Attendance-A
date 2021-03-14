@@ -159,6 +159,7 @@ class UsersController < ApplicationController
   def update_approval_edit_month
     ActiveRecord::Base.transaction do
       edit_approval_params.each do |id, item|
+        debugger
         if item[:edit_confirmation] == "1" # 変更check boxが選択されているなら。
           attendance = Attendance.find(id) # attendanceにAttendanceテーブルのIDを代入する
           if item[:edit_status] == "なし" # 勤怠申請自体が無かったことにする。
