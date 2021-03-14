@@ -61,7 +61,7 @@ class AttendancesController < ApplicationController
           elsif (item[:edit_next_day] =="0") && (item[:edit_started_at] > item[:edit_finished_at])
             flash[:danger] = "出社時間より早い退社時間はできません。"
             redirect_to attendances_edit_one_month_user_url(@user) and return
-          elsif item[:note].blank? # 編集画面の　備考　がないなら
+          elsif item[:edit_note].blank? # 編集画面の　備考　がないなら
             flash[:danger] = "備考へ内容を記入してください。"
             redirect_to attendances_edit_one_month_user_url(@user) and return
           end
@@ -123,7 +123,7 @@ class AttendancesController < ApplicationController
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
       params.require(:user).permit(attendances: [:started_at, :finished_at, :next_day, :note,
-                            :edit_started_at, :edit_finished_at, :edit_next_day, :edit_status, 
+                            :edit_started_at, :edit_finished_at, :edit_next_day, :edit_note, :edit_status, 
                             :application_superior, :application_superior_name, :edit_confirmation])[:attendances]
     end
     

@@ -163,14 +163,13 @@ class UsersController < ApplicationController
   def update_approval_edit_month
     ActiveRecord::Base.transaction do
       edit_approval_params.each do |id, item|
-        debugger
         if item[:edit_confirmation] == "1" # 変更check boxが選択されているなら。
           attendance = Attendance.find(id) # attendanceにAttendanceテーブルのIDを代入する
           if item[:edit_status] == "なし" # 勤怠申請自体が無かったことにする。
             # attendance.edit_started_at = nil 
             # attendance.edit_finished_at = nil
             attendance.next_day = nil
-            attendance.note = nil
+            item[:edit_note] = nil
             item[:edit_status] = nil
             item[:edit_confirmation] = nil
             attendance.application_superior_name = nil
@@ -180,14 +179,12 @@ class UsersController < ApplicationController
             item[:before_finished_at] = attendance.finished_at
             attendance.started_at = attendance.edit_started_at # 承認なら変更時間を勤怠時間に代入する。
             attendance.finished_at = attendance.edit_finished_at
+            attendance.note = item[:edit_note]
             attendance.next_day = item[:edit_next_day]
             item[:edit_approval_date] = Date.current
             item[:edit_confirmation] = "編集承認済"
             flash[:success] = "勤怠情報を承認しました。"
           elsif item[:edit_status] == "否認"
-            attendance.edit_started_at = nil # 否認なら変更時間を削除し、勤怠編集否認のメッセージ
-            attendance.edit_finished_at = nil
-            attendance.next_day = nil
             item[:edit_confirmation] = "勤怠編集承否認"
             flash[:danger] = "勤怠情報を否認しました。"
           end
@@ -268,7 +265,7 @@ class UsersController < ApplicationController
       params.require(:user)
       .permit(attendances: [:started_at, :finished_at, 
                             :edit_started_at, :edit_finished_at, :next_day, :edit_next_day, :note,
-                            :edit_status, :edit_confirmation, :edit_approval_date,
+                            :edit_status, :edit_confirmation, :edit_approval_date, :edit_note,
                             :before_started_at, :before_finished_at])[:attendances]
     end
     

@@ -7,5 +7,6 @@ class AddChangeAttendanceColumn < ActiveRecord::Migration[5.1]
     add_column :attendances, :before_finished_at, :datetime
     add_column :attendances, :edit_update_at, :datetime
     add_column :attendances, :edit_approval_date, :date
+    add_column :attendances, :edit_note, :string
   end
 end
