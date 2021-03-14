@@ -1,17 +1,18 @@
 # coding: utf-8
 Office.create!(office_name: "東京",
-               office_number: 101,
-               office_type: "出勤")
+              office_number: 101,
+              office_type: "出勤")
                
 Office.create!(office_name: "大阪",
-               office_number: 102,
-               office_type: "出勤")
+              office_number: 102,
+              office_type: "出勤")
                
 User.create!(name: "花田 光司",
              email: "superior@email.com",
              affiliation: "総務部",
              password: "password",
              password_confirmation: "password",
+             employee_number: "101-1001",
              uid: "101-1001",
              office_id: 1,
              superior: true)
@@ -21,6 +22,7 @@ User.create!(name: "花田 虎上",
              affiliation: "総務部",
              password: "password",
              password_confirmation: "password",
+             employee_number: "101-1002",
              uid: "101-1002",
              office_id: 1,
              superior: true)             
@@ -30,6 +32,7 @@ User.create!(name: "貴乃花",
              affiliation: "営業部",
              password: "password",
              password_confirmation: "password",
+             employee_number: "101-9001",
              uid: "101-9001",
              office_id: 1,
              admin: true)
@@ -39,6 +42,7 @@ User.create!(name: "若乃花",
              affiliation: "営業部",
              password: "password",
              password_confirmation: "password",
+             employee_number: "101-9002",
              uid: "101-9002",
              office_id: 1,
              admin: true)
@@ -52,6 +56,7 @@ User.create!(name: "若乃花",
                affiliation: "事務部",
                password: password,
                password_confirmation: password,
+               employee_number: "101-200#{4+n+1}",
                uid: "101-200#{4+n+1}",
                office_id: 1)
 end

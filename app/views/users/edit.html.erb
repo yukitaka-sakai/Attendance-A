@@ -15,12 +15,15 @@
       <%= f.label :email, class: "label-#{yield(:class_text)}" %>
       <%= f.email_field :email, class: "form-control" %>
 
-      <%= f.label :office_id, class: "label-#{yield(:class_text)}" %>
-      <%= f.collection_select :office_id, @offices, :id, :office_name, {include_blank: true}, class: "form-control" %>
-
       <%= f.label :affiliation, class: "label-#{yield(:class_text)}" %>
       <%= f.select :affiliation, ["総務部", "事務部", "人事部", "窓際部"], {selected: :affiliation}, class: "form-control" %>
+
+      <%= f.label :employee_number, class: "label-#{yield(:class_text)}" %>
+      <%= f.text_field :employee_number, class: "form-control" %>
       
+      <%= f.label :uid, class: "label-#{yield(:class_text)}" %>
+      <%= f.text_field :uid, class: "form-control" %>
+            
       <%= f.label :basic_work_time, class: "label-#{yield(:class_text)}" %>
       <%= f.time_field :basic_work_time, class: "form-control" %>
       
