@@ -6,11 +6,11 @@
   <form class="form-inline" >
     <%= form_with url: @user, method: :get, local: true do |f| %>
       <%= link_to "リセット", attendances_approval_log_user_path(@user), class: "btn btn-md btn-default" %>
-      <%= f.date_select :edit_approval_date, {prompt: "--",
+      <%= f.date_select :edit_approval_date, {prompt: Time.now.month,
                                               selected: @search_date,
                                               use_month_numbers: true,
                                               start_year: (Time.now.year),
-                                              end_year: (Time.now.year - 6),
+                                              end_year: (Time.now.year - 3),
                                               start_month: (Time.now.month),
                                               discard_day:true},
                                               {class: 'form-control  bootstrap-date', style: 'display: inline-block;width: auto;'} %>
