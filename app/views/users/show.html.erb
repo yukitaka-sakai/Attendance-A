@@ -168,7 +168,7 @@
         <td rowspan="2">
           <ol>
             <% if @report.approval_month_status == "申請中"%>
-              <li><%= "所属長承認　#{@report.application_onemonth_superior_name} へ申請中" %></li>
+              <li><%= "#{@report.application_onemonth_superior_name} へ勤怠承認申請中" %></li>
               <li>
                 <%= form_with(model: @report, url: user_report_path(@user, @report), local: true, method: :patch) do |f| %>
                   <%= f.hidden_field :user_id, :value => @user.id %>
@@ -178,8 +178,8 @@
                   <%= f.submit "再申請 送信", class: "btn btn-block btn-primary" %>
                 <% end %>
               </li>
-            <% elsif @report.approval_month_status == "承認"%>
-              <li><%= "所属長承認済み" %></li>
+            <% elsif (@report.approval_month_status == "承認") || (@report.approval_month_status == "否認") %>
+              <li><%= "#{@report.report_confirmation}：#{@report.application_onemonth_superior_name}" %></li>
               <li>
                 <%= form_with(model: @report, url: user_report_path(@user, @report), local: true, method: :patch) do |f| %>
                   <%= f.hidden_field :user_id, :value => @user.id %>

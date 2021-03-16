@@ -235,11 +235,11 @@ class UsersController < ApplicationController
             item[:application_onemonth_superior_name] = nil
             flash[:danger] = "1ヶ月の勤務申請を削除しました。"
           elsif item[:approval_month_status] == "承認"
-            item[:report_confirmation] = "1ヶ月の勤務申請承認済"
+            item[:report_confirmation] = "勤務申請承認済"
             flash[:success] = "1ヶ月の勤務申請を承認しました。"
           elsif item[:approval_month_status] == "否認"
-            item[:report_confirmation] = "1ヶ月の勤務申請否認"
-            flash[:danger] = "1ヶ月の勤務申請は否認されました。"
+            item[:report_confirmation] = "勤務申請否認"
+            flash[:danger] = "1ヶ月の勤務申請を否認しました。"
           elsif item[:approval_month_status] == "申請中"
             item[:report_confirmation] = nil
             flash[:danger] = "変更が選択されませんでした。"
