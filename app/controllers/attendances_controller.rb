@@ -4,8 +4,10 @@ class AttendancesController < ApplicationController
   before_action :set_one_month, only: [:edit_one_month]
   before_action :edit_one_month_approval, only: :edit_approval_page
   
-  
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直して下さい。"
+  
+  def edit_attendance_system
+  end
 
 # 出社・退社時間の入力
   def update

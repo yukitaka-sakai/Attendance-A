@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 # トップページ
   root 'static_pages#top'
   get  '/signup', to:'users#new'
+  get  '/edit-attendance-system', to:'attendances#edit_attendance_system'
   
 # ログインのルーティング
   get     '/login', to: 'sessions#new'
