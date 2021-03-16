@@ -5,6 +5,9 @@
 <% if logged_in? %>
   <%= link_to "ログイン済み", login_path, class: "btn btn-lg btn-primary btn-block disabled" %>
 <% else %>
-  <%= link_to "ログイン", login_path, class: "btn btn-lg btn-primary btn-block" %>
+  <%= link_to "ログイン", login_path, class: "btn btn-lg btn-primary btn-block btn-login" %>
+  <p>
+    ユーザー登録がまだの方は、<%= link_to "こちら", signup_path %>
+  </p>
 <% end %>
 </div>
