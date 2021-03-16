@@ -11,68 +11,60 @@ class AttendancesController < ApplicationController
   def update
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
-
-    # 出勤時間が未登録である事を判定する
     if @attendance.started_at.nil?
-    # 出勤データが入ったら編集用出勤カラムにも同じ内容を代入する。
-       @attendance.edit_started_at = @attendance.started_at
-       
+      @attendance.edit_started_at = @attendance.started_at
       if @attendance.update_attributes(started_at: Time.current.change(sec: 0), edit_started_at: Time.current.change(sec: 0))
         flash[:info] = "おはようございます。"
       else
         flash[:danger] = UPDATE_ERROR_MSG
       end
     elsif @attendance.finished_at.nil?
-          @attendance.edit_finished_at = @attendance.finished_at
+      @attendance.edit_finished_at = @attendance.finished_at
       if @attendance.update_attributes(finished_at: Time.current.change(sec: 0), edit_finished_at: Time.current.change(sec: 0))
         flash[:info] = "お疲れ様でした。"
       else
         flash[:danger] = UPDATE_ERROR_MSG
       end
-      # debugger
-         @attendance.edit_next_day = @attendance.next_day if @attendance.started_at.present? || @attendance.finished_at
+        @attendance.edit_next_day = @attendance.next_day if @attendance.started_at.present? || @attendance.finished_at
     end
     redirect_to @user
   end
   
-#　勤怠編集機能
-
   # 勤怠編集画面を表示させる（するときの処理）
   def edit_one_month
-    # ユーザーモデルのsuperiorが入力され、自分のID以外の名前を@superiorsに代入する。
     @superiors = User.where(superior: true).where.not(id: @user.id).select(:name)
   end
   
   # 勤怠情報の編集申請（するときの処理）
   def update_one_month
+    n = 0
     ActiveRecord::Base.transaction do
       attendances_params.each do |id, item| 
-        # ストロングパラメータの内容に基づいて　idとitemに対して繰り返す。
         attendance = Attendance.find(id)
-        if item[:application_superior_name].present? #上長が選択されているなら
-         # before_actionのset_one_monthからattendanceのidを代入する
-          if item[:edit_started_at].blank? # 編集画面の　出社時間　がないなら
+        if item[:application_superior_name].present? 
+          if item[:edit_started_at].blank?
             flash[:danger] = "出社時間の入力が必要です。"
             redirect_to attendances_edit_one_month_user_url(@user) and return
-          elsif item[:edit_finished_at].blank? # ���集画面の　退社時間　がないなら
+          elsif item[:edit_finished_at].blank? 
             flash[:danger] = "退社時間の入力が必要です。"
             redirect_to attendances_edit_one_month_user_url(@user) and return
-          # 編集画面の　翌日　且つ　出社時間より退社時間が早いなら
           elsif (item[:edit_next_day] =="0") && (item[:edit_started_at] > item[:edit_finished_at])
             flash[:danger] = "出社時間より早い退社時間はできません。"
             redirect_to attendances_edit_one_month_user_url(@user) and return
-          elsif item[:edit_note].blank? # 編集画面の　備考　がないなら
+          elsif item[:edit_note].blank? 
             flash[:danger] = "備考へ内容を記入してください。"
             redirect_to attendances_edit_one_month_user_url(@user) and return
           end
           item[:edit_status] = "申請中"
-          item[:edit_confirmation] = nil
           attendance.update_attributes!(item)
+          n += 1
+        # elsif item[:edit_started_at].present? || item[:edit_finished_at].present? || item[:edit_note].present?
+        #   flash[:danger] = "上長の入力が必要です。"
+        #   redirect_to attendances_edit_one_month_user_url(@user) and return
         end
-      end
-    end
-
-    flash[:success] = "勤怠変更申請を送信しました。"
+      end #do
+    end #do
+    flash[:success] = "勤怠変更を#{n}件申請しました。"
     redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
@@ -110,13 +102,11 @@ class AttendancesController < ApplicationController
   end
   
   def approval_log
-    # binding.pry
-    if params[:"edit_approval_date(1i)"].present?
-      @search_date = Date.new(params[:"edit_approval_date(1i)"].to_i,params[:"edit_approval_date(2i)"].to_i,params[:"edit_approval_date(3i)"].to_i)
+    if params["edit_approval_date(1i)"].present?
+      @search_date = Date.new(params["edit_approval_date(1i)"].to_i,params["edit_approval_date(2i)"].to_i,params["edit_approval_date(3i)"].to_i)
       @last_day = @search_date.end_of_month
     end
     @attendances = @user.attendances.where(edit_status: "承認", worked_on: @search_date..@last_day).order(:worked_on)
-    # binding.pry
   end
     
   private

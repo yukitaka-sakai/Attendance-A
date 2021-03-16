@@ -175,8 +175,12 @@ class UsersController < ApplicationController
             attendance.application_superior_name = nil
             flash[:danger] = "勤務変更を削除しました。"
           elsif item[:edit_status] == "承認"
-            item[:before_started_at] = attendance.started_at
-            item[:before_finished_at] = attendance.finished_at
+            if attendance.before_started_at == nil 
+              item[:before_started_at] = attendance.started_at
+            end
+            if attendance.before_finished_at == nil
+              item[:before_finished_at] = attendance.finished_at
+            end
             attendance.started_at = attendance.edit_started_at # 承認なら変更時間を勤怠時間に代入する。
             attendance.finished_at = attendance.edit_finished_at
             attendance.note = item[:edit_note]

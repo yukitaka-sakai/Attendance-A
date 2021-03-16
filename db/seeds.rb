@@ -7,8 +7,8 @@ Office.create!(office_name: "大阪",
               office_number: 102,
               office_type: "出勤")
                
-User.create!(name: "花田 光司",
-             email: "superior@email.com",
+User.create!(name: "上長１",
+             email: "superior1@email.com",
              affiliation: "総務部",
              password: "password",
              password_confirmation: "password",
@@ -17,8 +17,8 @@ User.create!(name: "花田 光司",
              office_id: 1,
              superior: true)
              
-User.create!(name: "花田 虎上",
-             email: "superior1@email.com",
+User.create!(name: "上長２",
+             email: "superior2@email.com",
              affiliation: "総務部",
              password: "password",
              password_confirmation: "password",
@@ -27,8 +27,8 @@ User.create!(name: "花田 虎上",
              office_id: 1,
              superior: true)             
              
-User.create!(name: "貴乃花",
-             email: "admin@email.com",
+User.create!(name: "管理者１",
+             email: "admin1@email.com",
              affiliation: "営業部",
              password: "password",
              password_confirmation: "password",
@@ -37,8 +37,8 @@ User.create!(name: "貴乃花",
              office_id: 1,
              admin: true)
              
-User.create!(name: "若乃花",
-             email: "admin1@email.com",
+User.create!(name: "管理者２",
+             email: "admin2@email.com",
              affiliation: "営業部",
              password: "password",
              password_confirmation: "password",

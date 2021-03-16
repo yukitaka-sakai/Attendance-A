@@ -46,7 +46,7 @@
                   <% end %>
                 </td>
                 <td><%= attendance.text_field :edit_note, readonly:true, class: "form-control" %></td>
-                <td><%= attendance.collection_select :application_superior_name, @superiors, :name, :name, {include_blank: "" }, disabled: true, class: "form-control" %></td>
+                <td><%= attendance.collection_select :application_superior_name, @superiors, :name, :name, {include_blank: true, selected: "" }, disabled: true, class: "form-control" %></td>
               <% else %>
                 <td><%= attendance.time_field :edit_started_at, class: "form-control" %></td>
                 <td><%= attendance.time_field :edit_finished_at, class: "form-control" %></td> 
@@ -59,7 +59,7 @@
                   <% end %>
                 </td>
                 <td><%= attendance.text_field :edit_note, placeholder: "入力必須", class: "form-control" %></td>
-                <td><%= attendance.collection_select :application_superior_name, @superiors, :name, :name, {include_blank:"" }, class: "form-control" %></td>
+                <td><%= attendance.collection_select :application_superior_name, @superiors, :name, :name, {include_blank: true, selected: "" }, class: "form-control" %></td>
                     <%= attendance.hidden_field :application_superior, :value => @user.id %>
               <% end %>
             </tr>
