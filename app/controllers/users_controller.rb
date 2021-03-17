@@ -40,15 +40,15 @@ class UsersController < ApplicationController
   def import
     if params[:csv_file].blank?
       flash[:danger] = "インポート するCSVファイルを選択してください。"
-      redirect_to users_url
+      redirect_to users_url and return
     else
       num = User.import(params[:csv_file])  # fileはtmpに自動で一時保存される
       if num > 0
         flash[:success] = "#{num.to_s}件のユーザー情報を追加しました。"
-        redirect_to users_url
+        redirect_to users_url and return
       else
         flash[:danger] = "読み込みエラーが発生しました。"
-        redirect_to users_url
+        redirect_to users_url and return
       end
     end
   end
