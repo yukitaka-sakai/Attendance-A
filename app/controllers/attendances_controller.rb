@@ -101,6 +101,7 @@ class AttendancesController < ApplicationController
         end
       end
     end
+    debugger
   end
   
   def approval_log

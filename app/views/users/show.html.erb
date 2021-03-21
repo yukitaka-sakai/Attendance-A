@@ -127,14 +127,19 @@
           <td><%= format_hour(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
           <td><%= format_min(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
           <td>
-              <!--残業終了予定時間があり、退社時間がある：予定残業時間-->
-            <% if day.started_at.present? && day.finished_at.present? %> 
-              <%= @overtimes = overtimes_3(day.started_at.floor_to(15.minutes),
-                               day.finished_at.floor_to(15.minutes),
-                               @user.designated_work_end_time.floor_to(15.minutes),
-                               day.next_day)
-              %>
+            <% if day.started_at.present? && day.finished_at.present? %> <!--残業終了予定時間があり、退社時間がある：予定残業時間-->
+              <%= @overtimes = overtimes_2(day.started_at.floor_to(15.minutes), #出社時間
+                                           day.finished_at.floor_to(15.minutes), #退社時間
+                                           day.next_day) %>
               <% @total_overtimes = @total_overtimes.to_f + @overtimes.to_f %>
+            <% elsif day.overtime_finished_at.present? && day.finished_at.blank? && day.started_at.present? %>
+              <%= overtimes_3(day.started_at.floor_to(15.minutes), #出社時間
+                              day.overtime_finished_at.floor_to(15.minutes),
+                              day.overtime_next_day) %>
+            <% elsif day.started_at.blank? && day.finished_at.blank? && day.overtime_finished_at.present? %>
+              <%= overtimes_4(day.overtime_finished_at.floor_to(15.minutes),
+                              day.overtime_next_day) %>
+                              
             <% end %>
           </td>
           <td class="text-field"><%= day.overtime_note %></td>
