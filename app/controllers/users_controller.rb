@@ -165,9 +165,12 @@ class UsersController < ApplicationController
       edit_approval_params.each do |id, item|
         if item[:edit_confirmation] == "1" # 変更check boxが選択されているなら。
           attendance = Attendance.find(id) # attendanceにAttendanceテーブルのIDを代入する
-          if item[:edit_status] == "なし" # 勤怠申請自体が無かったことにする。
-            # attendance.edit_started_at = nil 
-            # attendance.edit_finished_at = nil
+          if item[:edit_status] == "なし"
+            # 勤怠申請自体が無かったことにする。
+            # item[:edit_started_at] = nil
+            # item[:edit_finished_at] = nil
+            attendance.edit_started_at = nil 
+            attendance.edit_finished_at = nil
             attendance.next_day = nil
             item[:edit_note] = nil
             item[:edit_status] = nil
@@ -175,12 +178,12 @@ class UsersController < ApplicationController
             attendance.application_superior_name = nil
             flash[:danger] = "勤務変更を削除しました。"
           elsif item[:edit_status] == "承認"
-            if attendance.before_started_at == nil 
-              item[:before_started_at] = attendance.started_at
-            end
-            if attendance.before_finished_at == nil
-              item[:before_finished_at] = attendance.finished_at
-            end
+            # if attendance.before_started_at == nil 
+            #   item[:before_started_at] = attendance.started_at
+            # end
+            # if attendance.before_finished_at == nil
+            #   item[:before_finished_at] = attendance.finished_at
+            # end
             attendance.started_at = attendance.edit_started_at # 承認なら変更時間を勤怠時間に代入する。
             attendance.finished_at = attendance.edit_finished_at
             attendance.note = item[:edit_note]
@@ -189,7 +192,7 @@ class UsersController < ApplicationController
             item[:edit_confirmation] = "編集承認済"
             flash[:success] = "勤怠情報を承認しました。"
           elsif item[:edit_status] == "否認"
-            item[:edit_confirmation] = "勤怠編集承否認"
+            item[:edit_confirmation] = "勤怠編集 否認"
             flash[:danger] = "勤怠情報を否認しました。"
           end
             attendance.update_attributes!(item)

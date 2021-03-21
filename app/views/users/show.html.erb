@@ -145,12 +145,12 @@
           <td class="text-field"><%= day.overtime_note %></td>
           <td>
             <% if day.edit_status == "申請中" %>
-              <%= "#{day.application_superior_name} へ勤務変更申請中" %>
+              <%= "#{day.application_superior_name} へ勤務変更申請中" %></br>
             <% elsif (day.edit_status == "否認") || (day.edit_status == "承認") %>
               <%= "#{day.edit_confirmation} ：#{day.application_superior_name}" %></br>
             <% end %>
             <% if day.overtime_status == "申請中" %>
-              <%= "#{day.application_superior_name} へ残業申請中" %>
+              <%= "#{day.application_superior_name} へ残業申請中" %></br>
             <% elsif (day.overtime_status == "否認") || (day.overtime_status == "承認") %>
               <%= "#{day.overtime_confirmation} ：#{day.application_superior_name}" %>
             <% end %>
@@ -184,7 +184,7 @@
                 <% end %>
               </li>
             <% elsif (@report.approval_month_status == "承認") || (@report.approval_month_status == "否認") %>
-              <li><%= "#{@report.report_confirmation}：#{@report.application_onemonth_superior_name}" %></li>
+              <li><%= "#{@report.application_onemonth_superior_name}により#{@report.report_confirmation}" %></li>
               <li>
                 <%= form_with(model: @report, url: user_report_path(@user, @report), local: true, method: :patch) do |f| %>
                   <%= f.hidden_field :user_id, :value => @user.id %>

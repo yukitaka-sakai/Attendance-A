@@ -57,9 +57,18 @@ class AttendancesController < ApplicationController
             flash[:danger] = "備考へ内容を記入してください。"
             redirect_to attendances_edit_one_month_user_url(@user) and return
           end
+        if attendance.edit_status == "承認"
           item[:edit_status] = "申請中"
           attendance.update_attributes!(item)
           n += 1
+        else
+          item[:edit_status] = "申請中"
+          item[:before_started_at] = attendance.started_at
+          item[:before_finished_at] = attendance.finished_at
+          attendance.update_attributes!(item)
+          n += 1
+        end
+          
         # elsif item[:edit_started_at].present? || item[:edit_finished_at].present? || item[:edit_note].present?
         #   flash[:danger] = "上長の入力が必要です。"
         #   redirect_to attendances_edit_one_month_user_url(@user) and return
@@ -119,7 +128,7 @@ class AttendancesController < ApplicationController
   private
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :next_day, :note,
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :next_day, :note, :before_started_at, :before_started_at,
                             :edit_started_at, :edit_finished_at, :edit_next_day, :edit_note, :edit_status, 
                             :application_superior, :application_superior_name, :edit_confirmation])[:attendances]
     end
