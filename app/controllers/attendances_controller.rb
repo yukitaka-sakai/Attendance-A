@@ -85,8 +85,13 @@ class AttendancesController < ApplicationController
     @attendance = Attendance.find(params[:id])
     t = Time.current
     @time_current = t.strftime("%H:%M")
-    @next_day_judge = params[:attendance][:overtime_finished_at] < @time_current
-    if @next_day_judge && params[:attendance][:overtime_next_day] == "0"
+    @next_day_judge1 = params[:attendance][:overtime_finished_at] < @time_current
+    @next_day_judge2 = format("%.2f",((@user.designated_work_end_time.hour + (@user.designated_work_end_time.min)/60.0))) > params[:attendance][:overtime_finished_at]
+    # debugger
+    if @next_day_judge1 == false && @attendance.worked_on == Date.today && params[:attendance][:overtime_next_day] == "0"
+      flash[:danger] = "翌日になる場合は、翌日にチェックを入れてください。"
+      redirect_to @user and return
+    elsif @next_day_judge2 == true && @attendance.started_at == nil && @attendance.finished_at == nil && params[:attendance][:overtime_next_day] == "0"
       flash[:danger] = "翌日になる場合は、翌日にチェックを入れてください。"
       redirect_to @user and return
     else
@@ -101,7 +106,6 @@ class AttendancesController < ApplicationController
         end
       end
     end
-    debugger
   end
   
   def approval_log
