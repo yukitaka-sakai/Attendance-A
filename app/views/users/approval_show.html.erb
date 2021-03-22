@@ -82,7 +82,12 @@
                 <% @total_working_times = @total_working_times.to_f + @str_times.to_f %> <!--working_times 合計在社時間-->
               <% end %>
             </td>
-            <td class="text-field"><%= day.edit_note %></td>
+            <td class="text-field">
+              <% if day.note.present? %>
+              <%= day.note %>
+            <% else %>
+              <%= day.edit_note %>
+            <% end %></td>
             <td><%= format_hour(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
             <td><%= format_min(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
             <td>
