@@ -38,7 +38,7 @@
                 <td><%= f.time_field :overtime_finished_at, class: "form-control" %></td>
                 <td><%= f.check_box :overtime_next_day %></td>
                 <td><%= f.select :overtime_note,["作業フォローのため残業します。", "トラブル対応のため残業します。", "納期対応の為、残業します。", "突発対応の為残業します。"], {include_blank: ""}, class: "form-control" %></td>
-                <td><%= f.collection_select :application_superior_name, @superiors, :name, :name, {include_blank: true, selected: nil}, class: "form-control" %></td>
+                <td><%= f.collection_select :overtime_application_superior_name, @superiors, :name, :name, {include_blank: true, selected: nil}, class: "form-control" %></td>
               </tr>
             </tbody>
           </table>

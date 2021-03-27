@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     @superiors = User.where(superior: true).where.not(id: @user.id).select(:name)
     @worked_sum = @attendances.where.not(started_at: nil).count
     @approval_edit_sum = Attendance.where(application_superior_name: @user.name, edit_status: "申請中").count
-    @approval_overtime_sum = Attendance.where(application_superior_name: @user.name, overtime_status: "申請中").count
+    @approval_overtime_sum = Attendance.where(overtime_application_superior_name: @user.name, overtime_status: "申請中").count
     @approval_onemonth_sum = Report.where(application_onemonth_superior_name: @user.name, approval_month_status: "申請中").count
 # CSV出力
     respond_to do |format| 
@@ -116,7 +116,7 @@ class UsersController < ApplicationController
     # ログインしているユーザーを特定する。
     @user = User.find(params[:user_id])
     # Attendanceテーブルから特定された上長名がカラムにデータを持つ勤怠データを＠attendanceに代入する。
-    @attendances = Attendance.where(application_superior_name: @user.name, overtime_status: "申請中").order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
+    @attendances = Attendance.where(overtime_application_superior_name: @user.name, overtime_status: "申請中").order(user_id: "ASC", worked_on: "ASC").group_by(&:user_id)
   end
   
   def update_approval_overtime_request
@@ -124,19 +124,26 @@ class UsersController < ApplicationController
       overtime_request_params.each do |id, item|
         if item[:overtime_confirmation] == "1"
           attendance = Attendance.find(id)
+          # binding.pry
           if item[:overtime_status] == "なし"
-            item[:next_day] = nil
-            item[:note] = nil
-            item[:overtime_status] = nil
-            item[:overtime_confirmation] = nil
-            item[:application_superior_name] = nil
+            item[:overtime_finished_at] = attendance.log_overtime_finished_at
+            item[:overtime_next_day] = attendance.log_overtime_next_day
+            item[:overtime_status] = attendance.log_overtime_status
+            item[:overtime_note] = attendance.log_overtime_note
+            item[:overtime_confirmation] = attendance.log_overtime_confirmation
+            item[:overtime_application_superior_name] = attendance.log_application_superior_name
             flash[:danger] = "残業申請を削除しました。"
           elsif item[:overtime_status] == "承認"
-            item[:next_day] = item[:overtime_next_day]
+            item[:log_overtime_status] = item[:overtime_status]
+            item[:log_overtime_finished_at] = attendance.overtime_finished_at
+            item[:log_overtime_next_day] = attendance.overtime_next_day
+            item[:log_overtime_note] = attendance.overtime_note
+            item[:log_application_superior_name] = attendance.overtime_application_superior_name
             item[:overtime_confirmation] = "残業申請承認済"
+            item[:log_overtime_confirmation] = item[:overtime_confirmation]
             flash[:success] = "残業申請を承認しました。"
           elsif item[:overtime_status] == "否認"
-            item[:next_day] = nil
+            item[:log_overtime_status] = item[:overtime_status]
             item[:overtime_confirmation] = "残業申請否認"
             flash[:danger] = "残業申請は否認されました。"
           end
@@ -279,7 +286,9 @@ class UsersController < ApplicationController
     def overtime_request_params
       params.require(:user)
       .permit(attendances: [:overtime_finished_at, :overtime_next_day, :overtime_confirmation,
-                            :overtime_status, :next_day, :note, :application_superior_name])[:attendances]
+                            :overtime_status, :next_day, :overtime_note, :overtime_application_superior_name,
+                            :log_overtime_status, :log_overtime_next_day, :log_overtime_note,
+                            :log_overtime_finished_at, :log_application_superior_name, :log_overtime_confirmation])[:attendances]
     end
     
     def approval_month_report_params

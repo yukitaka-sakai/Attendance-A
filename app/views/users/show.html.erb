@@ -133,19 +133,8 @@
           <td><%= format_hour(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
           <td><%= format_min(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
           <td>
-            <% if day.started_at.present? && day.finished_at.present? %> <!--残業終了予定時間があり、退社時間がある：予定残業時間-->
-              <%= @overtimes = overtimes_2(day.started_at.floor_to(15.minutes), #出社時間
-                                           day.finished_at.floor_to(15.minutes), #退社時間
-                                           day.next_day) %>
-              <% @total_overtimes = @total_overtimes.to_f + @overtimes.to_f %>
-            <% elsif day.overtime_finished_at.present? && day.finished_at.blank? && day.started_at.present? %>
-              <%= overtimes_3(day.started_at.floor_to(15.minutes), #出社時間
-                              day.overtime_finished_at.floor_to(15.minutes),
-                              day.overtime_next_day) %>
-            <% elsif day.started_at.blank? && day.finished_at.blank? && day.overtime_finished_at.present? %>
-              <%= overtimes_4(day.overtime_finished_at.floor_to(15.minutes),
-                              day.overtime_next_day) %>
-                              
+            <% if day.overtime_status.present? %>
+              <%= overtimes_1(day.overtime_finished_at.floor_to(15.minutes),day.overtime_next_day) %>
             <% end %>
           </td>
           <td class="text-field"><%= day.overtime_note %></td>
@@ -156,9 +145,9 @@
               <%= "#{day.edit_confirmation} ：#{day.application_superior_name}" %></br>
             <% end %>
             <% if day.overtime_status == "申請中" %>
-              <%= "#{day.application_superior_name} へ残業申請中" %></br>
+              <%= "#{day.overtime_application_superior_name} へ残業申請中" %></br>
             <% elsif (day.overtime_status == "否認") || (day.overtime_status == "承認") %>
-              <%= "#{day.overtime_confirmation} ：#{day.application_superior_name}" %>
+              <%= "#{day.overtime_confirmation} ：#{day.overtime_application_superior_name}" %>
             <% end %>
           </td>
         </tr>
@@ -174,7 +163,7 @@
         <td colspan="6">基本勤務時間</td>
         <td>在社時間合計</td>
         <td colspan="3"></td>
-        <td>時間外時間合計</td>
+        <td></td>
         <td></td>
         <td rowspan="2">
           <ol>
@@ -220,7 +209,7 @@
         <td colspan="6"><%= format_basic_info(@user.basic_work_time).to_f * @worked_sum %></td>
         <td><%= format("%.2f", @total_working_times.to_f) %></td>
         <td colspan="3"></td>
-        <td><%= format("%.2f", @total_overtimes.to_f) %></td>
+        <td></td>
         <td></td>
       </tr>
     </tfoot>

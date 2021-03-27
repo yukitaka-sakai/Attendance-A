@@ -24,6 +24,6 @@ class Attendance < ApplicationRecord
   end
   
   def not_selected_supelior
-    errors.add(:application_superior_name,"を選択してください。") if (overtime_finished_at.present? && overtime_note.present?) && application_superior_name.blank?
+    errors.add(:overtime_application_superior_name,"を選択してください。") if (overtime_finished_at.present? && overtime_note.present?) && overtime_application_superior_name.blank?
   end
 end

@@ -45,8 +45,8 @@
                       <td><%= l(attendance.overtime_finished_at, format: :time) %></td>
                       <td><%= l(@user.designated_work_end_time, format: :time) %></td>
                       <td>
-                        <% if attendance.overtime_finished_at.present? && @user.designated_work_end_time.present? ||%>
-                          <%= @overtime_scheduled_time = overtimes_1(attendance.started_at, attendance.overtime_finished_at.floor_to(15.minutes), attendance.overtime_next_day) %>
+                        <% if attendance.overtime_status.present? %> 
+                          <%= overtimes_1(attendance.overtime_finished_at.floor_to(15.minutes),attendance.next_day) %>
                         <% end %>
                       </td>
                       <td><%= attendance.overtime_note if attendance.overtime_finished_at.present? %></td>

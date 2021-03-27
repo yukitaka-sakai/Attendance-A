@@ -92,21 +92,21 @@ class AttendancesController < ApplicationController
   def update_overtime_request #一件のみ保存する
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
-    t = Time.current
-    @time_current = t.strftime("%H:%M")
-    @next_day_judge1 = params[:attendance][:overtime_finished_at] < @time_current
-    @next_day_judge2 = format("%.2f",((@user.designated_work_end_time.hour + (@user.designated_work_end_time.min)/60.0))) > params[:attendance][:overtime_finished_at]
-    # debugger
-    if @next_day_judge1 == true && @attendance.worked_on == Date.today && params[:attendance][:overtime_next_day] == "0"
-      flash[:danger] = "翌日になる場合は、翌日にチェックを入れてください。"
-      redirect_to @user and return
-    elsif @next_day_judge2 == true && @attendance.started_at == nil && @attendance.finished_at == nil && params[:attendance][:overtime_next_day] == "0"
-      flash[:danger] = "翌日になる場合は、翌日にチェックを入れてください。"
-      redirect_to @user and return
-    else
+        # binding.pry
+    # t = Time.current
+    # @time_current = t.strftime("%H:%M")
+    # @next_day_judge1 = params[:attendance][:overtime_finished_at] < @time_current
+    # @next_day_judge2 = format("%.2f",((@user.designated_work_end_time.hour + (@user.designated_work_end_time.min)/60.0))) > params[:attendance][:overtime_finished_at]
+    # if @next_day_judge1 == true && @attendance.worked_on == Date.today && params[:attendance][:overtime_next_day] == "0"
+    #   flash[:danger] = "翌日になる場合は、翌日にチェックを入れてください。"
+    #   redirect_to @user and return
+    # elsif @next_day_judge2 == true && @attendance.started_at == nil && @attendance.finished_at == nil && params[:attendance][:overtime_next_day] == "0"
+    #   flash[:danger] = "翌日になる場合は、翌日にチェックを入れてください。"
+    #   redirect_to @user and return
+    # else
       if params[:attendance][:overtime_finished_at].present?
         params[:attendance][:overtime_status] = "申請中" 
-        if @attendance.update_attributes(overtime_params)
+        if @attendance.update_attributes!(overtime_params)
           flash[:success] = "残業申請を行いました。"
           redirect_to @user and return
         else
@@ -114,7 +114,7 @@ class AttendancesController < ApplicationController
           redirect_to @user and return
         end
       end
-    end
+    # end
   end
   
   def approval_log
@@ -135,8 +135,8 @@ class AttendancesController < ApplicationController
     
     def overtime_params
       params.require(:attendance).permit(:overtime_finished_at, :overtime_next_day,
-                            :overtime_note, :overtimes, :overtime_status, 
-                            :overtime_confirmation, :application_superior_name)
+                            :overtime_note, :overtime_status, 
+                            :overtime_application_superior_name)
     end
     
     def approval_one_month_params

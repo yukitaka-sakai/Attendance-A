@@ -21,7 +21,7 @@ module AttendancesHelper
   end
   
   # メソッド 名（1,2,3)の順番で引数を呼び出す。引数はカラム名は使わない。
-  def overtimes_1(start, overtimefinish, overtime_next_day)
+  def overtimes_1(overtimefinish, overtime_next_day)
     if overtime_next_day == "1"
       format("%.2f", ((overtimefinish.hour - @user.designated_work_end_time.hour) + ((overtimefinish.min - @user.designated_work_end_time.min) / 60.0) + 24))
     else
@@ -29,18 +29,18 @@ module AttendancesHelper
     end
   end
   
-  def overtimes_2(day_start, day_finish, next_day)
-    @overtime_judge = format("%.2f",((@user.basic_work_time.hour + (@user.basic_work_time.min)/60.0))) #@overtime_judge 基本勤務時間
-    if day_finish.present? && @overtime_judge.to_f < @str_times.to_f
-      if next_day == "1"
-        (@str_times.to_f + 24) - @overtime_judge.to_f
-      else
-        @str_times.to_f - @overtime_judge.to_f
-      end
-    else
-      @str_times.to_f - @overtime_judge.to_f
-    end
-  end
+  # def overtimes_2(day_start, day_finish, next_day)
+  #   @overtime_judge = format("%.2f",((@user.basic_work_time.hour + (@user.basic_work_time.min)/60.0))) #@overtime_judge 基本勤務時間
+  #   if day_finish.present? && @overtime_judge.to_f < @str_times.to_f
+  #     if next_day == "1"
+  #       (@str_times.to_f + 24) - @overtime_judge.to_f
+  #     else
+  #       @str_times.to_f - @overtime_judge.to_f
+  #     end
+  #   else
+  #     @str_times.to_f - @overtime_judge.to_f
+  #   end
+  # end
   
   def overtimes_3(day_start, overtime_finish, next_day)
     @overtime_judge = format("%.2f",((@user.basic_work_time.hour + (@user.basic_work_time.min)/60.0)))
