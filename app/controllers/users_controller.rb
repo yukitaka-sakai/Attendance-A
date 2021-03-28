@@ -195,6 +195,7 @@ class UsersController < ApplicationController
             end
           elsif item[:edit_status] == "承認"
             attendance.before_edit_status = item[:edit_status]
+            attendance.log_edit_status = item[:edit_status] if attendance.log_edit_status.blank?
             attendance.before_started_at = attendance.started_at# まず勤怠ページの勤怠情報を変更前勤怠に代入する。
             attendance.before_finished_at = attendance.finished_at
             attendance.started_at = attendance.edit_started_at # 承認なら変更時間を勤怠時間に代入する。

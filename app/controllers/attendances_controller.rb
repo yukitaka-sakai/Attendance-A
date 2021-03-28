@@ -69,6 +69,8 @@ class AttendancesController < ApplicationController
           n += 1
         else
           item[:edit_status] = "申請中"
+          item[:log_started_at] = attendance.started_at if item[:log_started_at].blank?
+          item[:log_finished_at] = attendance.finished_at if item[:log_finished_at].blank?
           item[:before_started_at] = attendance.started_at
           item[:before_finished_at] = attendance.finished_at
           item[:note] = item[:edit_note]
@@ -129,7 +131,7 @@ class AttendancesController < ApplicationController
       @search_date = Date.new(params["edit_approval_date(1i)"].to_i,params["edit_approval_date(2i)"].to_i,params["edit_approval_date(3i)"].to_i)
       @last_day = @search_date.end_of_month
     end
-    @attendances = @user.attendances.where(edit_status: "承認", worked_on: @search_date..@last_day).order(:worked_on)
+    @attendances = @user.attendances.where(log_edit_status: "承認", worked_on: @search_date..@last_day).order(:worked_on)
   end
     
   private

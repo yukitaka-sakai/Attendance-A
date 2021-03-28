@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 20210309164245) do
     t.datetime "log_started_at"
     t.datetime "log_finished_at"
     t.string "edit_status"
-    t.string "status"
+    t.string "log_edit_status"
     t.string "before_edit_status"
     t.string "edit_confirmation"
     t.string "before_edit_confirmation"

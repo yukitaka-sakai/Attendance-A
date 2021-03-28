@@ -47,12 +47,12 @@
         <tr>
           <td><%= l(attendance.worked_on) %></td>
           <td class="<%= css_class %>"><%= $days_of_the_week[attendance.worked_on.wday] %></td>
-          <% if attendance.before_started_at.nil? && attendance.before_finished_at.nil? %>
+          <% if attendance.log_started_at.nil? && attendance.log_finished_at.nil? %>
             <td></td>
             <td></td>
           <% else %>
-            <td><%= l(attendance.before_started_at, format: :time) if attendance.before_started_at.present? %></td>
-            <td><%= l(attendance.before_finished_at, format: :time) if attendance.before_finished_at.present? %></td>
+            <td><%= l(attendance.log_started_at, format: :time) if attendance.log_started_at.present? %></td>
+            <td><%= l(attendance.log_finished_at, format: :time) if attendance.log_finished_at.present? %></td>
           <% end %>
           <td><%= l(attendance.started_at, format: :time) %></td>
           <td><%= l(attendance.finished_at, format: :time) %></td>
