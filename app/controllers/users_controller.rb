@@ -124,7 +124,6 @@ class UsersController < ApplicationController
       overtime_request_params.each do |id, item|
         if item[:overtime_confirmation] == "1"
           attendance = Attendance.find(id)
-          # binding.pry
           if item[:overtime_status] == "なし"
             item[:overtime_finished_at] = attendance.log_overtime_finished_at
             item[:overtime_next_day] = attendance.log_overtime_next_day
@@ -143,7 +142,6 @@ class UsersController < ApplicationController
             item[:log_overtime_confirmation] = item[:overtime_confirmation]
             flash[:success] = "残業申請を承認しました。"
           elsif item[:overtime_status] == "否認"
-            item[:log_overtime_status] = item[:overtime_status]
             item[:overtime_confirmation] = "残業申請否認"
             flash[:danger] = "残業申請は否認されました。"
           end
@@ -169,37 +167,48 @@ class UsersController < ApplicationController
   
   def update_approval_edit_month
     ActiveRecord::Base.transaction do
-      edit_approval_params.each do |id, item|
+      edit_approval_params.each do |id, item| #実際に飛んでくるitemはモーダル内で変更が効くカラムのパラメーター
         if item[:edit_confirmation] == "1" # 変更check boxが選択されているなら。
           attendance = Attendance.find(id) # attendanceにAttendanceテーブルのIDを代入する
           if item[:edit_status] == "なし"
-            # 勤怠申請自体が無かったことにする。
-            # item[:edit_started_at] = nil
-            # item[:edit_finished_at] = nil
-            attendance.edit_started_at = nil 
-            attendance.edit_finished_at = nil
-            attendance.next_day = nil
-            item[:edit_note] = nil
-            item[:edit_status] = nil
-            item[:edit_confirmation] = nil
-            attendance.application_superior_name = nil
-            flash[:danger] = "勤務変更を削除しました。"
+            if attendance.before_edit_status == "承認" || attendance.before_edit_status == "否認"
+              item[:edit_status] = attendance.before_edit_status
+              attendance.started_at = attendance.before_started_at 
+              attendance.finished_at = attendance.before_finished_at 
+              attendance.edit_started_at = attendance.before_started_at
+              attendance.edit_finished_at = attendance.before_finished_at
+              attendance.edit_note = attendance.before_edit_note
+              attendance.note = attendance.before_edit_note
+              item[:edit_confirmation] = attendance.before_edit_confirmation
+              attendance.application_superior_name = attendance.before_application_superior_name
+              flash[:danger] = "勤務変更を削除しまし。"
+            else
+              attendance.note = attendance.before_edit_note
+              attendance.edit_started_at = nil 
+              attendance.edit_finished_at = nil
+              attendance.next_day = nil
+              item[:edit_note] = nil
+              item[:edit_status] = nil
+              item[:edit_confirmation] = nil
+              attendance.application_superior_name = nil
+              flash[:danger] = "勤務変更を削除しました。"
+            end
           elsif item[:edit_status] == "承認"
-            # if attendance.before_started_at == nil 
-            #   item[:before_started_at] = attendance.started_at
-            # end
-            # if attendance.before_finished_at == nil
-            #   item[:before_finished_at] = attendance.finished_at
-            # end
+            attendance.before_edit_status = item[:edit_status]
+            attendance.before_started_at = attendance.started_at# まず勤怠ページの勤怠情報を変更前勤怠に代入する。
+            attendance.before_finished_at = attendance.finished_at
             attendance.started_at = attendance.edit_started_at # 承認なら変更時間を勤怠時間に代入する。
             attendance.finished_at = attendance.edit_finished_at
-            attendance.note = item[:edit_note]
+            attendance.before_next_day = attendance.next_day
             attendance.next_day = item[:edit_next_day]
             item[:edit_approval_date] = Date.current
             item[:edit_confirmation] = "編集承認済"
+            attendance.before_edit_confirmation = item[:edit_confirmation]
             flash[:success] = "勤怠情報を承認しました。"
           elsif item[:edit_status] == "否認"
+            attendance.before_edit_status = item[:edit_status]
             item[:edit_confirmation] = "勤怠編集 否認"
+            attendance.before_edit_confirmation = item[:edit_confirmation]
             flash[:danger] = "勤怠情報を否認しました。"
           end
             attendance.update_attributes!(item)
@@ -280,7 +289,7 @@ class UsersController < ApplicationController
       .permit(attendances: [:started_at, :finished_at, 
                             :edit_started_at, :edit_finished_at, :next_day, :edit_next_day, :note,
                             :edit_status, :edit_confirmation, :edit_approval_date, :edit_note,
-                            :before_started_at, :before_finished_at])[:attendances]
+                            :before_started_at, :before_finished_at, :before_edit_note])[:attendances]
     end
     
     def overtime_request_params

@@ -92,7 +92,7 @@
             <td><%= format_min(day.overtime_finished_at) if day.overtime_finished_at.present? %></td>
             <td>
             <% if day.overtime_status.present? %> 
-              <%= overtimes_1(day.overtime_finished_at.floor_to(15.minutes),day.overtime_next_day) %>
+              <%= (overtimes_1(day.overtime_finished_at.floor_to(15.minutes),day.overtime_next_day)) if day.overtime_finished_at.present? %>
             <% end %>
             </td>
             <td><%= day.overtime_note %></td>
@@ -106,6 +106,8 @@
                 <%= "#{day.overtime_application_superior_name} へ残業申請中" %></br>
               <% elsif (day.overtime_status == "否認") || (day.overtime_status == "承認") %>
                 <%= "#{day.overtime_confirmation} ：#{day.overtime_application_superior_name}" %>
+              <% elsif day.overtime_status == "なし" %></br>
+              　<%=  %>
               <% end %>
             </td>
           </tr>

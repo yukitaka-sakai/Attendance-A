@@ -59,12 +59,19 @@ class AttendancesController < ApplicationController
           end
         if attendance.edit_status == "承認"
           item[:edit_status] = "申請中"
+          item[:before_started_at] = attendance.started_at
+          item[:before_finished_at] = attendance.finished_at
+          item[:before_edit_note] = attendance.note
+          item[:note] = item[:edit_note]
+          item[:before_application_superior_name] = attendance.application_superior_name
+          # binding.pry
           attendance.update_attributes!(item)
           n += 1
         else
           item[:edit_status] = "申請中"
           item[:before_started_at] = attendance.started_at
           item[:before_finished_at] = attendance.finished_at
+          item[:note] = item[:edit_note]
           attendance.update_attributes!(item)
           n += 1
         end
@@ -129,7 +136,7 @@ class AttendancesController < ApplicationController
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
       params.require(:user).permit(attendances: [:started_at, :finished_at, :next_day, :note, :before_started_at, :before_started_at,
-                            :edit_started_at, :edit_finished_at, :edit_next_day, :edit_note, :edit_status, 
+                            :before_edit_note, :edit_started_at, :edit_finished_at, :edit_next_day, :edit_note, :edit_status, 
                             :application_superior, :application_superior_name, :edit_confirmation])[:attendances]
     end
     
