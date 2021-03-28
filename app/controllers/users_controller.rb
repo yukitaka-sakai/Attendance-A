@@ -170,16 +170,20 @@ class UsersController < ApplicationController
       edit_approval_params.each do |id, item| #実際に飛んでくるitemはモーダル内で変更が効くカラムのパラメーター
         if item[:edit_confirmation] == "1" # 変更check boxが選択されているなら。
           attendance = Attendance.find(id) # attendanceにAttendanceテーブルのIDを代入する
+          # binding.pry
           if item[:edit_status] == "なし"
+            # binding.pry
             if attendance.before_edit_status == "承認" || attendance.before_edit_status == "否認"
-              item[:edit_status] = attendance.before_edit_status
+              item[:edit_status] = attendance.before_edit_status if attendance.before_edit_status == "承認"
+              item[:edit_status] = attendance.log_edit_status if attendance.before_edit_status == "否認"
               attendance.started_at = attendance.before_started_at 
               attendance.finished_at = attendance.before_finished_at 
               attendance.edit_started_at = attendance.before_started_at
               attendance.edit_finished_at = attendance.before_finished_at
               attendance.edit_note = attendance.before_edit_note
               attendance.note = attendance.before_edit_note
-              item[:edit_confirmation] = attendance.before_edit_confirmation
+              item[:edit_confirmation] = attendance.before_edit_confirmation if attendance.before_edit_status == "承認"
+              item[:edit_confirmation] = attendance.log_edit_confirmation if attendance.before_edit_status == "否認"
               attendance.application_superior_name = attendance.before_application_superior_name
               flash[:danger] = "勤務変更を削除しまし。"
             else
@@ -194,6 +198,8 @@ class UsersController < ApplicationController
               flash[:danger] = "勤務変更を削除しました。"
             end
           elsif item[:edit_status] == "承認"
+            attendance.log_started_at = attendance.before_started_at if attendance.before_started_at.blank?
+            attendance.log_finished_at = attendance.before_finished_at if attendance.before_finished_at.blank?
             attendance.before_edit_status = item[:edit_status]
             attendance.log_edit_status = item[:edit_status] if attendance.log_edit_status.blank?
             attendance.before_started_at = attendance.started_at# まず勤怠ページの勤怠情報を変更前勤怠に代入する。
@@ -205,6 +211,7 @@ class UsersController < ApplicationController
             item[:edit_approval_date] = Date.current
             item[:edit_confirmation] = "編集承認済"
             attendance.before_edit_confirmation = item[:edit_confirmation]
+            attendance.log_edit_confirmation = item[:edit_confirmation]
             flash[:success] = "勤怠情報を承認しました。"
           elsif item[:edit_status] == "否認"
             attendance.before_edit_status = item[:edit_status]

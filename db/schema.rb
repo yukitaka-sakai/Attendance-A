@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20210309164245) do
     t.string "log_edit_status"
     t.string "before_edit_status"
     t.string "edit_confirmation"
+    t.string "log_edit_confirmation"
     t.string "before_edit_confirmation"
     t.datetime "overtime_finished_at"
     t.string "overtime_next_day"
@@ -84,9 +85,9 @@ ActiveRecord::Schema.define(version: 20210309164245) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "affiliation"
-    t.datetime "basic_work_time", default: "2021-03-27 23:00:00"
-    t.datetime "designated_work_start_time", default: "2021-03-27 23:30:00"
-    t.datetime "designated_work_end_time", default: "2021-03-28 08:30:00"
+    t.datetime "basic_work_time", default: "2021-03-28 23:00:00"
+    t.datetime "designated_work_start_time", default: "2021-03-28 23:30:00"
+    t.datetime "designated_work_end_time", default: "2021-03-29 08:30:00"
     t.boolean "superior", default: false
     t.string "uid"
     t.string "employee_number"

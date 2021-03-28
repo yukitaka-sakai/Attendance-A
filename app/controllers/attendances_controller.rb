@@ -15,14 +15,20 @@ class AttendancesController < ApplicationController
     @attendance = Attendance.find(params[:id])
     if @attendance.started_at.nil?
       @attendance.edit_started_at = @attendance.started_at
-      if @attendance.update_attributes(started_at: Time.current.change(sec: 0), edit_started_at: Time.current.change(sec: 0))
+      @attendance.log_started_at = @attendance.started_at
+      if @attendance.update_attributes(started_at: Time.current.change(sec: 0),
+                                        edit_started_at: Time.current.change(sec: 0),
+                                        log_started_at: Time.current.change(sec: 0))
         flash[:info] = "おはようございます。"
       else
         flash[:danger] = UPDATE_ERROR_MSG
       end
     elsif @attendance.finished_at.nil?
       @attendance.edit_finished_at = @attendance.finished_at
-      if @attendance.update_attributes(finished_at: Time.current.change(sec: 0), edit_finished_at: Time.current.change(sec: 0))
+      @attendance.log_finished_at = @attendance.finished_at
+      if @attendance.update_attributes(finished_at: Time.current.change(sec: 0),
+                                        edit_finished_at: Time.current.change(sec: 0),
+                                        log_finished_at: Time.current.change(sec: 0))
         flash[:info] = "お疲れ様でした。"
       else
         flash[:danger] = UPDATE_ERROR_MSG
@@ -55,7 +61,7 @@ class AttendancesController < ApplicationController
             redirect_to attendances_edit_one_month_user_url(@user) and return
           elsif item[:edit_note].blank? 
             flash[:danger] = "備考へ内容を記入してください。"
-            redirect_to attendances_edit_one_month_user_url(@user) and return
+            redirect_to attendances_edit_one_month_user_url(@user) and return #空の項目はないか
           end
         if attendance.edit_status == "承認"
           item[:edit_status] = "申請中"
@@ -67,10 +73,17 @@ class AttendancesController < ApplicationController
           # binding.pry
           attendance.update_attributes!(item)
           n += 1
+        elsif attendance.edit_status == "否認"
+          item[:edit_status] = "申請中"
+          item[:before_started_at] = attendance.started_at
+          item[:before_finished_at] = attendance.finished_at
+          item[:note] = item[:edit_note]
+          attendance.update_attributes!(item)
+          n += 1
         else
           item[:edit_status] = "申請中"
-          item[:log_started_at] = attendance.started_at if item[:log_started_at].blank?
-          item[:log_finished_at] = attendance.finished_at if item[:log_finished_at].blank?
+          item[:log_started_at] = attendance.started_at if attendance.started_at.blank?
+          item[:log_finished_at] = attendance.finished_at if attendance.finished_at.blank?
           item[:before_started_at] = attendance.started_at
           item[:before_finished_at] = attendance.finished_at
           item[:note] = item[:edit_note]
